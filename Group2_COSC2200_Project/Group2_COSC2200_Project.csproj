@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Folder Include="assets\images\" />
-    <Folder Include="viewmodel\" />
-    <Folder Include="view\" />
   </ItemGroup>
 
 </Project>
