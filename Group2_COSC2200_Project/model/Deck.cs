@@ -28,7 +28,7 @@
         /// <summary>
         /// Shuffles the cards in the deck using the Fisher-Yates algorithm.
         /// </summary>
-        public void Shuffle() // TODO: Cite this the algo
+        public void Shuffle() // TODO: Cite this algo
         {
             Random rnd = new();
             for (int i = Cards.Count - 1; i > 0; i--)
