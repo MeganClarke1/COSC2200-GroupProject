@@ -13,7 +13,7 @@
             Black,
             Red
         }
-
+                                                                                                                       
         /// <summary>
         /// Defines the four suits a card can belong to: Clubs, Diamonds, Hearts, or Spades.
         /// </summary>
@@ -59,7 +59,7 @@
         public int Value { get; set; }
 
         /// <summary>
-        /// Initializes a new Card instance with specified suit and rank, automatically determining its colour and initial value.
+        /// Initializes a new Card instance with specified suit and rank, determining its colour and initial value.
         /// Clubs and Spades are Black; Diamonds and Hearts are Red. Initial values are assigned from 1 (Nine) to 6 (Ace).
         /// </summary>
         /// <param name="suit">The suit of the card.</param>
@@ -86,6 +86,15 @@
                 Ranks.Ace => 6,
                 _ => 0,
             };
+        }
+
+        /// <summary>
+        /// Returns a string that represents the current Card object.
+        /// </summary>
+        /// <returns>A string that represents the current card in the format "[Rank] of [Suit]".</returns>
+        public override string ToString()
+        {
+            return $"{Rank} of {Suit}";
         }
     }
 }

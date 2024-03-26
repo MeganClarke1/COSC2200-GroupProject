@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Page Include="App.xaml" />
+    <ProjectReference Include="..\Group2_COSC2200_Project\Group2_COSC2200_Project.csproj" />
   </ItemGroup>
 
 </Project>
