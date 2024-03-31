@@ -72,8 +72,48 @@ namespace Group2_COSC2200_Project.model
             lastPlayer.IsDealer = true;
 
             return TurnList;
-        } 
+        }
 
-        
+        /// <summary>
+        /// Creates a new ROUND object with the selected Trump Card.
+        /// Takes the selected Trump, the current player who selected it, and the 2 participating teams.
+        /// Checks both teams for the presence of that player object. If the player object is found in that team,
+        /// then we know what team selected the Trump, and the rounds MakerStatus (Team object) is set.
+        /// Also set the TrumpCard in round object.
+        /// Return a new Round Object.
+        /// </summary>
+        /// <param name="selectedCard"> The card that was chosen as Trump. </param>
+        /// <param name="currentPlayer"> The player whose current turn it is (Who selected the trump) </param>
+        /// <param name="TeamOne"> The first team participating in the game. </param>
+        /// <param name="TeamTwo"> The second team participating in the game. </param>
+        /// <returns> newRound a new Round object </returns>
+        public Round TrumpSelected(Card selectedCard, Player currentPlayer, Team TeamOne, Team TeamTwo)
+        {
+
+            // Initialize a round object
+            Round newRound = new Round();
+
+            // Loops through both team lists to check for which team selected the trump. Whichever team did, update the
+            // Round.MakerStatus to THAT team
+            foreach (Player player in TeamOne.TeamPlayers)
+            {
+                if (player == currentPlayer)
+                {
+                    newRound.MakerTeam = TeamOne;
+                }
+            }
+            foreach (Player player in TeamTwo.TeamPlayers)
+            {
+                if (player == currentPlayer)
+                {
+                    newRound.MakerTeam = TeamTwo;
+                }
+            }
+
+            // Regardless, update Round.TrumpCard
+            newRound.TrumpCard = selectedCard;
+
+            return newRound;
+        }
     }
 }
