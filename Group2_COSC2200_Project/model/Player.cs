@@ -30,7 +30,10 @@ namespace Group2_COSC2200_Project.model
         public bool IsDealer { get; set; }
 
 
-        // Constructor
+        /// <summary>
+        /// Constructor for a Player Object. 
+        /// _isDealer can be set to false until Team and TurnList Creation (Game Functionality)
+        /// </summary>
         public Player(int _playerID, string _playerName, bool _isDealer)
         {
             this.PlayerID = _playerID;
