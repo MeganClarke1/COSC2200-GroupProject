@@ -56,7 +56,7 @@
         /// <summary>
         /// Gets or sets the game-specific value of the card.
         /// </summary>
-        public int Value { get; set; }
+        public int Value { get; }
 
         /// <summary>
         /// Initializes a new Card instance with specified suit and rank, determining its colour and initial value.
