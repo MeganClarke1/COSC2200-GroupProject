@@ -73,8 +73,10 @@ namespace Group2_COSC2200_Project.model
             startGameState.gameTurnList = newTurnListDealerSet;
 
             // TODO: Deal Cards ... return and set Hand objects to StartGameState properties
+            GameFunctionality.DealCards(newDeck, newTurnListDealerSet);
 
             // TODO: Kitty Identified ... return Card object (kitty) and set to StartGameState properties
+
 
             // Instantiate StartGameState object with all determined above
             StartGameState newStartGameState = new StartGameState();
