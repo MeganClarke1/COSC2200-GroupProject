@@ -114,9 +114,21 @@ namespace Group2_COSC2200_Project.model
             return newRound;
         }
 
-        public static void SetCardValues(Card.Suits trumpSuit, List<Player> turnList, Deck deck)
-        {
 
+        /// <summary>
+        /// Updates the value of each card in every player's hand based on the specified trump suit.
+        /// </summary>
+        /// <param name="trumpSuit">The suit that has been declared as trump for the current round.</param>
+        /// <param name="turnList">A list of players participating in the current round, whose cards will be evaluated.</param>
+        public static void SetTrumpSuitValues(Card.Suits trumpSuit, List<Player> turnList)
+        {
+            foreach (Player player in turnList)
+            {
+                foreach (Card card in player.PlayerHand.Cards)
+                {
+                    card.SetTrumpSuitValue(trumpSuit);
+                }
+            }
         }
 
         /// <summary>

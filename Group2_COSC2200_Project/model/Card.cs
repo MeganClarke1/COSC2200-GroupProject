@@ -56,7 +56,9 @@
         /// <summary>
         /// Gets or sets the game-specific value of the card.
         /// </summary>
-        public int Value { get; }
+
+        public int Value { get; private set; }
+
 
         /// <summary>
         /// Initializes a new Card instance with specified suit and rank, determining its colour and initial value.
@@ -95,6 +97,62 @@
         public override string ToString()
         {
             return $"{Rank} of {Suit}";
+        }
+
+        /// <summary>
+        /// Determines the colour of a card based on its suit.
+        /// </summary>
+        /// <param name="suit">The suit of the card.</param>
+        /// <returns>The colour of the card.</returns>
+        private Colours GetColourFromSuit(Suits suit)
+        {
+            return suit switch
+            {
+                Suits.Clubs => Colours.Black,
+                Suits.Spades => Colours.Black,
+                _ => Colours.Red,
+            };
+        }
+
+        /// <summary>
+        /// Sets the value of the card based on its relationship to the trump suit.
+        /// </summary>
+        /// <param name="trumpSuit">The suit that has been declared as trump for the current round.</param>
+        public void SetTrumpSuitValue(Suits trumpSuit)
+        {
+            // Colour of the trump suit used to determine the left bower
+            Colours trumpColour = GetColourFromSuit(trumpSuit);
+
+            if (Suit == trumpSuit)
+            {
+                if (Rank == Ranks.Jack)
+                {
+                    Value = 21; // Set the value of the right bower to 21, making it the highest value
+                }
+                else
+                {
+                    Value += 13; // Sets Trump suit values: Nine -> 14, Ten -> 15, Queen -> 17, King -> 18, Ace -> 19
+                }
+            } // Finds the left bower
+            else if (Colour == trumpColour && Suit != trumpSuit && Rank == Ranks.Jack)
+            {
+                Value = 20; // Set the value of the left bower to 20, making it the second highest value
+            }
+        }
+
+        /// <summary>
+        /// Adjusts the value of the card based on its relationship to the lead suit in a trick, 
+        /// provided it's not also the trump suit.
+        /// </summary>
+        /// <param name="leadSuit">The suit that was led in the current trick.</param>
+        /// <param name="trumpSuit">The suit that has been declared as trump for the current round, 
+        /// which outranks all other suits.</param>
+        public void SetLeadSuitValue(Suits leadSuit, Suits trumpSuit)
+        {
+            if (Suit == leadSuit && Suit != trumpSuit)
+            {
+                Value += 6;
+            }
         }
     }
 }
