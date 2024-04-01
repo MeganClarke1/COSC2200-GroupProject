@@ -1,50 +1,41 @@
 ﻿namespace Group2_COSC2200_Project.model
 {
     /// <summary>
-    /// Represents a hand in the Euchre game, including the list of cards in the hand and the playerID
-    /// associated with the hand.
+    /// Represents a hand of cards held by a player in the Euchre game.
     /// </summary>
     public class Hand
     {
         /// <summary>
-        /// The list of card object in the hand
+        /// A list containing the cards in the player's hand.
         /// </summary>
-        private List<Card> cards;
+        public List<Card> Cards { get; }
 
         /// <summary>
-        /// The player ID associated with the hand
+        /// Initializes a new empty hand.
         /// </summary>
-        private int playerId;
-
-
-        // Constructor
-        public Hand(int playerId)
+        public Hand()
         {
-            this.cards = new List<Card>();
-            this.playerId = playerId;
+           Cards = new List<Card>();
         }
 
-
-        public int PlayerId
-        {
-            get { return playerId; }
-            set { playerId = value; }
-        }
-
+        /// <summary>
+        /// Adds a card to the player's hand.
+        /// </summary>
+        /// <param name="card">The card to be added.</param>
         public void AddCard(Card card)
         {
-            cards.Add(card);
+            Cards.Add(card);
         }
 
-        public bool RemoveCard(Card card)
+        /// <summary>
+        /// Removes the specified card from the player's hand.
+        /// </summary>
+        /// <param name="card">The card to be removed.</param>
+        /// <returns>The removed card.</returns>
+        public Card RemoveCard(Card card)
         {
-            return cards.Remove(card);
-        }
-
-        public List<Card> Cards
-        {
-            get { return cards; }
+            Cards.Remove(card);
+            return card;
         }
     }
-
 }
