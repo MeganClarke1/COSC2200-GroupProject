@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using Group2_COSC2200_Project.viewmodel;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +10,15 @@ namespace Group2_COSC2200_Project
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            MainWindow = new MainWindow()
+            {
+                DataContext = new MainViewModel()
+            };
+            MainWindow.Show();
+            base.OnStartup(e);
+        }
     }
 
 }

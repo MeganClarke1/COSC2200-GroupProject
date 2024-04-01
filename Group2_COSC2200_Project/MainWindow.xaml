@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Group2_COSC2200_Project"
+        xmlns:local="clr-namespace:Group2_COSC2200_Project" 
+        xmlns:view="clr-namespace:Group2_COSC2200_Project.view"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Euchre Game" Height="760" Width="1290" ResizeMode="NoResize">
     <Grid>
-
+        <view:GameView DataContext="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
