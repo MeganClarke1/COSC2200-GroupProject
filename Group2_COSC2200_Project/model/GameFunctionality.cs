@@ -80,12 +80,12 @@ namespace Group2_COSC2200_Project.model
         /// Also set the TrumpCard in round object.
         /// Return a new Round Object.
         /// </summary>
-        /// <param name="selectedCard"> The card that was chosen as Trump. </param>
+        /// <param name="selectedTrumpSuit"> The card Suit property that was chosen as Trump. </param>
         /// <param name="currentPlayer"> The player whose current turn it is (Who selected the trump) </param>
         /// <param name="TeamOne"> The first team participating in the game. </param>
         /// <param name="TeamTwo"> The second team participating in the game. </param>
         /// <returns> newRound a new Round object </returns>
-        public static Round TrumpSelected(Card selectedCard, Player currentPlayer, Team TeamOne, Team TeamTwo)
+        public static Round TrumpSelected(Card.Suits selectedTrumpSuit, Player currentPlayer, Team TeamOne, Team TeamTwo)
         {
 
             // Initialize a round object (Empty Values)
@@ -108,8 +108,8 @@ namespace Group2_COSC2200_Project.model
                 }
             }
 
-            // Regardless, update Round.TrumpCard
-            newRound.TrumpCard = selectedCard;
+            // Regardless, update Round.TrumpSuit
+            newRound.TrumpSuit = selectedTrumpSuit;
 
             return newRound;
         }

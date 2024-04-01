@@ -19,7 +19,7 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// The selected trump card for the round.
         /// </summary>
-        public Card? TrumpCard { get; set; }
+        public Card.Suits? TrumpSuit { get; set; }
 
         /// <summary>
         /// The Team that selected the trump this round. (Maker Team)
@@ -34,7 +34,7 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// The Team that won the round.
         /// </summary>
-        public Team? WinningTem { get; set; }
+        public Team? WinningTeam { get; set; }
 
         /// <summary>
         /// The points awarded for this round to the WinningTeam.
@@ -47,35 +47,78 @@ namespace Group2_COSC2200_Project.model
         public Round()
         {
             TricksInRound = new List<Trick>();
-            TrumpCard = null; 
+            TrumpSuit = null; 
             MakerTeam = null; 
             AloneTeam = null;
-            //WinningTeam = new Team();
-            PointsAwarded = 0; 
+            //WinningTeam = new Team(); // Not sure what to do here... Set to empty Team object? or just initiate as null ... or not at all... 
+            PointsAwarded = 0;          // an empty round needs to be instantiated for manipulation/editing in the GameFunctionality TrumpSelected()
         }
 
-        public Round(List<Trick> _TrickList, Card _TrumpCard, Team _MakerTeam, Team _AloneTeam, Team _WinningTeam, int _PointsAwarded)
+        public Round(List<Trick> _TrickList, Card.Suits _TrumpSuit, Team _MakerTeam, Team _AloneTeam, Team _WinningTeam, int _PointsAwarded)
         {
             this.TricksInRound = _TrickList;
-            this.TrumpCard = _TrumpCard;
+            this.TrumpSuit = _TrumpSuit;
             this.MakerTeam = _MakerTeam;
             this.AloneTeam  = _AloneTeam;
-            this.WinningTem = _WinningTeam;
+            this.WinningTeam = _WinningTeam;
             this.PointsAwarded = _PointsAwarded;
         }
 
-        ///<todo>Create a way to calculate the winner of a round... This will involve logic with the list of tricks and will
-        /// likely need to take into account MakerTeam, and AloneTeam.... Could use the TricksInRound list (which has a winning team
-        /// property for each trick) to determine how many tricks each team won, then take into account their MakerStatus to
-        /// determine if they met the minimum tricks to win for a MakerTeam.
-        /// Return the TEAM that won the round. </todo>
-        public Team DetermineRoundWinnerAndPoints(List<Trick> TricksInRound, Team TeamOne, Team TeamTwo)
+        /// <summary>
+        /// Takes in a current round object, determines which team has more wins. 
+        /// Checks which team is maker, and determines points won off factor. (Maker team win = 1 point, non-maker team = 3 points)
+        /// </summary>
+        /// <param name="currentRound"> The Round object currently being played to be updated </param>
+        /// <param name="TeamOne"> The First team participating in the game </param>
+        /// <param name="TeamTwo"> The second team participating in the game </param>
+        /// <returns> currentRound a Round object with updated properties </returns>
+        public Round DetermineRoundWinnerAndPoints(Round currentRound, Team TeamOne, Team TeamTwo)
         {
-            // Check which team has maker Status
-
-            // Check how many trick wins each team has
             
-            return Team WinningTeam;
+            // Check which team has maker Status
+            Team currentMakerTeam = currentRound.MakerTeam;
+
+            // Initiate team wins counters to 0
+            int teamOneWins = 0;
+            int teamTwoWins = 0;
+
+            // Loop through the list of trick objects in the currentRound and increment team win counters based on the WinningTeam property in Trick
+            foreach (Trick trick in currentRound.TricksInRound)
+            {
+                // If the WinningTeam of the Tricks team Id property is equal to TeamOne enum ...
+                if (trick.TrickWinningTeam.TeamId == Team.TeamID.TeamOne)
+                {
+                    teamOneWins++;
+                }
+                else if (trick.TrickWinningTeam.TeamId == Team.TeamID.TeamTwo)
+                {
+                    teamTwoWins++;
+                }
+            }
+
+            // Check which team has more wins and set the winning team property of the current round to the team with more wins.
+            if (teamOneWins > teamTwoWins)
+            {
+                currentRound.WinningTeam = TeamOne;
+            }
+            else
+            {
+                currentRound.WinningTeam = TeamTwo;
+            }
+
+            // Determine points using maker status. Maker team winning a round is 1 point. Non-maker team is 3 points.
+            if (currentRound.WinningTeam == currentMakerTeam)
+            {
+                currentRound.PointsAwarded = 1;
+            }
+            else if (currentRound.WinningTeam != currentMakerTeam)
+            {
+                currentRound.PointsAwarded = 3;
+            }
+
+            // Set the current round PointsAwarded status 
+
+            return currentRound;
         }
         
     }

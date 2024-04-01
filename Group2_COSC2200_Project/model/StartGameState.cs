@@ -22,6 +22,8 @@ namespace Group2_COSC2200_Project.model
         public Team gameTeamTwo { get; set; }
 
         public List<Player> gameTurnList { get; set; }
+        
+        // TODO: Add property for Hands and Kitty Card object 
 
         /// <summary>
         /// A constructor for the StartGameState
@@ -29,8 +31,6 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public StartGameState() 
         { 
-            
-        
         }
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace Group2_COSC2200_Project.model
             startGameState.gameDeck = newDeck;
 
             // Create 4 new players
-            Player playerOne = new Player(1, "PlayerOne", false);// TODO: WHEN MERGED WITH COLINS CHANGES WE CAN TAKE "FALSE" OUT AS THATS DEFAULT NOW
-            Player playerTwo = new Player(2, "PlayerTwo", false);
-            Player playerThree = new Player(3, "PlayerThree", false);
-            Player playerFour = new Player(4, "PlayerFour", false);
+            Player playerOne = new Player(1, "PlayerOne");
+            Player playerTwo = new Player(2, "PlayerTwo");
+            Player playerThree = new Player(3, "PlayerThree");
+            Player playerFour = new Player(4, "PlayerFour");
 
             // Create 2 teams .... Do we want EACH team as a property here ?
             List<Player>TeamOneList = Team.createTeam(playerOne, playerTwo);
@@ -67,16 +67,14 @@ namespace Group2_COSC2200_Project.model
 
             // Create the TurnList
             List<Player> newTurnList = GameFunctionality.CreateTurnList(TeamOneList, TeamTwoList);
-
-            // Create a new gameFunctionality object w/ the turnList
-            GameFunctionality newGFObj = new GameFunctionality(newTurnList);
-
             // Set the Dealer
-            newGFObj.SetDealer();
+            List <Player> newTurnListDealerSet = GameFunctionality.SetDealer(newTurnList);
+            // Set the StartGameState TurnList to the dealer set TurnList
+            startGameState.gameTurnList = newTurnListDealerSet;
 
-            // Deal Cards
+            // TODO: Deal Cards ... return and set Hand objects to StartGameState properties
 
-            // Kitty Identified
+            // TODO: Kitty Identified ... return Card object (kitty) and set to StartGameState properties
 
             // Instantiate StartGameState object with all determined above
             StartGameState newStartGameState = new StartGameState();
