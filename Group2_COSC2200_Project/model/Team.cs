@@ -34,7 +34,7 @@ namespace Group2_COSC2200_Project.model
 
 
         /// <summary>
-        /// A list of player objects representing a team (2 players).
+        /// Constructor for a team object.
         /// </summary>
         public Team(TeamID _teamId, List<Player> _teamPlayers)
         {
