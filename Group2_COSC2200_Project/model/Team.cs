@@ -9,7 +9,7 @@ namespace Group2_COSC2200_Project.model
     /// <summary>
     /// Represents a team for the Euchre game.
     /// </summary>
-    class Team
+    public class Team
     {
         /// <summary>
         /// Creates an enum for the 2 possible TeamIDs.
