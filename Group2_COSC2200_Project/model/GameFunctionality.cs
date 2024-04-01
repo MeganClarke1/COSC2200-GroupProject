@@ -11,10 +11,6 @@ namespace Group2_COSC2200_Project.model
     /// </summary>
     class GameFunctionality
     {
-        /// <summary>
-        /// A list of players where the first player in the list is the current turn.
-        /// </summary>
-        public List<Player> TurnList { get; private set; }
 
         /// <summary>
         /// Static method to merge 2 team lists into one turn list for game functionality construction
@@ -41,7 +37,7 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         /// <param name="TurnList"></param>
         /// <returns> TurnList an updated list of players where the player who just had their turn is moved to the end.</returns>
-        public List<Player> NextTurn(List<Player> TurnList)
+        public static List<Player> NextTurn(List<Player> TurnList)
         {
             // Fetch the current player whose turn it is
             Player CurrentTurnPlayer = TurnList[0]; 
@@ -61,7 +57,7 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         /// <param name="TurnList">a TurnList</param>
         /// <returns>TurnList a TurnList where the player at the end of the list is made dealer.</returns>
-        public List<Player> SetDealer(List<Player> TurnList) 
+        public static List<Player> SetDealer(List<Player> TurnList) 
         { 
             
             // Fetch the last person in the turn list and make them dealer
@@ -87,7 +83,7 @@ namespace Group2_COSC2200_Project.model
         /// <param name="TeamOne"> The first team participating in the game. </param>
         /// <param name="TeamTwo"> The second team participating in the game. </param>
         /// <returns> newRound a new Round object </returns>
-        public Round TrumpSelected(Card selectedCard, Player currentPlayer, Team TeamOne, Team TeamTwo)
+        public static Round TrumpSelected(Card selectedCard, Player currentPlayer, Team TeamOne, Team TeamTwo)
         {
 
             // Initialize a round object (Empty Values)
