@@ -16,7 +16,26 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public List<Card> PlayedCards { get; private set; }
 
-        ///<todo>Entire class. Ties closely with round, and game functionality. 
-        ///Refer to all other made classes and flow Doc in teams.</todo>
+        public Card WinningCard { get; private set; }
+
+        public Card.Suits LeadSuit {  get; private set; }
+
+        public Team TrickWinningTeam { get; private set; }
+
+        // Constructor
+        // TODO: decide if we need a parameterized or if blank constructor is fine, or both.
+        public Trick()
+        {
+
+        }
+
+        // Methods
+        // TODO: Logic for determining a Trick Winner
+        public DetermineTrickWinner()
+        {
+
+        }
+        
+
     }
 }
