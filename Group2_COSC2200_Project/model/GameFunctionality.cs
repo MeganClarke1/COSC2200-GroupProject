@@ -12,12 +12,14 @@ namespace Group2_COSC2200_Project.model
     class GameFunctionality
     {
 
+        public Card.Suits Trump;
+
         /// <summary>
         /// Static method to merge 2 team lists into one turn list for game functionality construction
         /// Takes 2 lists of players (teams), and merges them into 1 turnlist, where player turns alternate between teams.
         /// </summary>
         /// <returns> TurnList a list of player Objects indicating turn order. </returns>
-        public static List<Player> CreateTurnList(List <Player> TeamOne, List <Player> TeamTwo)
+        public static List<Player> CreateTurnList(List<Player> TeamOne, List<Player> TeamTwo)
         {
             // Create a turnList
             List<Player> TurnList = new List<Player>();
@@ -40,8 +42,8 @@ namespace Group2_COSC2200_Project.model
         public static List<Player> NextTurn(List<Player> TurnList)
         {
             // Fetch the current player whose turn it is
-            Player CurrentTurnPlayer = TurnList[0]; 
-            
+            Player CurrentTurnPlayer = TurnList[0];
+
             // Remove the first index position (Current player whose turn it is)
             TurnList.RemoveAt(0);
 
@@ -57,9 +59,9 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         /// <param name="TurnList">a TurnList</param>
         /// <returns>TurnList a TurnList where the player at the end of the list is made dealer.</returns>
-        public static List<Player> SetDealer(List<Player> TurnList) 
-        { 
-            
+        public static List<Player> SetDealer(List<Player> TurnList)
+        {
+
             // Fetch the last person in the turn list and make them dealer
             Player lastPlayer = TurnList[3];
 
@@ -110,6 +112,38 @@ namespace Group2_COSC2200_Project.model
             newRound.TrumpSuit = selectedTrumpSuit;
 
             return newRound;
+        }
+
+        public static void SetCardValues(Card.Suits trumpSuit, List<Player> turnList, Deck deck)
+        {
+
+        }
+
+        /// <summary>
+        /// Deals cards to players in the specified turn order, following the order of 3 cards in a row to each
+        /// player, then two cards in a row to each player.
+        /// </summary>
+        /// <param name="deck">The deck of cards to deal from.</param>
+        /// <param name="turnList">The list of players in the turn order, representing who receives cards.</param>
+        public static void DealCards(Deck deck, List<Player> turnList)
+        {
+            deck.Shuffle();
+            foreach (Player player in turnList)
+            {
+                // Deal 3 cards in a row to each player
+                for (int i = 0; i < 3; i++)
+                {
+                    player.PlayerHand.AddCard(deck.DealCard());
+                }
+            }
+            foreach (Player player in turnList)
+            {
+                // Deal 2 cards in a row to each player
+                for (int i = 0; i < 2; i++)
+                {
+                    player.PlayerHand.AddCard(deck.DealCard());
+                }
+            }
         }
     }
 }
