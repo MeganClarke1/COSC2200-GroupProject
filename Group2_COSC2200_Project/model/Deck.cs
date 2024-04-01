@@ -40,11 +40,13 @@
 
         /// <summary>
         /// Removes and returns the card at the top of the deck.
+        /// Also, Attaches the playerID from player class to the CardsAssociatedToPlayers
         /// </summary>
         /// <returns>The card that was at the top of the deck.</returns>
-        public Card DealCard()
+        public Card DealCard(Player player)
         {
             Card card = Cards[Cards.Count - 1];
+            card.CardsAssociatedToPlayers = player.PlayerID;
             Cards.RemoveAt(Cards.Count - 1);
             return card;
         }
