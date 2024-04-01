@@ -114,6 +114,7 @@ namespace Group2_COSC2200_Project.model
             return newRound;
         }
 
+
         /// <summary>
         /// Updates the value of each card in every player's hand based on the specified trump suit.
         /// </summary>
