@@ -90,7 +90,7 @@ namespace Group2_COSC2200_Project.model
         public Round TrumpSelected(Card selectedCard, Player currentPlayer, Team TeamOne, Team TeamTwo)
         {
 
-            // Initialize a round object
+            // Initialize a round object (Empty Values)
             Round newRound = new Round();
 
             // Loops through both team lists to check for which team selected the trump. Whichever team did, update the
