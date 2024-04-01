@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Group2_COSC2200_Project.view
 {
     /// <summary>
-    /// Interaction logic for MainMenuView.xaml
+    /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class MainMenuView : UserControl
+    public partial class GameView : UserControl
     {
-        public MainMenuView()
+        public GameView()
         {
             InitializeComponent();
         }

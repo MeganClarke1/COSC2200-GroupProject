@@ -6,10 +6,6 @@
     /// </summary>
     public class Hand
     {
-
-
-        // Attributes
-
         /// <summary>
         /// The list of card object in the hand
         /// </summary>

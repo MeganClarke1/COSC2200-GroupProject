@@ -9,7 +9,74 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\images\classic\10_of_clubs.png" />
+    <None Remove="assets\images\classic\10_of_diamonds.png" />
+    <None Remove="assets\images\classic\10_of_hearts.png" />
+    <None Remove="assets\images\classic\10_of_spades.png" />
+    <None Remove="assets\images\classic\9_of_clubs.png" />
+    <None Remove="assets\images\classic\9_of_diamonds.png" />
+    <None Remove="assets\images\classic\9_of_hearts.png" />
+    <None Remove="assets\images\classic\9_of_spades.png" />
+    <None Remove="assets\images\classic\ace_of_clubs.png" />
+    <None Remove="assets\images\classic\ace_of_diamonds.png" />
+    <None Remove="assets\images\classic\ace_of_hearts.png" />
+    <None Remove="assets\images\classic\ace_of_spades.png" />
+    <None Remove="assets\images\classic\back.png" />
+    <None Remove="assets\images\classic\card_back.png" />
+    <None Remove="assets\images\classic\jack_of_clubs.png" />
+    <None Remove="assets\images\classic\jack_of_diamonds.png" />
+    <None Remove="assets\images\classic\jack_of_hearts.png" />
+    <None Remove="assets\images\classic\jack_of_spades.png" />
+    <None Remove="assets\images\classic\king_of_clubs.png" />
+    <None Remove="assets\images\classic\king_of_diamonds.png" />
+    <None Remove="assets\images\classic\king_of_hearts.png" />
+    <None Remove="assets\images\classic\king_of_spades.png" />
+    <None Remove="assets\images\classic\nine_of_clubs.png" />
+    <None Remove="assets\images\classic\nine_of_diamonds.png" />
+    <None Remove="assets\images\classic\nine_of_hearts.png" />
+    <None Remove="assets\images\classic\nine_of_spades.png" />
+    <None Remove="assets\images\classic\playing_surface.jpg" />
+    <None Remove="assets\images\classic\queen_of_clubs.png" />
+    <None Remove="assets\images\classic\queen_of_diamonds.png" />
+    <None Remove="assets\images\classic\queen_of_hearts.png" />
+    <None Remove="assets\images\classic\queen_of_spades.png" />
+    <None Remove="assets\images\classic\ten_of_clubs.png" />
+    <None Remove="assets\images\classic\ten_of_diamonds.png" />
+    <None Remove="assets\images\classic\ten_of_hearts.png" />
+    <None Remove="assets\images\classic\ten_of_spades.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\images\classic\ace_of_clubs.png" />
+    <Resource Include="assets\images\classic\ace_of_diamonds.png" />
+    <Resource Include="assets\images\classic\ace_of_hearts.png" />
+    <Resource Include="assets\images\classic\ace_of_spades.png" />
+    <Resource Include="assets\images\classic\card_back.png" />
+    <Resource Include="assets\images\classic\jack_of_clubs.png" />
+    <Resource Include="assets\images\classic\jack_of_diamonds.png" />
+    <Resource Include="assets\images\classic\jack_of_hearts.png" />
+    <Resource Include="assets\images\classic\jack_of_spades.png" />
+    <Resource Include="assets\images\classic\king_of_clubs.png" />
+    <Resource Include="assets\images\classic\king_of_diamonds.png" />
+    <Resource Include="assets\images\classic\king_of_hearts.png" />
+    <Resource Include="assets\images\classic\king_of_spades.png" />
+    <Resource Include="assets\images\classic\nine_of_clubs.png" />
+    <Resource Include="assets\images\classic\nine_of_diamonds.png" />
+    <Resource Include="assets\images\classic\nine_of_hearts.png" />
+    <Resource Include="assets\images\classic\nine_of_spades.png" />
+    <Resource Include="assets\images\classic\playing_surface.jpg" />
+    <Resource Include="assets\images\classic\queen_of_clubs.png" />
+    <Resource Include="assets\images\classic\queen_of_diamonds.png" />
+    <Resource Include="assets\images\classic\queen_of_hearts.png" />
+    <Resource Include="assets\images\classic\queen_of_spades.png" />
+    <Resource Include="assets\images\classic\ten_of_clubs.png" />
+    <Resource Include="assets\images\classic\ten_of_diamonds.png" />
+    <Resource Include="assets\images\classic\ten_of_hearts.png" />
+    <Resource Include="assets\images\classic\ten_of_spades.png" />
   </ItemGroup>
 
 </Project>
