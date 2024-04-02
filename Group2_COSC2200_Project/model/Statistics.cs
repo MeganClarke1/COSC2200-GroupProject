@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -77,12 +79,16 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// Takes a Statistics object to save to the JSON.
+        /// Takes a Statistics object to append to the JSON.
         /// </summary>
         /// <param name="StatsToJSON"></param>
         public void SaveStatistics (Statistics StatsToJSON)
         {
+            // Serialize the Statistics object to JSON
+            string jsonString = JsonConvert.SerializeObject(StatsToJSON);
 
+            // Append the JSON string to the file
+            File.AppendAllText("stats.json", jsonString + Environment.NewLine);
         }
 
         /// <summary>
