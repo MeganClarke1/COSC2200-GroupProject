@@ -91,8 +91,12 @@ namespace Group2_COSC2200_Project.model
             // Intitalize a dictionary of Statistics objects... Will Hold the contents of the JSON file where the key is PLayer ID.
             Dictionary<int, Statistics> statisticsDict;
 
+            // Construct the file path for the stats.json file in the Data folder ... Intended to work even even this is not being run on local.
+            string dataFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            string jsonFilePath = Path.Combine(dataFolderPath, "stats.json");
+
             // Read the content of the JSON file
-            string json = File.ReadAllText("stats.json");
+            string json = File.ReadAllText(jsonFilePath);
 
             // File is empty, or doesn't exist, so Initialize the statisticsList as an empty list of Statistics objects.
             if (string.IsNullOrWhiteSpace(json)) 
@@ -120,7 +124,7 @@ namespace Group2_COSC2200_Project.model
 
             // Serialize the dictionary back to JSON and write to file
             string updatedJson = JsonConvert.SerializeObject(statisticsDict, Formatting.Indented); 
-            File.WriteAllText("stats.json", updatedJson); 
+            File.WriteAllText(jsonFilePath, updatedJson); 
         }
 
         /// <summary>
@@ -128,11 +132,16 @@ namespace Group2_COSC2200_Project.model
         /// Check for the existance of the given ID, return a dictionary formatted record for that player. 
         /// </summary>
         /// <param name="uniqueID"> The unique id to fetch the given corresponding statistics record from the JSON.</param>
-        /// <returns> playerStatistics - a Statistics object representing the player's stats. </returns>
+        /// <returns> playerStatistics - a Statistics object representing the player's stats. Or null if no record found. </returns>
         public Statistics LoadStatistics(int uniqueID)
         {
+
+            // Construct the file path for the stats.json file in the Data folder ... Intended to work even even this is not being run on local.
+            string dataFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            string jsonFilePath = Path.Combine(dataFolderPath, "stats.json");
+
             // Read JSON data into a dictionary with unique ID as the key
-            string json = File.ReadAllText("stats.json");
+            string json = File.ReadAllText(jsonFilePath);
             Dictionary<int, Statistics> statisticsDict = JsonConvert.DeserializeObject<Dictionary<int, Statistics>>(json);
 
             // Check if the dictionary contains the unique ID
