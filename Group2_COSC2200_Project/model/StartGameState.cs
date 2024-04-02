@@ -81,6 +81,8 @@ namespace Group2_COSC2200_Project.model
             // Instantiate StartGameState object with all determined above
             StartGameState newStartGameState = new StartGameState();
 
+            Console.WriteLine("YOOOOOOOOOOOOOOOOOO");
+
             // Return it
             return newStartGameState;
         }

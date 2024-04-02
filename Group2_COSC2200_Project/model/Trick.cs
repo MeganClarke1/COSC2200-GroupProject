@@ -31,10 +31,10 @@ namespace Group2_COSC2200_Project.model
 
         // Methods
         // TODO: Logic for determining a Trick Winner
-        public DetermineTrickWinner()
-        {
-
-        }
+       //public DetermineTrickWinner()
+       //{
+       //    return;
+       //}
         
 
     }

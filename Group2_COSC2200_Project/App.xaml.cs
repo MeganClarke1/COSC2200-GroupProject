@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Data;
 using System.Windows;
+using Group2_COSC2200_Project.model;
+using System.Diagnostics;
 
 namespace Group2_COSC2200_Project
 {
@@ -12,6 +14,9 @@ namespace Group2_COSC2200_Project
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            Debug.WriteLine("Hello");
+            String name = "hello";
+            Debug.WriteLine(name);
             MainWindow = new MainWindow()
             {
                 DataContext = new MainViewModel()

@@ -62,7 +62,7 @@
         /// <summary>
         /// Represents the card associated to the player. We are doing that by attaching the players ID to this attribute.
         /// </summary>
-        public int CardsAssociatedToPlayers { get; private set; }
+        public int CardsAssociatedToPlayers { get; set; }
 
         /// <summary>
         /// Initializes a new Card instance with specified suit and rank, determining its colour and initial value.
