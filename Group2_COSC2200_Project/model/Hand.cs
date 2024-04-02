@@ -8,7 +8,7 @@
         /// <summary>
         /// A list containing the cards in the player's hand.
         /// </summary>
-        public List<Card> Cards { get; }
+        public List<Card> Cards { get; set; }
 
         /// <summary>
         /// Initializes a new empty hand.
