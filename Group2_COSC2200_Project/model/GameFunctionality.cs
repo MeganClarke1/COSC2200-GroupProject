@@ -145,7 +145,7 @@ namespace Group2_COSC2200_Project.model
                 // Deal 3 cards in a row to each player
                 for (int i = 0; i < 3; i++)
                 {
-                    player.PlayerHand.AddCard(deck.DealCard());
+                    player.PlayerHand.AddCard(deck.DealCard(player));
                 }
             }
             foreach (Player player in turnList)
@@ -153,7 +153,7 @@ namespace Group2_COSC2200_Project.model
                 // Deal 2 cards in a row to each player
                 for (int i = 0; i < 2; i++)
                 {
-                    player.PlayerHand.AddCard(deck.DealCard());
+                    player.PlayerHand.AddCard(deck.DealCard(player));
                 }
             }
         }
