@@ -14,6 +14,9 @@ namespace Group2_COSC2200_Project
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            Debug.WriteLine("Hello");
+            String name = "hello";
+            Debug.WriteLine(name);
             MainWindow = new MainWindow()
             {
                 DataContext = new MainViewModel()
