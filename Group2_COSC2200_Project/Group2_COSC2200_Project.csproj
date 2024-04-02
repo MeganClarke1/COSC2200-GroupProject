@@ -79,4 +79,8 @@
     <Resource Include="assets\images\classic\ten_of_spades.png" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
 </Project>
