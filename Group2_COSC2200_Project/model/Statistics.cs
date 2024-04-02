@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using System.Windows.Input;
+using System.Windows.Markup;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -79,30 +81,71 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// Takes a Statistics object to append to the JSON.
+        /// Takes a Statistics object to save to the JSON. Checks whether record currently exists in the JSON by comparing Statistics.PlayerID & 
+        /// the playerID of the record in the JSON. Will update OR add the record based on this existence.
+        /// Deserializes the entire JSON into a list for logic, then serializes it back to the JSON.
         /// </summary>
-        /// <param name="StatsToJSON"></param>
-        public void SaveStatistics (Statistics StatsToJSON)
+        /// <param name="statsToJSON"></param>
+        public void SaveStatistics(Statistics statsToJSON)
         {
-            // Serialize the Statistics object to JSON
-            string jsonString = JsonConvert.SerializeObject(StatsToJSON);
+            // Intitalize a dictionary of Statistics objects... Will Hold the contents of the JSON file where the key is PLayer ID.
+            Dictionary<int, Statistics> statisticsDict;
 
-            // Append the JSON string to the file
-            File.AppendAllText("stats.json", jsonString + Environment.NewLine);
+            // Read the content of the JSON file
+            string json = File.ReadAllText("stats.json");
+
+            // File is empty, or doesn't exist, so Initialize the statisticsList as an empty list of Statistics objects.
+            if (string.IsNullOrWhiteSpace(json)) 
+            {
+                statisticsDict = new Dictionary<int, Statistics>(); 
+            }
+
+            // File Exists/Is Populated, so deserialize it into the dictionary.
+            else 
+            {
+                statisticsDict = JsonConvert.DeserializeObject<Dictionary<int, Statistics>>(json); 
+            }
+
+            // Check if the PlayerID already exists in the dictionary, so update the existing record.
+            if (statisticsDict.ContainsKey(statsToJSON.PlayerID))
+            {
+                statisticsDict[statsToJSON.PlayerID] = statsToJSON;
+            }
+
+            // Player record doesn't exist, so add a new record.
+            else
+            {
+                statisticsDict.Add(statsToJSON.PlayerID, statsToJSON);
+            }
+
+            // Serialize the dictionary back to JSON and write to file
+            string updatedJson = JsonConvert.SerializeObject(statisticsDict, Formatting.Indented); 
+            File.WriteAllText("stats.json", updatedJson); 
         }
 
         /// <summary>
-        /// Takes a unique ID to identify the player record in the JSON, returns that record. Parses it to a statistics object and returns it ??
+        /// Takes a unique ID to identify the player record in the JSON. Deserializes the JSON into a dictionary, where the key is the player ID.
+        /// Check for the existance of the given ID, return a dictionary formatted record for that player. 
         /// </summary>
         /// <param name="uniqueID"> The unique id to fetch the given corresponding statistics record from the JSON.</param>
-        /// <returns> JSONStats - A JSON formatted string representing a player's statistics object (record). </returns>
+        /// <returns> playerStatistics - a Statistics object representing the player's stats. </returns>
         public Statistics LoadStatistics(int uniqueID)
         {
+            // Read JSON data into a dictionary with unique ID as the key
+            string json = File.ReadAllText("stats.json");
+            Dictionary<int, Statistics> statisticsDict = JsonConvert.DeserializeObject<Dictionary<int, Statistics>>(json);
 
+            // Check if the dictionary contains the unique ID
+            if (statisticsDict.ContainsKey(uniqueID))
+            {
+                Statistics playerStatistics = statisticsDict[uniqueID];
 
-
-
-            return StatsFromJSON;
+                return playerStatistics; 
+            }
+            else
+            {
+                return null; // Return null if not found
+            }
         }
 
         /// <summary>
@@ -113,7 +156,7 @@ namespace Group2_COSC2200_Project.model
         /// <param name="uniqueID"></param>
         public void ResetStats(int uniqueID)
         {
-
+            ///<todo> Do We NEED Reset stats? RE: Extra feature...? </todo>
         }
 
     }
