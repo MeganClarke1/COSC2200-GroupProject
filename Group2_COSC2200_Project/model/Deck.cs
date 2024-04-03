@@ -50,5 +50,17 @@
             Cards.RemoveAt(Cards.Count - 1);
             return card;
         }
+
+        /// <summary>
+        /// Takes a deck object and determines the 21st card. 
+        /// Because euchre deals out 20 cards, the 21st card would be the kitty.
+        /// </summary>
+        /// <param name="deck"> The Deck to determine the kitty from. </param>
+        /// <returns> kitty - the 21st card in the deck </returns>
+        public Card DetermineKitty()
+        {
+            Card kitty = Cards[1];
+            return kitty;
+        }
     }
 }

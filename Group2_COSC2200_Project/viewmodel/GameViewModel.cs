@@ -11,6 +11,7 @@ namespace Group2_COSC2200_Project.viewmodel
         private HandViewModel _player2Hand;
         private HandViewModel _player3Hand;
         private HandViewModel _player4Hand;
+        private KittyViewModel _kitty;
 
         public HandViewModel Player1Hand
         {
@@ -64,6 +65,19 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        public KittyViewModel Kitty
+        {
+            get => _kitty;
+            set
+            {
+                if (_kitty != value)
+                {
+                    _kitty = value;
+                    OnPropertyChanged(nameof(Player4Hand));
+                }
+            }
+        }
+
         public GameViewModel()
         {
             _game.Initialize();
@@ -71,6 +85,7 @@ namespace Group2_COSC2200_Project.viewmodel
             _player2Hand = new HandViewModel(_game.Players[1].PlayerHand);
             _player3Hand = new HandViewModel(_game.Players[2].PlayerHand);
             _player4Hand = new HandViewModel(_game.Players[3].PlayerHand);
+            _kitty = new KittyViewModel(_game.Kitty);
         }
     }
 
