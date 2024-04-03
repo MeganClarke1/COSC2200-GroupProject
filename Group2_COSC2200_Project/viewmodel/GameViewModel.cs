@@ -81,10 +81,10 @@ namespace Group2_COSC2200_Project.viewmodel
         public GameViewModel()
         {
             _game.Initialize();
-            _player1Hand = new HandViewModel(_game.Players[0].PlayerHand);
-            _player2Hand = new HandViewModel(_game.Players[1].PlayerHand);
-            _player3Hand = new HandViewModel(_game.Players[2].PlayerHand);
-            _player4Hand = new HandViewModel(_game.Players[3].PlayerHand);
+            _player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            _player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            _player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            _player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
             _kitty = new KittyViewModel(_game.Kitty);
         }
     }
