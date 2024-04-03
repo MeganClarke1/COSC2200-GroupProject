@@ -1,11 +1,16 @@
-﻿using Group2_COSC2200_Project.model;
+﻿using GalaSoft.MvvmLight.Command;
+using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
     public class GameViewModel : ViewModelBase
     {
         private Game _game = new Game();
+
+        public ICommand OrderUpCommand { get; private set; }
+        public ICommand PassCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -79,13 +84,39 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         public GameViewModel()
-        {
+        {   
             _game.Initialize();
             _player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
             _player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
             _player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             _player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
             _kitty = new KittyViewModel(_game.Kitty);
+
+            OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
+            PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
+        }
+
+        // Defining our iCommand Method calls
+        private void OrderUpExecute(object parameter)
+        {
+            _game.OrderUp();
+        }
+
+        private bool CanOrderUpExecute(object parameter)
+        {
+            // Add any condition here that determines whether the button can be clicked
+            return true; // Change this condition as per your requirement
+        }
+
+        private void PassExecute(object parameter)
+        {
+            _game.Pass();
+        }
+
+        private bool CanPassExecute(object parameter)
+        {
+            // Add any condition here that determines whether the button can be clicked
+            return true; // Change this condition as per your requirement
         }
     }
 
