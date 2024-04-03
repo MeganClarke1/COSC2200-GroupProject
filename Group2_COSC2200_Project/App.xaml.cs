@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Data;
 using System.Windows;
+using Group2_COSC2200_Project.model;
+using System.Diagnostics;
 
 namespace Group2_COSC2200_Project
 {

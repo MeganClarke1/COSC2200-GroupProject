@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Group2_COSC2200_Project.model;
+using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
