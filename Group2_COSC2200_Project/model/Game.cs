@@ -28,8 +28,6 @@ namespace Group2_COSC2200_Project.model
         public bool trumpFromKitty { get; private set; }
 
 
-
-
         public Game()
         {
             
@@ -46,8 +44,8 @@ namespace Group2_COSC2200_Project.model
             PlayerThree = (new Player(3, "Player 3"));
             PlayerFour = (new Player(4, "Player 4"));
 
-            Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerTwo));
-            Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerThree, PlayerFour));
+            Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree));
+            Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
 
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
 
@@ -60,7 +58,7 @@ namespace Group2_COSC2200_Project.model
 
         public void TrumpSelection() // HANDLES ONLY BUTTON ENABLING
         {
-            CurrentPlayer = TurnList[0];
+            CurrentPlayer = TurnList[1];
             trumpFromKitty = true;
         }
 
@@ -84,10 +82,14 @@ namespace Group2_COSC2200_Project.model
         public void Pass()
         {
             // Change turns 
-            GameFunctionality.NextTurn(TurnList);
+            //GameFunctionality.NextTurn(TurnList);
+
+            CurrentPlayer = TurnList[1];
+
+            MessageBox.Show("Test.");
 
             // RESET the current player to the new player's whose turn it is
-            CurrentPlayer = TurnList[0];
+            //CurrentPlayer = TurnList[0];
 
         }
     }
