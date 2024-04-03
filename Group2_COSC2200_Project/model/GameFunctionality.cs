@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -157,5 +158,49 @@ namespace Group2_COSC2200_Project.model
                 }
             }
         }
+
+        /*// 2 Options: Loop through each player (bad performance) or, simply use the turnList to call the function in order of the turnlist
+        // Eg. TurnList[0].PassOrOrderUp
+        //     TurnList[1].PassOrOrderUp
+        public static bool PassOrOrderUp(List<Player>turnList)
+        {
+            // Reference the property in game to see if we still need to ask for trump ( still false, meaning no one else has ordered up )
+            if (! game.gameTrumpOrdered)
+            {
+                // Check the current player in the turnlist
+                Player currentPlayer = turnList[0];
+
+                // Enable buttons for currentPlayer 
+                if (currentPlayer == playerOne) // playerOne should reference the player Object in Game properties
+                {
+                    // Enable player 1's buttons... Will need specific names on each button to reference
+
+                    // Prompt that user
+                    MessageBox.Show("Your Turn " + playerOne);
+                }
+
+            }
+            else
+            {
+                // disable all buttons
+            }
+        }
+
+        public static void playerOneOrder()
+        {
+            // change the gameTrumpOrder status to true
+            Game.gameTrumpOrdered = true;
+
+            // set trump suit property of game
+            Game.TrumpSuit = Card trumpCard.suit;
+
+            //disable all buttons
+        }
+
+        public static void playerOnePass()
+        {
+
+        }*/
+
     }
 }

@@ -37,7 +37,7 @@
                 </ItemsControl>
             </Grid>
             <Button Content="Pass" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Order it up" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button x:Name ="Player1OrderUp" IsEnabled="False" Content="Order it up" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 2 Grid -->
             <Grid Width="500" Height="145" Margin="-178,237,708,238" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player2Hand.Cards}">
