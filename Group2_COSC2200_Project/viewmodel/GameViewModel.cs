@@ -1,11 +1,16 @@
-﻿using Group2_COSC2200_Project.model;
+﻿using GalaSoft.MvvmLight.Command;
+using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
     public class GameViewModel : ViewModelBase
     {
         private Game _game = new Game();
+
+        public ICommand OrderUpCommand { get; private set; }
+        public ICommand PassCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -152,7 +157,7 @@ namespace Group2_COSC2200_Project.viewmodel
         // public bool Player2Turn => _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
 
         public GameViewModel()
-        {
+        {   
             _game.Initialize();
             _player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
             _player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
@@ -160,6 +165,41 @@ namespace Group2_COSC2200_Project.viewmodel
             _player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
             _kitty = new KittyViewModel(_game.Kitty);
 
+            OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
+            PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
+
+            UpdatePlayerTurn();
+        }
+
+        private void OrderUpExecute(object parameter)
+        {
+            _game.OrderUp();
+        }
+
+        private bool CanOrderUpExecute(object parameter)
+        {
+            // Add any condition here that determines whether the button can be clicked
+            return true; // Change this condition as per your requirement
+        }
+
+        private void PassExecute(object parameter)
+        {
+            _game.Pass();
+            UpdatePlayerTurn();
+        }
+
+        private bool CanPassExecute(object parameter)
+        {
+            // Add any condition here that determines whether the button can be clicked
+            return true; // Change this condition as per your requirement
+        }
+
+        private void UpdatePlayerTurn()
+        {
+            Player1Turn = _game.CurrentPlayer == _game.PlayerOne && _game.trumpFromKitty;
+            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
+            Player3Turn = _game.CurrentPlayer == _game.PlayerThree && _game.trumpFromKitty;
+            Player4Turn = _game.CurrentPlayer == _game.PlayerFour && _game.trumpFromKitty;
         }
     }
 

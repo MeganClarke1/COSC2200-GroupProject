@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using static Group2_COSC2200_Project.model.Card;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -21,7 +22,11 @@ namespace Group2_COSC2200_Project.model
         public Team Team1 { get; private set; }
         public Team Team2 { get; private set; }
 
-        
+        public Card.Suits TrumpSuit { get; private set; }
+
+        public Player CurrentPlayer { get; private set; }
+        public bool trumpFromKitty { get; private set; }
+
 
         public Game()
         {
@@ -33,13 +38,14 @@ namespace Group2_COSC2200_Project.model
 
         public void Initialize()
         {
+
             PlayerOne = (new Player(1, "Player 1"));
             PlayerTwo = (new Player(2, "Player 2"));
             PlayerThree = (new Player(3, "Player 3"));
             PlayerFour = (new Player(4, "Player 4"));
 
-            Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerTwo));
-            Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerThree, PlayerFour));
+            Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree));
+            Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
 
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
 
@@ -50,24 +56,39 @@ namespace Group2_COSC2200_Project.model
 
         }
 
-        public void TrumpSelection()
+        public void TrumpSelection() // HANDLES ONLY BUTTON ENABLING
         {
-            // Player determination
-            Player currentPlayer = TurnList[0];
+            CurrentPlayer = TurnList[0];
+            trumpFromKitty = true;
+        }
 
-            if(currentPlayer == PlayerOne)
-            {
-                GameView myUserControl = new GameView(); // create game view instance
+        // These handle what happens when ANY user clicks order up 
+        public void OrderUp()
+        {
+            // Change Boolean TrumpSelected to True so no more players are asked / have their buttons enabled
+            trumpFromKitty = false;
 
-                var button = myUserControl.FindName("Player1OrderUp") as Button; // fetch the player 1 order up button
+            // Set trump suit property to the Kitty's suit value.
+            TrumpSuit = Kitty[0].Suit;
 
-                button.IsEnabled = true; // set it to true to enable button
+            // TODO :Set Maker status from the team of which the player that ordered up belongs to 
 
-                MessageBox.Show("Your turn " + currentPlayer);
+            // Disable all buttons
+            MessageBox.Show("Current Kitty " + TrumpSuit.ToString());
 
-            }
+        }
 
-            // Enabling buttons here with player determination 
+        // These handle what happens when ANY user clicks pass
+        public void Pass()
+        {
+            // Change turns 
+            GameFunctionality.NextTurn(TurnList);
+
+            // RESET the current player to the new player's whose turn it is
+            CurrentPlayer = TurnList[0];
+
+            // Present the message to the player that its their turn
+            MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
 
         }
     }
