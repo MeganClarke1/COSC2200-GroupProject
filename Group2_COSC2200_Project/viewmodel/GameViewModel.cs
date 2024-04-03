@@ -168,11 +168,7 @@ namespace Group2_COSC2200_Project.viewmodel
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
 
-            Player1Turn = _game.CurrentPlayer == _game.PlayerOne && _game.trumpFromKitty;
-            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
-            Player3Turn = _game.CurrentPlayer == _game.PlayerThree && _game.trumpFromKitty;
-            Player4Turn = _game.CurrentPlayer == _game.PlayerFour && _game.trumpFromKitty;
-
+            UpdatePlayerTurn();
         }
 
         private void OrderUpExecute(object parameter)
@@ -189,12 +185,21 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PassExecute(object parameter)
         {
             _game.Pass();
+            UpdatePlayerTurn();
         }
 
         private bool CanPassExecute(object parameter)
         {
             // Add any condition here that determines whether the button can be clicked
             return true; // Change this condition as per your requirement
+        }
+
+        private void UpdatePlayerTurn()
+        {
+            Player1Turn = _game.CurrentPlayer == _game.PlayerOne && _game.trumpFromKitty;
+            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
+            Player3Turn = _game.CurrentPlayer == _game.PlayerThree && _game.trumpFromKitty;
+            Player4Turn = _game.CurrentPlayer == _game.PlayerFour && _game.trumpFromKitty;
         }
     }
 

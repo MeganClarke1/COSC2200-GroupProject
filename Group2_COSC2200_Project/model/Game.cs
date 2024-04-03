@@ -58,7 +58,7 @@ namespace Group2_COSC2200_Project.model
 
         public void TrumpSelection() // HANDLES ONLY BUTTON ENABLING
         {
-            CurrentPlayer = TurnList[1];
+            CurrentPlayer = TurnList[0];
             trumpFromKitty = true;
         }
 
@@ -82,14 +82,13 @@ namespace Group2_COSC2200_Project.model
         public void Pass()
         {
             // Change turns 
-            //GameFunctionality.NextTurn(TurnList);
-
-            CurrentPlayer = TurnList[1];
-
-            MessageBox.Show("Test.");
+            GameFunctionality.NextTurn(TurnList);
 
             // RESET the current player to the new player's whose turn it is
-            //CurrentPlayer = TurnList[0];
+            CurrentPlayer = TurnList[0];
+
+            // Present the message to the player that its their turn
+            MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
 
         }
     }
