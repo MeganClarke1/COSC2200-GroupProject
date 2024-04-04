@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace Group2_COSC2200_Project.model
+﻿namespace Group2_COSC2200_Project.model
 {
     /// <summary>
     /// Represents the general game logic for the game.

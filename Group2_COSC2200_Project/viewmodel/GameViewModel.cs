@@ -1,28 +1,30 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
     public class GameViewModel : ViewModelBase
     {
-        private Game _game = new Game();
+        private Game _game = new();
 
         public ICommand OrderUpCommand { get; private set; }
         public ICommand PassCommand { get; private set; }
+        public ICommand StartCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
         private HandViewModel _player3Hand;
         private HandViewModel _player4Hand;
+        private KittyViewModel _kitty;
+        private Deck _deck;
         private bool _player1Turn;
         private bool _player2Turn;
         private bool _player3Turn;
         private bool _player4Turn;
-        private Player _currentPlayer;
-        private bool _trumpFromKitty;
-        private KittyViewModel _kitty;
+        private Visibility _started = Visibility.Visible;
 
         public HandViewModel Player1Hand
         {
@@ -76,19 +78,6 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public Player CurrentPlayer
-        {
-            get => _currentPlayer;
-            set
-            {
-                if (_currentPlayer != value)
-                {
-                    _currentPlayer = value;
-                    OnPropertyChanged(nameof(CurrentPlayer));
-                }
-            }
-        }
-
         public KittyViewModel Kitty
         {
             get => _kitty;
@@ -97,7 +86,20 @@ namespace Group2_COSC2200_Project.viewmodel
                 if (_kitty != value)
                 {
                     _kitty = value;
-                    OnPropertyChanged(nameof(Player4Hand));
+                    OnPropertyChanged(nameof(Kitty));
+                }
+            }
+        }
+
+        public Deck Deck
+        {
+            get => _deck;
+            set
+            {
+                if (_deck != value)
+                {
+                    _deck = value;
+                    OnPropertyChanged(nameof(Deck));
                 }
             }
         }
@@ -154,32 +156,37 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        public Visibility Started
+        {
+            get => _started;
+            set
+            {
+                if (_started != value)
+                {
+                    _started = value;
+                    OnPropertyChanged(nameof(Started));
+                }
+            }
+        }
+
         // public bool Player2Turn => _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
 
         public GameViewModel()
         {   
-            _game.Initialize();
-            _player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            _player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            _player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            _player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-            _kitty = new KittyViewModel(_game.Kitty);
-
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
-
-            UpdatePlayerTurn();
+            StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
         }
 
         private void OrderUpExecute(object parameter)
         {
             _game.OrderUp();
+            UpdatePlayerTurn();
         }
 
         private bool CanOrderUpExecute(object parameter)
         {
-            // Add any condition here that determines whether the button can be clicked
-            return true; // Change this condition as per your requirement
+            return true;
         }
 
         private void PassExecute(object parameter)
@@ -190,8 +197,24 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private bool CanPassExecute(object parameter)
         {
-            // Add any condition here that determines whether the button can be clicked
-            return true; // Change this condition as per your requirement
+            return true;
+        }
+
+        private void StartExecute(object parameter)
+        {
+            _game.Start();
+            Started = Visibility.Collapsed;
+            UpdatePlayerTurn();
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Kitty = new KittyViewModel(_game.Kitty);
+        }
+
+        private bool CanStartExecute(object parameter)
+        {
+            return true;
         }
 
         private void UpdatePlayerTurn()
