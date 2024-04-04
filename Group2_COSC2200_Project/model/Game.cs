@@ -61,7 +61,7 @@ namespace Group2_COSC2200_Project.model
             // TODO :Set Maker status from the team of which the player that ordered up belongs to 
 
             // Disable all buttons
-            MessageBox.Show("Current Kitty " + TrumpSuit.ToString());
+            MessageBox.Show("Trump Suit is: " + TrumpSuit.ToString());
 
         }
 
