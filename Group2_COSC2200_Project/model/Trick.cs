@@ -29,13 +29,31 @@ namespace Group2_COSC2200_Project.model
 
         }
 
-        // Methods
-        // TODO: Logic for determining a Trick Winner
-       //public DetermineTrickWinner()
-       //{
-       //    return;
-       //}
-        
+        /// <summary>
+        /// Takes a list of Card objects, iterates through them, and compares their Value property to the current Highest Value.
+        /// If it is higher, reassigns the HighCardValue to that Card's current Value.
+        /// Also, put that entire Card object in the HighCard variable.
+        /// Will return the Card Object with the highest Value property.
+        /// </summary>
+        /// <param name="PlayedCards"> A list of card objects that have been played in a trick. </param>
+        /// <returns> highCard - A card object with the highest .Value. </returns>
+        public static Card DetermineTrickWinner(List<Card> PlayedCards)
+        {   
+            int highCardValue = 0;
+            Card highCard = null;
+
+            foreach(var card in PlayedCards)
+            {
+                if (card.Value > highCardValue)
+                {
+                    highCardValue = card.Value;
+                    highCard = card;
+                }
+            }
+
+            return highCard;
+        }
+
 
     }
 }

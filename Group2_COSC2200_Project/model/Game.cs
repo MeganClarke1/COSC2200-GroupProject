@@ -34,6 +34,7 @@ namespace Group2_COSC2200_Project.model
             Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree));
             Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
+            PlayArea = new List<Card>();
         }
 
         public void Start()
@@ -84,6 +85,12 @@ namespace Group2_COSC2200_Project.model
             Card card = CurrentPlayer.PlayerHand.Cards[idx];
             CurrentPlayer.PlayerHand.Cards.RemoveAt(idx);
             PlayArea.Add(card);
+        }
+
+        /// TEST FUNCTION - CAN DELETE LATER *************
+        public void AddCardtoPlayAreaTest(Card CardToAdd)
+        {
+            PlayArea.Add(CardToAdd);
         }
     }
 }
