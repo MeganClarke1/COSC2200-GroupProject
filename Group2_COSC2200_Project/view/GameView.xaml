@@ -20,7 +20,9 @@
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player1Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Cursor="Hand">
+                            <!-- Use a Button for each card -->
+                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -43,7 +45,9 @@
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player2Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Cursor="Hand">
+                            <!-- Use a Button for each card -->
+                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -69,7 +73,9 @@
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player3Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Cursor="Hand">
+                            <!-- Use a Button for each card -->
+                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -92,7 +98,9 @@
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player4Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Cursor="Hand">
+                            <!-- Use a Button for each card -->
+                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -114,8 +122,8 @@
             <Button Content="Pass" Command="{Binding PassCommand}" IsEnabled="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <Button Content="Order it up" Command="{Binding OrderUpCommand}" IsEnabled="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player Area -->
-            <Grid Width="400" Height="145" Margin="315,238,315,238" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl Margin="5,0,5,10" >
+            <Grid x:Name="playAreaGrid" Width="400" Height="145" Margin="315,238,315,238" RenderTransformOrigin="0.5,0.5">
+                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding PlayArea.PlayedCards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Margin="5" Cursor="Hand">
