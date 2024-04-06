@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
-    public class GameViewModel : ViewModelBase, INotifyPropertyChanged
+    public class GameViewModel : ViewModelBase
     {
         private Game _game = new();
 
@@ -16,7 +16,6 @@ namespace Group2_COSC2200_Project.viewmodel
         public ICommand PassCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
         public ICommand PlayCardCommand { get; private set; }
-
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -44,7 +43,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 }
             }
         }
-
 
         public HandViewModel Player1Hand
         {
@@ -193,17 +191,36 @@ namespace Group2_COSC2200_Project.viewmodel
 
         public GameViewModel()
         {   
+            UpdateViewModelState();
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
             StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
             PlayCardCommand = new RelayCommand<object>(PlayCardExecute, CanPlayCardExecute);
+        }
 
+        private void UpdateViewModelState()
+        {
+            switch (_game.CurrentState)
+            {
+                case Game.GameState.Initialize:
+                    // 
+                    break;
+                case Game.GameState.Start:
+                    Start();
+                    break;
+                case Game.GameState.Deal:
+                    // 
+                    break;
+                case Game.GameState.TrumpSelectionFromKitty:
+                    TrumpSelectionFromKitty();
+                    break;
+            }
         }
 
         private void OrderUpExecute(object parameter)
         {
             _game.OrderUp();
-            UpdatePlayerTurn();
+            UpdateViewModelState();
         }
 
         private bool CanOrderUpExecute(object parameter)
@@ -214,7 +231,7 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PassExecute(object parameter)
         {
             _game.Pass();
-            UpdatePlayerTurn();
+            UpdateViewModelState();
         }
 
         private bool CanPassExecute(object parameter)
@@ -225,15 +242,9 @@ namespace Group2_COSC2200_Project.viewmodel
         private void StartExecute(object parameter)
         {
             _game.Start();
-            Started = Visibility.Collapsed;
-            UpdatePlayerTurn();
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-            Kitty = new KittyViewModel(_game.Kitty);
-            PlayArea = new PlayAreaViewModel(_game.PlayArea);
-
+            UpdateViewModelState();
+            _game.TrumpSelectionFromKitty();
+            UpdateViewModelState();
         }
 
         private bool CanStartExecute(object parameter)
@@ -241,12 +252,23 @@ namespace Group2_COSC2200_Project.viewmodel
             return true;
         }
 
-        private void UpdatePlayerTurn()
+        private void Start()
         {
-            Player1Turn = _game.CurrentPlayer == _game.PlayerOne && _game.trumpFromKitty;
-            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
-            Player3Turn = _game.CurrentPlayer == _game.PlayerThree && _game.trumpFromKitty;
-            Player4Turn = _game.CurrentPlayer == _game.PlayerFour && _game.trumpFromKitty;
+            Started = Visibility.Collapsed;
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Kitty = new KittyViewModel(_game.Kitty);
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+        }
+
+        private void TrumpSelectionFromKitty()
+        {
+            Player1Turn = _game.CurrentPlayer == _game.PlayerOne;
+            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo;
+            Player3Turn = _game.CurrentPlayer == _game.PlayerThree;
+            Player4Turn = _game.CurrentPlayer == _game.PlayerFour;
         }
 
         /// <summary>
@@ -281,7 +303,7 @@ namespace Group2_COSC2200_Project.viewmodel
 
                     // Pass turns and update the buttons 
                     _game.Pass();
-                    UpdatePlayerTurn();
+                    //UpdatePlayerTurn();
                 }
             }
             // 4 cards have been played

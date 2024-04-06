@@ -5,9 +5,6 @@
     /// </summary>
     class GameFunctionality
     {
-
-        public Card.Suits Trump;
-
         /// <summary>
         /// Static method to merge 2 team lists into one turn list for game functionality construction
         /// Takes 2 lists of players (teams), and merges them into 1 turnlist, where player turns alternate between teams.

@@ -1,13 +1,19 @@
-﻿using Group2_COSC2200_Project.view;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using static Group2_COSC2200_Project.model.Card;
+﻿using System.Windows;
 
 namespace Group2_COSC2200_Project.model
 {
     public class Game
     {
+        public enum GameState
+        {
+            Initialize,
+            Start,
+            Deal,
+            TrumpSelectionFromKitty,
+            TrumpSelectionPostKitty,
+            Round
+        }
+        public GameState CurrentState { get; private set; }
 
         public Player PlayerOne { get; private set; }
         public Player PlayerTwo { get; private set; }
@@ -18,13 +24,42 @@ namespace Group2_COSC2200_Project.model
         public Deck Deck { get; private set; }
         public List<Card> Kitty {  get; private set; }
         public List<Player> TurnList { get; private set; }
-        public Card.Suits TrumpSuit { get; private set; }
         public Player CurrentPlayer { get; private set; }
-        public bool trumpFromKitty { get; private set; }
+        public Card.Suits TrumpSuit { get; private set; }
+        public Card.Suits LeadSuit { get; private set; }
         public List<Card> PlayArea { get; private set; }
 
         public Game()
         {
+            ChangeState(GameState.Initialize);
+        }
+
+        public void ChangeState(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Initialize:
+                    Initialize();
+                    break;
+                case GameState.Start: 
+                    Start(); 
+                    break;
+                case GameState.Deal:
+                    //Deal();
+                    break;
+                case GameState.TrumpSelectionFromKitty:
+                    TrumpSelectionFromKitty(); 
+                    break;
+                case GameState.TrumpSelectionPostKitty:
+                    //TrumpSelectionPostKitty();
+                    break;
+            }
+        }
+
+        public void Initialize()
+        {
+            CurrentState = GameState.Initialize;
+
             Deck = new Deck();
             Kitty = new List<Card>();
             PlayerOne = (new Player(1, "Player 1"));
@@ -39,31 +74,27 @@ namespace Group2_COSC2200_Project.model
 
         public void Start()
         {
+            CurrentState = GameState.Start;
+
             GameFunctionality.DealCards(Deck, TurnList);
             Kitty.Add(Deck.DetermineKitty());
-            TrumpSelection();
         }
 
-        public void TrumpSelection() // HANDLES ONLY BUTTON ENABLING
+        public void TrumpSelectionFromKitty() // HANDLES ONLY BUTTON ENABLING
         {
+            CurrentState = GameState.TrumpSelectionFromKitty;
+
+            MessageBox.Show("Current Kitty " + TrumpSuit.ToString());
             CurrentPlayer = TurnList[0];
-            trumpFromKitty = true;
         }
 
         // These handle what happens when ANY user clicks order up 
         public void OrderUp()
         {
-            // Change Boolean TrumpSelected to True so no more players are asked / have their buttons enabled
-            trumpFromKitty = false;
-
             // Set trump suit property to the Kitty's suit value.
             TrumpSuit = Kitty[0].Suit;
 
             // TODO :Set Maker status from the team of which the player that ordered up belongs to 
-
-            // Disable all buttons
-            MessageBox.Show("Current Kitty " + TrumpSuit.ToString());
-
         }
 
         // These handle what happens when ANY user clicks pass
@@ -78,13 +109,6 @@ namespace Group2_COSC2200_Project.model
             // Present the message to the player that its their turn
             MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
 
-        }
-
-        public void PlayCard(int idx)
-        {
-            Card card = CurrentPlayer.PlayerHand.Cards[idx];
-            CurrentPlayer.PlayerHand.Cards.RemoveAt(idx);
-            PlayArea.Add(card);
         }
 
         /// TEST FUNCTION - CAN DELETE LATER *************
