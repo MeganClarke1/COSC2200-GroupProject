@@ -25,6 +25,7 @@ namespace Group2_COSC2200_Project.model
 
         public Scoreboard()
         { 
+
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public void ResetScoreboardTricks()
         {
-            TeamTwoTricks = 0;
+            TeamOneTricks = 0;
             TeamTwoTricks = 0;
         }
 
