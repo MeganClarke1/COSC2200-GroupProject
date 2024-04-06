@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -30,18 +31,23 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// Takes a list of Card objects, iterates through them, and compares their Value property to the current Highest Value.
-        /// If it is higher, reassigns the HighCardValue to that Card's current Value.
-        /// Also, put that entire Card object in the HighCard variable.
-        /// Will return the Card Object with the highest Value property.
+        /// Takes a list of played cards, the current turn list, and both Team objects.
+        ///     Determines the highest card of all played cards, stores the player who that card belongs to. (Winning Player)
+        ///     Loops through both teams to find which team the winning player belongs to. (Comparing player IDs)
+        ///     Returns the team who owns the winning player. (Winning Team)
         /// </summary>
-        /// <param name="PlayedCards"> A list of card objects that have been played in a trick. </param>
-        /// <returns> highCard - A card object with the highest .Value. </returns>
-        public static Card DetermineTrickWinner(List<Card> PlayedCards)
+        /// <param name="PlayedCards"> The List of Card objects that have been played this trick. </param>
+        /// <param name="TeamOne"> The current team one of the game class. </param>
+        /// <param name="TeamTwo"> The current team two of the game class. </param>
+        /// <returns> WinningTeam - The Team object who won the trick. </returns>
+        public static Team DetermineTrickWinner(List<Card> PlayedCards, 
+                                                Team TeamOne, Team TeamTwo)
         {   
+            // Initialize the highCard value for comparison.
             int highCardValue = 0;
             Card highCard = null;
 
+            // Compare each card in played cards to the current high card value. Reassign if higher.
             foreach(var card in PlayedCards)
             {
                 if (card.Value > highCardValue)
@@ -51,9 +57,31 @@ namespace Group2_COSC2200_Project.model
                 }
             }
 
-            return highCard;
+            // Fetch the player who owned the card that has the highest value.
+            int winningPlayerId = highCard.CardsAssociatedToPlayers;
+
+            // Initialize an empty winningTeam to hold the result.
+            Team winningTeam = null;
+
+            // Index here for checking each position in the Team list.
+            int index = 0;
+            // For each player in each team, check if their id matches the winningPlayer's ID. If so, set their team to be the winner.
+            foreach (Player player in TeamOne.TeamPlayers) 
+            {
+                if (winningPlayerId == TeamOne.TeamPlayers[index].PlayerID)
+                {
+                    winningTeam = TeamOne;
+                    break;
+                }
+                else if (winningPlayerId == TeamTwo.TeamPlayers[index].PlayerID)
+                {
+                    winningTeam = TeamTwo;
+                    break;
+                }
+                index++;
+            }
+            
+            return winningTeam;
         }
-
-
     }
 }

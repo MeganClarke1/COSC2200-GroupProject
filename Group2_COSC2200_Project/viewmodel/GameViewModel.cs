@@ -29,7 +29,77 @@ namespace Group2_COSC2200_Project.viewmodel
         private bool _player2Turn;
         private bool _player3Turn;
         private bool _player4Turn;
+        private Team _teamOne;
+        private Team _teamTwo;
+        private int _teamOneTricks;
+        private int _teamTwoTricks;
+        private Scoreboard _scoreBoard;
         private Visibility _started = Visibility.Visible;
+
+        public Scoreboard Scoreboard
+        {
+            get => _scoreBoard;
+            set
+            {
+                if (_scoreBoard != value)
+                {
+                    _scoreBoard = value;
+                    OnPropertyChanged(nameof(Scoreboard));
+                }
+            }
+        }
+
+        public int TeamOneTricks
+        {
+            get => _teamOneTricks;
+            set
+            {
+                if (_teamOneTricks != value)
+                {
+                    _teamOneTricks = value;
+                    OnPropertyChanged(nameof(TeamOneTricks));
+                }
+            }
+        }
+
+        public int TeamTwoTricks
+        {
+            get => _teamTwoTricks;
+            set
+            {
+                if (_teamTwoTricks != value)
+                {
+                    _teamTwoTricks = value;
+                    OnPropertyChanged(nameof(TeamTwoTricks));
+                }
+            }
+        }
+
+        public Team TeamOne
+        {
+            get => _teamOne;
+            set
+            {
+                if (_teamOne != value)
+                {
+                    _teamOne = value;
+                    OnPropertyChanged(nameof(TeamOne));
+                }
+            }
+        }
+
+        public Team TeamTwo
+        {
+            get => _teamTwo;
+            set
+            {
+                if (_teamTwo != value)
+                {
+                    _teamTwo = value;
+                    OnPropertyChanged(nameof(TeamTwo));
+                }
+            }
+        }
 
         public PlayAreaViewModel PlayArea
         {
@@ -267,6 +337,9 @@ namespace Group2_COSC2200_Project.viewmodel
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            TeamOne = new Team(_game.Team1.TeamId, _game.Team1.TeamPlayers);
+            TeamTwo = new Team(_game.Team2.TeamId, _game.Team2.TeamPlayers);
+            Scoreboard = new Scoreboard();
         }
 
         private void TrumpSelectionFromKitty()
@@ -343,16 +416,18 @@ namespace Group2_COSC2200_Project.viewmodel
             else
             {
                 MessageBox.Show("Everyone has played a card. Time to see who wins!");
-                Card winningCard = Trick.DetermineTrickWinner(_game.PlayArea);
-                int winningPlayerId = winningCard.CardsAssociatedToPlayers;
+                Team winningTeam = Trick.DetermineTrickWinner(_game.PlayArea, _game.Team1, _game.Team2);
+                MessageBox.Show("Winning Team: " + winningTeam.TeamId);
 
-                foreach (Player player in _game.TurnList)
+                // Increment the trick counter based on winning team
+                if (winningTeam.TeamId == Team.TeamID.TeamOne) {
+                    TeamOneTricks++;
+                    //Scoreboard.IncrementTrickCount(TeamOne);   // **** When trying to do this same method from the Scoreboard obj, doesnt work .... ***
+                }
+                else if(winningTeam.TeamId == Team.TeamID.TeamTwo)
                 {
-                    if (winningPlayerId == player.PlayerID)
-                    {
-                        MessageBox.Show("Trick Winner: " + player.PlayerName);
-                        break;
-                    }
+                    TeamTwoTricks++;
+                    //Scoreboard.IncrementTrickCount(TeamTwo);
                 }
             }
         }
