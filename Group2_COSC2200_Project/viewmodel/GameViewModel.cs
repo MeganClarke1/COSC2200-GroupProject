@@ -2,6 +2,7 @@
 using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+
 using System.Windows;
 using System.Windows.Input;
 
@@ -16,12 +17,14 @@ namespace Group2_COSC2200_Project.viewmodel
         public ICommand StartCommand { get; private set; }
         public ICommand PlayCardCommand { get; private set; }
 
+
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
         private HandViewModel _player3Hand;
         private HandViewModel _player4Hand;
         private KittyViewModel _kitty;
         private PlayAreaViewModel _playArea;
+
         private Deck _deck;
         private bool _player1Turn;
         private bool _player2Turn;
@@ -41,6 +44,7 @@ namespace Group2_COSC2200_Project.viewmodel
                 }
             }
         }
+
 
         public HandViewModel Player1Hand
         {
@@ -193,6 +197,7 @@ namespace Group2_COSC2200_Project.viewmodel
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
             StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
             PlayCardCommand = new RelayCommand<object>(PlayCardExecute, CanPlayCardExecute);
+
         }
 
         private void OrderUpExecute(object parameter)
