@@ -11,10 +11,10 @@ namespace Group2_COSC2200_Project.model
             Deal,
             TrumpSelectionFromKitty,
             TrumpSelectionPostKitty,
+            DealerKittySwap,
             Round
         }
         public GameState CurrentState { get; private set; }
-
         public Player PlayerOne { get; private set; }
         public Player PlayerTwo { get; private set; }
         public Player PlayerThree { get; private set; }
@@ -24,6 +24,7 @@ namespace Group2_COSC2200_Project.model
         public Deck Deck { get; private set; }
         public List<Card> Kitty {  get; private set; }
         public List<Player> TurnList { get; private set; }
+        public int TurnsTaken { get; private set; }
         public Player CurrentPlayer { get; private set; }
         public Card.Suits TrumpSuit { get; private set; }
         public Card.Suits LeadSuit { get; private set; }
@@ -53,6 +54,9 @@ namespace Group2_COSC2200_Project.model
                 case GameState.TrumpSelectionPostKitty:
                     //TrumpSelectionPostKitty();
                     break;
+                case GameState.DealerKittySwap:
+                    DealerKittySwap();
+                    break;
             }
         }
 
@@ -75,7 +79,7 @@ namespace Group2_COSC2200_Project.model
         public void Start()
         {
             CurrentState = GameState.Start;
-
+            GameFunctionality.SetDealer(TurnList);
             GameFunctionality.DealCards(Deck, TurnList);
             Kitty.Add(Deck.DetermineKitty());
         }
@@ -83,23 +87,44 @@ namespace Group2_COSC2200_Project.model
         public void TrumpSelectionFromKitty() // HANDLES ONLY BUTTON ENABLING
         {
             CurrentState = GameState.TrumpSelectionFromKitty;
-
-            MessageBox.Show("Current Kitty " + TrumpSuit.ToString());
+            MessageBox.Show("Current Kitty " + Kitty[0].Suit);
+            TurnsTaken = 0;
             CurrentPlayer = TurnList[0];
         }
 
-        // These handle what happens when ANY user clicks order up 
-        public void OrderUp()
+        public void TrumpSelectionPostKitty()
         {
-            // Set trump suit property to the Kitty's suit value.
-            TrumpSuit = Kitty[0].Suit;
+            CurrentState = GameState.TrumpSelectionPostKitty;
+            TurnsTaken = 0;
 
+        }
+
+        public void DealerKittySwap()
+        {
+            CurrentState = GameState.DealerKittySwap;
+            TurnList = GameFunctionality.RotateToDealer(TurnList);
+            CurrentPlayer = TurnList[0];
+            MessageBox.Show(CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
+        }
+
+        // These handle what happens when ANY user clicks order up 
+        public void OrderUpFromKitty()
+        {
+            TrumpSuit = Kitty[0].Suit;
+            MessageBox.Show("Trump suit is " + TrumpSuit);
+            ChangeState(GameState.DealerKittySwap);
             // TODO :Set Maker status from the team of which the player that ordered up belongs to 
         }
 
         // These handle what happens when ANY user clicks pass
-        public void Pass()
+        public void PassFromKitty()
         {
+            TurnsTaken++;
+            if (TurnsTaken >= TurnList.Count)
+            {
+                ChangeState(GameState.TrumpSelectionPostKitty);
+                return;
+            }
             // Change turns 
             GameFunctionality.NextTurn(TurnList);
 
@@ -108,7 +133,6 @@ namespace Group2_COSC2200_Project.model
 
             // Present the message to the player that its their turn
             MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
-
         }
 
         /// TEST FUNCTION - CAN DELETE LATER *************
@@ -117,5 +141,13 @@ namespace Group2_COSC2200_Project.model
             PlayArea.Add(CardToAdd);
         }
 
+        public void SwapWithKitty(Player currentPlayer, Card card)
+        {
+            Card kittyCard = Kitty[0];
+            Card playerCard = currentPlayer.PlayerHand.RemoveCard(card);
+            Kitty.Remove(Kitty[0]);
+            Kitty.Add(playerCard);
+            currentPlayer.PlayerHand.AddCard(kittyCard);
+        }
     }
 }

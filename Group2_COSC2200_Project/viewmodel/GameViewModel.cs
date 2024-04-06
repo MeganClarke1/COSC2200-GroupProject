@@ -15,7 +15,7 @@ namespace Group2_COSC2200_Project.viewmodel
         public ICommand OrderUpCommand { get; private set; }
         public ICommand PassCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
-        public ICommand PlayCardCommand { get; private set; }
+        public ICommand ClickCardCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -195,7 +195,7 @@ namespace Group2_COSC2200_Project.viewmodel
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
             StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
-            PlayCardCommand = new RelayCommand<object>(PlayCardExecute, CanPlayCardExecute);
+            ClickCardCommand = new RelayCommand<object>(ClickCardExecute, CanClickCardExecute);
         }
 
         private void UpdateViewModelState()
@@ -214,12 +214,18 @@ namespace Group2_COSC2200_Project.viewmodel
                 case Game.GameState.TrumpSelectionFromKitty:
                     TrumpSelectionFromKitty();
                     break;
+                case Game.GameState.TrumpSelectionPostKitty:
+                    //
+                    break;
+                case Game.GameState.DealerKittySwap:
+                    DealerKittySwap();
+                    break;
             }
         }
 
         private void OrderUpExecute(object parameter)
         {
-            _game.OrderUp();
+            _game.OrderUpFromKitty();
             UpdateViewModelState();
         }
 
@@ -230,7 +236,7 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void PassExecute(object parameter)
         {
-            _game.Pass();
+            _game.PassFromKitty();
             UpdateViewModelState();
         }
 
@@ -271,6 +277,11 @@ namespace Group2_COSC2200_Project.viewmodel
             Player4Turn = _game.CurrentPlayer == _game.PlayerFour;
         }
 
+        private void DealerKittySwap()
+        {
+
+        }
+
         /// <summary>
         /// Is bound to a button on each card in a player's hand. When clicked, will passed the clicked object to this
         /// function, and add that clicked card to the PlayArea of the game instance. Sets the GameViewModel property PlayArea
@@ -278,10 +289,32 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         /// <param name="parameter"> The object passed from the Command {binding} in the GameView.xaml. In this case, will be a 
         /// CardViewModel object of the clicked card. </param>
-        private void PlayCardExecute(object parameter)
+        private void ClickCardExecute(object parameter)
         {
+            if (_game.CurrentState == Game.GameState.DealerKittySwap)
+            {
+                if (parameter is CardViewModel cardViewModel)
+                {
+                    SwapWithKitty(cardViewModel);
+                }
+            } 
+            else
+            {
+                PlayCard(parameter);
+            }
 
-            if (_game.PlayArea.Count < 4) {
+            
+        }
+
+        private bool CanClickCardExecute(object parameter)
+        {
+            return true;
+        }
+
+        private void PlayCard(object parameter)
+        {
+            if (_game.PlayArea.Count < 4)
+            {
                 // This is fetching a cardViewModel when a card is clicked
                 // Therefore, must fetch that cardViewModel's .Card property (which is the card object)
                 if (parameter is CardViewModel cardViewModel)
@@ -302,7 +335,7 @@ namespace Group2_COSC2200_Project.viewmodel
                         Player4Hand.Cards.Remove(cardViewModel);
 
                     // Pass turns and update the buttons 
-                    _game.Pass();
+                    _game.PassFromKitty();
                     //UpdatePlayerTurn();
                 }
             }
@@ -313,7 +346,7 @@ namespace Group2_COSC2200_Project.viewmodel
                 Card winningCard = Trick.DetermineTrickWinner(_game.PlayArea);
                 int winningPlayerId = winningCard.CardsAssociatedToPlayers;
 
-                foreach(Player player in _game.TurnList)
+                foreach (Player player in _game.TurnList)
                 {
                     if (winningPlayerId == player.PlayerID)
                     {
@@ -324,10 +357,14 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        private bool CanPlayCardExecute(object parameter)
+        private void SwapWithKitty(CardViewModel cardViewModel)
         {
-            return true;
+            _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
+            Kitty = new KittyViewModel(_game.Kitty);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
         }
     }
-
 }

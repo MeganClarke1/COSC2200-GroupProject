@@ -45,6 +45,20 @@
             return TurnList;
         }
 
+        public static List<Player> RotateToDealer(List<Player> TurnList)
+        {
+            if (TurnList[0].IsDealer)
+            {
+                return TurnList;
+            }
+
+            while (!TurnList[0].IsDealer)
+            {
+                NextTurn(TurnList);
+            }
+            return TurnList;
+        }
+
         /// <summary>
         /// Will set the isDealer Status of the player in the last position of the turnList to dealer.
         /// </summary>
