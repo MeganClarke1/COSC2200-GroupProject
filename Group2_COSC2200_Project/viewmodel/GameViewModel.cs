@@ -283,17 +283,8 @@ namespace Group2_COSC2200_Project.viewmodel
             else
             {
                 MessageBox.Show("Everyone has played a card. Time to see who wins!");
-                Card winningCard = Trick.DetermineTrickWinner(_game.PlayArea);
-                int winningPlayerId = winningCard.CardsAssociatedToPlayers;
-
-                foreach(Player player in _game.TurnList)
-                {
-                    if (winningPlayerId == player.PlayerID)
-                    {
-                        MessageBox.Show("Trick Winner: " + player.PlayerName);
-                        break;
-                    }
-                }
+                Team winningTeam = Trick.DetermineTrickWinner(_game.PlayArea, _game.Team1, _game.Team2);
+                MessageBox.Show("Winning Team: " + winningTeam.TeamId);
             }
         }
 
