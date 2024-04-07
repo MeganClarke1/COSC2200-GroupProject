@@ -204,7 +204,7 @@
                     <TextBlock Text="{Binding TeamOneTricks}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                 </Border>
                 <Border Grid.Column="2" Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1">
-                    <TextBlock></TextBlock>
+                    <TextBlock Text="{Binding TeamOneScore}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                 </Border>
 
                 <!-- Third Row -->
@@ -215,7 +215,7 @@
                     <TextBlock Text="{Binding TeamTwoTricks}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                 </Border>
                 <Border Grid.Column="2" Grid.Row="2" BorderBrush="Black" BorderThickness="1,0,1,1">
-                    <TextBlock></TextBlock>
+                    <TextBlock Text="{Binding TeamTwoScore}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                 </Border>
             </Grid>
 
