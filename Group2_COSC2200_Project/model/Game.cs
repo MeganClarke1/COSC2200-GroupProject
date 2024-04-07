@@ -9,11 +9,10 @@ namespace Group2_COSC2200_Project.model
         {
             Initialize,
             Start,
-            Deal,
             TrumpSelectionFromKitty,
             TrumpSelectionPostKitty,
             DealerKittySwap,
-            Round,
+            Play,
             EndOfGame
         }
         public GameState CurrentState { get; private set; }
@@ -32,6 +31,11 @@ namespace Group2_COSC2200_Project.model
         public Card.Suits TrumpSuit { get; private set; }
         public Card.Suits LeadSuit { get; private set; }
         public List<Card> PlayArea { get; private set; }
+        public int TeamOneTricks { get; private set; }
+        public int TeamTwoTricks { get; private set; }
+        public int PlayedCardsCounter { get; private set; }
+        public int TeamOneScore { get; private set; }
+        public int TeamTwoScore { get; private set; }
 
         public Game()
         {
@@ -48,17 +52,14 @@ namespace Group2_COSC2200_Project.model
                 case GameState.Start: 
                     Start(); 
                     break;
-                case GameState.Deal:
-                    //Deal();
-                    break;
                 case GameState.TrumpSelectionFromKitty:
                     TrumpSelectionFromKitty(); 
                     break;
                 case GameState.TrumpSelectionPostKitty:
                     TrumpSelectionPostKitty();
                     break;
-                case GameState.Round: //added (brody)
-                    NewRound();
+                case GameState.Play:
+                    Play();
                     break;
                 case GameState.EndOfGame: 
                     EndOfGame();
@@ -83,6 +84,12 @@ namespace Group2_COSC2200_Project.model
             Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
             PlayArea = new List<Card>();
+            TurnsTaken = 0;
+            TeamOneTricks = 0;
+            TeamTwoTricks = 0;
+            PlayedCardsCounter = 0;
+            TeamOneScore = 8;
+            TeamTwoScore = 8;
         }
 
         public void Start()
@@ -105,7 +112,6 @@ namespace Group2_COSC2200_Project.model
         public void OrderUpFromKitty()
         {
             TrumpSuit = Kitty[0].Suit;
-            MessageBox.Show("Trump suit is " + TrumpSuit);
             ChangeState(GameState.DealerKittySwap);
             // TODO :Set Maker status from the team of which the player that ordered up belongs to 
         }
@@ -125,9 +131,6 @@ namespace Group2_COSC2200_Project.model
 
             // RESET the current player to the new player's whose turn it is
             CurrentPlayer = TurnList[0];
-
-            // Present the message to the player that its their turn
-            MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
         }
 
         public void TrumpSelectionPostKitty()
@@ -142,7 +145,7 @@ namespace Group2_COSC2200_Project.model
         public void OrderUpPostKitty(Card.Suits trumpSuit)
         {
             TrumpSuit = trumpSuit;
-            MessageBox.Show(TrumpSuit.ToString());
+            ChangeState(GameState.Play);
         }
 
         public void PassPostKitty()
@@ -155,7 +158,6 @@ namespace Group2_COSC2200_Project.model
             }
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
-            MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
         }
 
         public void DealerKittySwap()
@@ -163,7 +165,6 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.DealerKittySwap;
             TurnList = GameFunctionality.RotateToDealer(TurnList);
             CurrentPlayer = TurnList[0];
-            MessageBox.Show(CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
         }
 
         /// TEST FUNCTION - CAN DELETE LATER *************
@@ -172,16 +173,106 @@ namespace Group2_COSC2200_Project.model
             PlayArea.Add(CardToAdd);
         }
 
+        public void PlayCard(Player currentPlayer, Card card)
+        {
+            PlayArea.Add(currentPlayer.PlayerHand.RemoveCard(card));
+            TurnsTaken++;
+            PlayedCardsCounter++;
+            GameFunctionality.NextTurn(TurnList);
+            CurrentPlayer = TurnList[0];
+        }
+
+        public void CheckTrickWinner()
+        {
+            if (TurnsTaken >= 4)
+            {
+                TurnsTaken = 0;
+                Team winningTeam = Trick.DetermineTrickWinner(PlayArea, Team1, Team2);
+                MessageBox.Show("Trick Winners: " + winningTeam.TeamId.ToString());
+
+                // Increment the trick counter based on winning team
+                if (winningTeam.TeamId == Team.TeamID.TeamOne)
+                {
+                    TeamOneTricks++;
+                    //Scoreboard.IncrementTrickCount(TeamOne);   // **** When trying to do this same method from the Scoreboard obj, doesnt work .... ***
+                }
+                else if (winningTeam.TeamId == Team.TeamID.TeamTwo)
+                {
+                    TeamTwoTricks++;
+                    //Scoreboard.IncrementTrickCount(TeamTwo);
+                }
+                PlayArea.Clear();
+
+                if (PlayedCardsCounter >= 20)
+                {
+                    CheckRoundWinner();
+                }
+            }
+        }
+
+        public void CheckRoundWinner()
+        {
+            string RoundWinner = "";
+
+            if (TeamOneTricks >= 3)
+            {
+                RoundWinner = Team.TeamID.TeamOne.ToString();
+
+                /*if (TeamOne.MakerStatus == true)
+                {
+                    TeamOneScore++;
+                }
+                else
+                {
+                    TeamOneScore = TeamOneScore + 3;
+                }*/
+
+                TeamOneScore++;
+            }
+            else if (TeamTwoTricks >= 3)
+            {
+                RoundWinner = Team.TeamID.TeamTwo.ToString();
+
+                /*if (TeamTwo.MakerStatus == true)
+                {
+                    TeamTwoScore++;
+                }
+                else
+                {
+                    TeamTwoScore = TeamTwoScore + 3;
+                }*/
+
+                TeamTwoScore++;
+            }
+            MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
+            CheckGameWinner();
+            NewRound();
+        }
+
+        public void CheckGameWinner()
+        {
+            if (TeamOneScore >= 10 || TeamTwoScore >= 10)
+            {
+                ChangeState(GameState.EndOfGame);
+            }
+        }
+
+        public void Play()
+        {
+            TurnsTaken = 0;
+            CurrentState = GameState.Play;
+            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
+            CurrentPlayer = TurnList[0];
+        }
+
         //added (brody)
         // Creates a new deck (effectively shuffling the cards back into the deck), then performs the same functionality as start game.
         public void NewRound()
-        {   
-            
-            // Set the state to Round
-            CurrentState = GameState.Round;
+        {
+            PlayedCardsCounter = 0;
 
             // Recreate a new deck, since the old one is used up.
-            Deck newDeck = new Deck();
+            Deck = new Deck();
 
             // Clear the players hands
             PlayerOne.PlayerHand.Cards.Clear();
@@ -189,13 +280,16 @@ namespace Group2_COSC2200_Project.model
             PlayerThree.PlayerHand.Cards.Clear();
             PlayerFour.PlayerHand.Cards.Clear();
 
+            // Reset Trick Scores
+            TeamOneTricks = 0;
+            TeamTwoTricks = 0;
+
             // Deal new hands.
-            GameFunctionality.DealCards(newDeck, TurnList);
+            GameFunctionality.DealCards(Deck, TurnList);
 
             // Clear the kitty, and re-determine a new kitty.
             Kitty.Clear();
-            Kitty.Add(newDeck.DetermineKitty());
-
+            Kitty.Add(Deck.DetermineKitty());
         }
 
         public void EndOfGame()
@@ -211,6 +305,7 @@ namespace Group2_COSC2200_Project.model
             Kitty.Remove(Kitty[0]);
             Kitty.Add(playerCard);
             currentPlayer.PlayerHand.AddCard(kittyCard);
+            ChangeState(GameState.Play);
         }
     }
 }

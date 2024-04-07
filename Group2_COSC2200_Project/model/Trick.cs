@@ -63,22 +63,20 @@ namespace Group2_COSC2200_Project.model
             // Initialize an empty winningTeam to hold the result.
             Team winningTeam = null;
 
-            // Index here for checking each position in the Team list.
-            int index = 0;
             // For each player in each team, check if their id matches the winningPlayer's ID. If so, set their team to be the winner.
-            foreach (Player player in TeamOne.TeamPlayers) 
+            foreach (Player player in TeamOne.TeamPlayers)
             {
-                if (winningPlayerId == TeamOne.TeamPlayers[index].PlayerID)
+                if (winningPlayerId == player.PlayerID)
                 {
                     winningTeam = TeamOne;
-                    break;
                 }
-                else if (winningPlayerId == TeamTwo.TeamPlayers[index].PlayerID)
+            }
+            foreach (Player player in TeamTwo.TeamPlayers)
+            {
+                if (winningPlayerId == player.PlayerID)
                 {
                     winningTeam = TeamTwo;
-                    break;
                 }
-                index++;
             }
             
             return winningTeam;
