@@ -345,58 +345,65 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
+        /// Adds a card from a hand to the play area, removes it from hand.
+        /// If it is the 4th card to be played, automatically evaulates the winning result of the play area. 
         /// Is bound to a button on each card in a player's hand. When clicked, will passed the clicked object to this
         /// function, and add that clicked card to the PlayArea of the game instance. Sets the GameViewModel property PlayArea
         /// to the newly add to game instance play area.
+        /// 
         /// </summary>
         /// <param name="parameter"> The object passed from the Command {binding} in the GameView.xaml. In this case, will be a 
         /// CardViewModel object of the clicked card. </param>
         private void PlayCardExecute(object parameter)
         {
 
-            if (_game.PlayArea.Count < 4) {
-                // This is fetching a cardViewModel when a card is clicked
-                // Therefore, must fetch that cardViewModel's .Card property (which is the card object)
-                if (parameter is CardViewModel cardViewModel)
-                {
-                    Card clickedCard = cardViewModel.Card;
-                    _game.AddCardtoPlayAreaTest(clickedCard);
-                    PlayArea = new PlayAreaViewModel(_game.PlayArea);
 
-                    // Remove the card from the hand that the card belonged to
-                    if (_game.CurrentPlayer == _game.PlayerOne)
-                        Player1Hand.Cards.Remove(cardViewModel);
-                    else if (_game.CurrentPlayer == _game.PlayerTwo)
-                        Player2Hand.Cards.Remove(cardViewModel);           // This is directly modifying ONLY the GameViewModel props...
-                                                                           // Is that bad? do we also need to update Model stuff?
-                    else if (_game.CurrentPlayer == _game.PlayerThree)    // Probably could create a remove card function
-                        Player3Hand.Cards.Remove(cardViewModel);          // or a function for this logic to clean this area up.
-                    else if (_game.CurrentPlayer == _game.PlayerFour)
-                        Player4Hand.Cards.Remove(cardViewModel);
-
-                    // Pass turns and update the buttons 
-                    _game.Pass();
-                    //UpdatePlayerTurn();
-                }
-            }
-            // 4 cards have been played
-            else
+            // This is fetching a cardViewModel when a card is clicked
+            // Therefore, must fetch that cardViewModel's .Card property (which is the card object)
+            if (parameter is CardViewModel cardViewModel)
             {
-                MessageBox.Show("Everyone has played a card. Time to see who wins!");
-                Team winningTeam = Trick.DetermineTrickWinner(_game.PlayArea, _game.Team1, _game.Team2);
-                MessageBox.Show("Winning Team: " + winningTeam.TeamId);
+                Card clickedCard = cardViewModel.Card;
+                _game.AddCardtoPlayAreaTest(clickedCard);
+                PlayArea = new PlayAreaViewModel(_game.PlayArea);
 
-                // Increment the trick counter based on winning team
-                if (winningTeam.TeamId == Team.TeamID.TeamOne) {
-                    TeamOneTricks++;
-                    //Scoreboard.IncrementTrickCount(TeamOne);   // **** When trying to do this same method from the Scoreboard obj, doesnt work .... ***
-                }
-                else if(winningTeam.TeamId == Team.TeamID.TeamTwo)
+                // Remove the card from the hand that is represented by the CURRENT TURN
+                if (_game.CurrentPlayer == _game.PlayerOne)
+                    Player1Hand.Cards.Remove(cardViewModel);
+                else if (_game.CurrentPlayer == _game.PlayerTwo)
+                    Player2Hand.Cards.Remove(cardViewModel);           // This is directly modifying ONLY the GameViewModel props...
+                                                                        // Is that bad? do we also need to update Model stuff?
+                else if (_game.CurrentPlayer == _game.PlayerThree)    // Probably could create a remove card function
+                    Player3Hand.Cards.Remove(cardViewModel);          // or a function for this logic to clean this area up.
+                else if (_game.CurrentPlayer == _game.PlayerFour)
+                    Player4Hand.Cards.Remove(cardViewModel);
+
+                // Pass turns and update the buttons 
+                _game.Pass();
+                    
+                // 4th Card HAS been played. (Checked after every play)
+                if (_game.PlayArea.Count >= 4)
                 {
-                    TeamTwoTricks++;
-                    //Scoreboard.IncrementTrickCount(TeamTwo);
+                    MessageBox.Show("Everyone has played a card. Time to see who wins!");
+                    Team winningTeam = Trick.DetermineTrickWinner(_game.PlayArea, _game.Team1, _game.Team2);
+                    MessageBox.Show("Winning Team: " + winningTeam.TeamId);
+
+                    // Increment the trick counter based on winning team
+                    if (winningTeam.TeamId == Team.TeamID.TeamOne)
+                    {
+                        TeamOneTricks++;
+                        //Scoreboard.IncrementTrickCount(TeamOne);   // **** When trying to do this same method from the Scoreboard obj, doesnt work .... ***
+                    }
+                    else if (winningTeam.TeamId == Team.TeamID.TeamTwo)
+                    {
+                        TeamTwoTricks++;
+                        //Scoreboard.IncrementTrickCount(TeamTwo);
+                    }
+
+                    // Clear the _game instances playArea, and set the ViewModel prop to it's reset (empty) value.
+                    _game.PlayArea.Clear(); 
+                    PlayArea = new PlayAreaViewModel(_game.PlayArea);
                 }
-            }
+            }   
         }
 
         private bool CanPlayCardExecute(object parameter)
