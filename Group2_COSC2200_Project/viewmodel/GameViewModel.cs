@@ -14,6 +14,8 @@ namespace Group2_COSC2200_Project.viewmodel
 
         public ICommand OrderUpCommand { get; private set; }
         public ICommand PassCommand { get; private set; }
+        public ICommand OrderUpPostKittyCommand {  get; private set; }
+        public ICommand PassPostKittyCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
         public ICommand ClickCardCommand { get; private set; }
 
@@ -25,10 +27,21 @@ namespace Group2_COSC2200_Project.viewmodel
         private PlayAreaViewModel _playArea;
 
         private Deck _deck;
-        private bool _player1Turn;
-        private bool _player2Turn;
-        private bool _player3Turn;
-        private bool _player4Turn;
+
+        private Visibility _player1Turn = Visibility.Collapsed;
+        private Visibility _player2Turn = Visibility.Collapsed;
+        private Visibility _player3Turn = Visibility.Collapsed;
+        private Visibility _player4Turn = Visibility.Collapsed;
+
+        private Visibility _player1PostKittyTurn = Visibility.Collapsed;
+
+        private bool _player1CanClickCard;
+        private bool _player2CanClickCard;
+        private bool _player3CanClickCard;
+        private bool _player4CanClickCard;
+
+        private List<Card.Suits> _nonKittySuits;
+
         private Team _teamOne;
         private Team _teamTwo;
         private int _teamOneTricks;
@@ -192,7 +205,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player1Turn
+        public Visibility Player1Turn
         {
             get { return _player1Turn; }
             private set
@@ -205,7 +218,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player2Turn
+        public Visibility Player2Turn
         {
             get { return _player2Turn; }
             private set
@@ -218,7 +231,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player3Turn
+        public Visibility Player3Turn
         {
             get { return _player3Turn; }
             private set
@@ -231,7 +244,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player4Turn
+        public Visibility Player4Turn
         {
             get { return _player4Turn; }
             private set
@@ -241,6 +254,81 @@ namespace Group2_COSC2200_Project.viewmodel
                     _player4Turn = value;
                     OnPropertyChanged(nameof(Player4Turn));
                 }
+            }
+        }
+
+        public Visibility Player1PostKittyTurn
+        {
+            get { return _player1PostKittyTurn; }
+            private set
+            {
+                if (_player1PostKittyTurn != value)
+                {
+                    _player1PostKittyTurn = value;
+                    OnPropertyChanged(nameof(Player1PostKittyTurn));
+                }
+            }
+        }
+
+        public bool Player1CanClickCard
+        {
+            get => _player1CanClickCard;
+            set
+            {
+                if (_player1CanClickCard != value)
+                {
+                    _player1CanClickCard = value;
+                    OnPropertyChanged(nameof(Player1CanClickCard));
+                }
+            }
+        }
+
+        public bool Player2CanClickCard
+        {
+            get => _player2CanClickCard;
+            set
+            {
+                if (_player2CanClickCard != value)
+                {
+                    _player2CanClickCard = value;
+                    OnPropertyChanged(nameof(Player2CanClickCard));
+                }
+            }
+        }
+
+        public bool Player3CanClickCard
+        {
+            get => _player3CanClickCard;
+            set
+            {
+                if (_player3CanClickCard != value)
+                {
+                    _player3CanClickCard = value;
+                    OnPropertyChanged(nameof(Player3CanClickCard));
+                }
+            }
+        }
+
+        public bool Player4CanClickCard
+        {
+            get => _player4CanClickCard;
+            set
+            {
+                if (_player4CanClickCard != value)
+                {
+                    _player4CanClickCard = value;
+                    OnPropertyChanged(nameof(Player4CanClickCard));
+                }
+            }
+        }
+
+        public List<Card.Suits> NonKittySuits
+        {
+            get => _nonKittySuits;
+            set
+            {
+                _nonKittySuits = value;
+                OnPropertyChanged(nameof(NonKittySuits));
             }
         }
 
@@ -266,6 +354,8 @@ namespace Group2_COSC2200_Project.viewmodel
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
             StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
             ClickCardCommand = new RelayCommand<object>(ClickCardExecute, CanClickCardExecute);
+            OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute, CanOrderUpPostKittyExecute);
+            PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute, CanPassPostKittyExecute);
         }
 
         private void UpdateViewModelState()
@@ -285,7 +375,7 @@ namespace Group2_COSC2200_Project.viewmodel
                     TrumpSelectionFromKitty();
                     break;
                 case Game.GameState.TrumpSelectionPostKitty:
-                    //
+                    TrumpSelectionPostKitty();
                     break;
                 case Game.GameState.DealerKittySwap:
                     DealerKittySwap();
@@ -328,6 +418,26 @@ namespace Group2_COSC2200_Project.viewmodel
             return true;
         }
 
+        private void OrderUpPostKittyExecute(Card.Suits trumpSuit)
+        {
+            _game.OrderUpPostKitty(trumpSuit);
+        }
+
+        private bool CanOrderUpPostKittyExecute(Card.Suits trumpSuit)
+        {
+            return true;
+        }
+
+        private void PassPostKittyExecute(object parameter)
+        {
+            _game.PassPostKitty();
+        }
+
+        private bool CanPassPostKittyExecute(object parameter)
+        {
+            return true;
+        }
+
         private void Start()
         {
             Started = Visibility.Collapsed;
@@ -344,15 +454,32 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void TrumpSelectionFromKitty()
         {
-            Player1Turn = _game.CurrentPlayer == _game.PlayerOne;
-            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo;
-            Player3Turn = _game.CurrentPlayer == _game.PlayerThree;
-            Player4Turn = _game.CurrentPlayer == _game.PlayerFour;
+            Player1Turn = _game.CurrentPlayer == _game.PlayerOne ? Visibility.Visible : Visibility.Collapsed;
+            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo ? Visibility.Visible : Visibility.Collapsed;
+            Player3Turn = _game.CurrentPlayer == _game.PlayerThree ? Visibility.Visible : Visibility.Collapsed;
+            Player4Turn = _game.CurrentPlayer == _game.PlayerFour ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void TrumpSelectionPostKitty()
+        {
+            NonKittySuits = _game.NonKittySuits;
+            Player1PostKittyTurn = _game.CurrentPlayer == _game.PlayerOne ? Visibility.Visible : Visibility.Collapsed;
+            Player1Turn = Visibility.Collapsed;
+            Player2Turn = Visibility.Collapsed;
+            Player3Turn = Visibility.Collapsed;
+            Player4Turn = Visibility.Collapsed;
         }
 
         private void DealerKittySwap()
         {
-
+            Player1Turn = Visibility.Collapsed;
+            Player2Turn = Visibility.Collapsed;
+            Player3Turn = Visibility.Collapsed;
+            Player4Turn = Visibility.Collapsed;
+            Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
+            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
+            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
+            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
         }
 
         /// <summary>
@@ -375,8 +502,6 @@ namespace Group2_COSC2200_Project.viewmodel
             {
                 PlayCard(parameter);
             }
-
-            
         }
 
         private bool CanClickCardExecute(object parameter)

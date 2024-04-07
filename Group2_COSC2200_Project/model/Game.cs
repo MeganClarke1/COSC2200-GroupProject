@@ -12,7 +12,6 @@ namespace Group2_COSC2200_Project.model
             TrumpSelectionFromKitty,
             TrumpSelectionPostKitty,
             DealerKittySwap,
-            Round
         }
         public GameState CurrentState { get; private set; }
         public Player PlayerOne { get; private set; }
@@ -23,6 +22,7 @@ namespace Group2_COSC2200_Project.model
         public Team Team2 { get; private set; }
         public Deck Deck { get; private set; }
         public List<Card> Kitty {  get; private set; }
+        public List<Card.Suits> NonKittySuits { get; private set; }
         public List<Player> TurnList { get; private set; }
         public int TurnsTaken { get; private set; }
         public Player CurrentPlayer { get; private set; }
@@ -52,7 +52,7 @@ namespace Group2_COSC2200_Project.model
                     TrumpSelectionFromKitty(); 
                     break;
                 case GameState.TrumpSelectionPostKitty:
-                    //TrumpSelectionPostKitty();
+                    TrumpSelectionPostKitty();
                     break;
                 case GameState.DealerKittySwap:
                     DealerKittySwap();
@@ -92,21 +92,6 @@ namespace Group2_COSC2200_Project.model
             CurrentPlayer = TurnList[0];
         }
 
-        public void TrumpSelectionPostKitty()
-        {
-            CurrentState = GameState.TrumpSelectionPostKitty;
-            TurnsTaken = 0;
-
-        }
-
-        public void DealerKittySwap()
-        {
-            CurrentState = GameState.DealerKittySwap;
-            TurnList = GameFunctionality.RotateToDealer(TurnList);
-            CurrentPlayer = TurnList[0];
-            MessageBox.Show(CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
-        }
-
         // These handle what happens when ANY user clicks order up 
         public void OrderUpFromKitty()
         {
@@ -122,6 +107,7 @@ namespace Group2_COSC2200_Project.model
             TurnsTaken++;
             if (TurnsTaken >= TurnList.Count)
             {
+                MessageBox.Show("Pick a trump suit.");
                 ChangeState(GameState.TrumpSelectionPostKitty);
                 return;
             }
@@ -133,6 +119,42 @@ namespace Group2_COSC2200_Project.model
 
             // Present the message to the player that its their turn
             MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
+        }
+
+        public void TrumpSelectionPostKitty()
+        {
+            CurrentState = GameState.TrumpSelectionPostKitty;
+            TurnsTaken = 0;
+            NonKittySuits = GameFunctionality.SetNonKittySuits(Kitty[0]);
+            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
+            CurrentPlayer = TurnList[0];
+        }
+
+        public void OrderUpPostKitty(Card.Suits trumpSuit)
+        {
+            TrumpSuit = trumpSuit;
+            MessageBox.Show(TrumpSuit.ToString());
+        }
+
+        public void PassPostKitty()
+        {
+            TurnsTaken++;
+            if (TurnsTaken >= TurnList.Count)
+            {
+                MessageBox.Show("Dealer must pick a suit!");
+                return;
+            }
+            GameFunctionality.NextTurn(TurnList);
+            CurrentPlayer = TurnList[0];
+            MessageBox.Show("Your Turn: " + CurrentPlayer.PlayerName);
+        }
+
+        public void DealerKittySwap()
+        {
+            CurrentState = GameState.DealerKittySwap;
+            TurnList = GameFunctionality.RotateToDealer(TurnList);
+            CurrentPlayer = TurnList[0];
+            MessageBox.Show(CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
         }
 
         /// TEST FUNCTION - CAN DELETE LATER *************
