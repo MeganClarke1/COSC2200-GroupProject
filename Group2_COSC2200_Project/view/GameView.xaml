@@ -21,8 +21,10 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
-                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding}">
+                            <Button Margin="5" Cursor="Hand" 
+                                    Command="{Binding DataContext.ClickCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    IsEnabled="{Binding DataContext.Player1CanClickCard, RelativeSource={RelativeSource AncestorType=UserControl}}">>
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -38,16 +40,24 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </Grid>
-            <Button Content="Pass" Command="{Binding PassCommand}" IsEnabled="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Order it up" Command="{Binding OrderUpCommand}" IsEnabled="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <!-- Kitty Trump Selection Buttons -->
+            <Button Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <!-- Post Kitty Trump Selection Buttons -->
+            <Button Content="{Binding NonKittySuits[0]}" CommandParameter="{Binding NonKittySuits[0]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="{Binding NonKittySuits[1]}" CommandParameter="{Binding NonKittySuits[1]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="{Binding NonKittySuits[2]}" CommandParameter="{Binding NonKittySuits[2]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="Pass" Command="{Binding PassPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 2 Grid -->
             <Grid Width="500" Height="145" Margin="-178,237,708,238" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player2Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
-                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding}">
+                            <Button Margin="5" Cursor="Hand" 
+                                    Command="{Binding DataContext.ClickCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    IsEnabled="{Binding DataContext.Player2CanClickCard, RelativeSource={RelativeSource AncestorType=UserControl}}">>
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -66,16 +76,19 @@
                     <RotateTransform Angle="90"/>
                 </Grid.RenderTransform>
             </Grid>
-            <Button Content="Pass" Command="{Binding PassCommand}" IsEnabled="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Order it up" Command="{Binding OrderUpCommand}" IsEnabled="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <!-- Kitty Trump Selection Buttons -->
+            <Button Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 3 Grid -->
             <Grid Width="500" Height="145" Margin="265,0,265,475" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player3Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
-                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding}">
+                            <Button Margin="5" Cursor="Hand" 
+                                    Command="{Binding DataContext.ClickCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    IsEnabled="{Binding DataContext.Player3CanClickCard, RelativeSource={RelativeSource AncestorType=UserControl}}">>
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -91,16 +104,19 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </Grid>
-            <Button Content="Pass" Command="{Binding PassCommand}" IsEnabled="{Binding Player3Turn}" HorizontalAlignment="Left" Margin="355,150,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Order it up" Command="{Binding OrderUpCommand}" IsEnabled="{Binding Player3Turn}" HorizontalAlignment="Left" Margin="520,150,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <!-- Kitty Trump Selection Buttons -->
+            <Button Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player3Turn}" HorizontalAlignment="Left" Margin="355,150,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player3Turn}" HorizontalAlignment="Left" Margin="520,150,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 4 Grid -->
             <Grid Width="500" Height="145" Margin="708,237,-178,238" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player4Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
-                            <Button Margin="5" Cursor="Hand" Command="{Binding DataContext.PlayCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding}">
+                            <Button Margin="5" Cursor="Hand" 
+                                    Command="{Binding DataContext.ClickCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    IsEnabled="{Binding DataContext.Player4CanClickCard, RelativeSource={RelativeSource AncestorType=UserControl}}">>
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
@@ -119,20 +135,16 @@
                     <RotateTransform Angle="-90"/>
                 </Grid.RenderTransform>
             </Grid>
-            <Button Content="Pass" Command="{Binding PassCommand}" IsEnabled="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Order it up" Command="{Binding OrderUpCommand}" IsEnabled="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player Area -->
             <Grid x:Name="playAreaGrid" Width="400" Height="145" Margin="315,238,315,238" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding PlayArea.PlayedCards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <Border Margin="5">
+                                <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
@@ -143,17 +155,13 @@
                 </ItemsControl>
             </Grid>
             <!-- Kitty -->
-            <Grid Width="100" Height="145" Margin="779,402,151,72" RenderTransformOrigin="0.5,0.5">
+            <Grid Width="100" Height="145" Margin="772,402,158,72" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Kitty.KittyCard}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <Border Margin="5">
+                                <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>

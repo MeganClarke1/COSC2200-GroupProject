@@ -14,8 +14,10 @@ namespace Group2_COSC2200_Project.viewmodel
 
         public ICommand OrderUpCommand { get; private set; }
         public ICommand PassCommand { get; private set; }
+        public ICommand OrderUpPostKittyCommand {  get; private set; }
+        public ICommand PassPostKittyCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
-        public ICommand PlayCardCommand { get; private set; }
+        public ICommand ClickCardCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -25,18 +27,28 @@ namespace Group2_COSC2200_Project.viewmodel
         private PlayAreaViewModel _playArea;
 
         private Deck _deck;
-        private bool _player1Turn;
-        private bool _player2Turn;
-        private bool _player3Turn;
-        private bool _player4Turn;
+
+        private Visibility _player1Turn = Visibility.Collapsed;
+        private Visibility _player2Turn = Visibility.Collapsed;
+        private Visibility _player3Turn = Visibility.Collapsed;
+        private Visibility _player4Turn = Visibility.Collapsed;
+
+        private Visibility _player1PostKittyTurn = Visibility.Collapsed;
+
+        private bool _player1CanClickCard;
+        private bool _player2CanClickCard;
+        private bool _player3CanClickCard;
+        private bool _player4CanClickCard;
+
+        private List<Card.Suits> _nonKittySuits;
+
         private Team _teamOne;
         private Team _teamTwo;
         private int _teamOneTricks;
         private int _teamTwoTricks;
         private int _teamOneScore;
-        private int _teamTwoScore = 9;
+        private int _teamTwoScore;
         private Scoreboard _scoreBoard;
-        private int _playedCardsCntr;
         private Visibility _started = Visibility.Visible;
 
         public Scoreboard Scoreboard
@@ -221,7 +233,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player1Turn
+        public Visibility Player1Turn
         {
             get { return _player1Turn; }
             private set
@@ -234,7 +246,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player2Turn
+        public Visibility Player2Turn
         {
             get { return _player2Turn; }
             private set
@@ -247,7 +259,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player3Turn
+        public Visibility Player3Turn
         {
             get { return _player3Turn; }
             private set
@@ -260,7 +272,7 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        public bool Player4Turn
+        public Visibility Player4Turn
         {
             get { return _player4Turn; }
             private set
@@ -270,6 +282,81 @@ namespace Group2_COSC2200_Project.viewmodel
                     _player4Turn = value;
                     OnPropertyChanged(nameof(Player4Turn));
                 }
+            }
+        }
+
+        public Visibility Player1PostKittyTurn
+        {
+            get { return _player1PostKittyTurn; }
+            private set
+            {
+                if (_player1PostKittyTurn != value)
+                {
+                    _player1PostKittyTurn = value;
+                    OnPropertyChanged(nameof(Player1PostKittyTurn));
+                }
+            }
+        }
+
+        public bool Player1CanClickCard
+        {
+            get => _player1CanClickCard;
+            set
+            {
+                if (_player1CanClickCard != value)
+                {
+                    _player1CanClickCard = value;
+                    OnPropertyChanged(nameof(Player1CanClickCard));
+                }
+            }
+        }
+
+        public bool Player2CanClickCard
+        {
+            get => _player2CanClickCard;
+            set
+            {
+                if (_player2CanClickCard != value)
+                {
+                    _player2CanClickCard = value;
+                    OnPropertyChanged(nameof(Player2CanClickCard));
+                }
+            }
+        }
+
+        public bool Player3CanClickCard
+        {
+            get => _player3CanClickCard;
+            set
+            {
+                if (_player3CanClickCard != value)
+                {
+                    _player3CanClickCard = value;
+                    OnPropertyChanged(nameof(Player3CanClickCard));
+                }
+            }
+        }
+
+        public bool Player4CanClickCard
+        {
+            get => _player4CanClickCard;
+            set
+            {
+                if (_player4CanClickCard != value)
+                {
+                    _player4CanClickCard = value;
+                    OnPropertyChanged(nameof(Player4CanClickCard));
+                }
+            }
+        }
+
+        public List<Card.Suits> NonKittySuits
+        {
+            get => _nonKittySuits;
+            set
+            {
+                _nonKittySuits = value;
+                OnPropertyChanged(nameof(NonKittySuits));
             }
         }
 
@@ -294,11 +381,14 @@ namespace Group2_COSC2200_Project.viewmodel
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
             StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
-            PlayCardCommand = new RelayCommand<object>(PlayCardExecute, CanPlayCardExecute);
+            ClickCardCommand = new RelayCommand<object>(ClickCardExecute, CanClickCardExecute);
+            OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute, CanOrderUpPostKittyExecute);
+            PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute, CanPassPostKittyExecute);
         }
 
         private void UpdateViewModelState()
         {
+            UpdateScore();
             switch (_game.CurrentState)
             {
                 case Game.GameState.Initialize:
@@ -307,25 +397,29 @@ namespace Group2_COSC2200_Project.viewmodel
                 case Game.GameState.Start:
                     Start();
                     break;
-                case Game.GameState.Deal:
-                    // 
-                    break;
                 case Game.GameState.TrumpSelectionFromKitty:
                     TrumpSelectionFromKitty();
                     break;
-                case Game.GameState.Round:
-                    NewRound();   
+                case Game.GameState.Play:
+                    Play();
                     break;
                 case Game.GameState.EndOfGame:
-                    EndOfGame();
+                    //EndOfGame();
+                    break;
+                case Game.GameState.TrumpSelectionPostKitty:
+                    TrumpSelectionPostKitty();
+                    break;
+                case Game.GameState.DealerKittySwap:
+                    DealerKittySwap();
                     break;
             }
         }
 
         private void OrderUpExecute(object parameter)
         {
-            _game.OrderUp();
+            _game.OrderUpFromKitty();
             UpdateViewModelState();
+            MessageBox.Show(_game.CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
         }
 
         private bool CanOrderUpExecute(object parameter)
@@ -335,8 +429,9 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void PassExecute(object parameter)
         {
-            _game.Pass();
+            _game.PassFromKitty();
             UpdateViewModelState();
+            MessageBox.Show("Your Turn: " + _game.CurrentPlayer.PlayerName);
         }
 
         private bool CanPassExecute(object parameter)
@@ -357,6 +452,30 @@ namespace Group2_COSC2200_Project.viewmodel
             return true;
         }
 
+        private void OrderUpPostKittyExecute(Card.Suits trumpSuit)
+        {
+            _game.OrderUpPostKitty(trumpSuit);
+            UpdateViewModelState();
+            MessageBox.Show("Trump suit is " + _game.TrumpSuit);
+        }
+
+        private bool CanOrderUpPostKittyExecute(Card.Suits trumpSuit)
+        {
+            return true;
+        }
+
+        private void PassPostKittyExecute(object parameter)
+        {
+            _game.PassPostKitty();
+            UpdateViewModelState();
+            MessageBox.Show("Your Turn: " + _game.CurrentPlayer.PlayerName);
+        }
+
+        private bool CanPassPostKittyExecute(object parameter)
+        {
+            return true;
+        }
+
         private void Start()
         {
             Started = Visibility.Collapsed;
@@ -373,10 +492,32 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void TrumpSelectionFromKitty()
         {
-            Player1Turn = _game.CurrentPlayer == _game.PlayerOne;
-            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo;
-            Player3Turn = _game.CurrentPlayer == _game.PlayerThree;
-            Player4Turn = _game.CurrentPlayer == _game.PlayerFour;
+            Player1Turn = _game.CurrentPlayer == _game.PlayerOne ? Visibility.Visible : Visibility.Collapsed;
+            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo ? Visibility.Visible : Visibility.Collapsed;
+            Player3Turn = _game.CurrentPlayer == _game.PlayerThree ? Visibility.Visible : Visibility.Collapsed;
+            Player4Turn = _game.CurrentPlayer == _game.PlayerFour ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void TrumpSelectionPostKitty()
+        {
+            NonKittySuits = _game.NonKittySuits;
+            Player1PostKittyTurn = Visibility.Visible;
+            Player1Turn = Visibility.Collapsed;
+            Player2Turn = Visibility.Collapsed;
+            Player3Turn = Visibility.Collapsed;
+            Player4Turn = Visibility.Collapsed;
+        }
+
+        private void DealerKittySwap()
+        {
+            Player1Turn = Visibility.Collapsed;
+            Player2Turn = Visibility.Collapsed;
+            Player3Turn = Visibility.Collapsed;
+            Player4Turn = Visibility.Collapsed;
+            Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
+            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
+            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
+            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
         }
 
         /// <summary>
@@ -389,131 +530,83 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         /// <param name="parameter"> The object passed from the Command {binding} in the GameView.xaml. In this case, will be a 
         /// CardViewModel object of the clicked card. </param>
-        private void PlayCardExecute(object parameter)
+        private void ClickCardExecute(object parameter)
         {
-
-            _playedCardsCntr++; // For checking if 20 cards have been played
-
-            // This is fetching a cardViewModel when a card is clicked
-            // Therefore, must fetch that cardViewModel's .Card property (which is the card object)
-            if (parameter is CardViewModel cardViewModel)
+            if (_game.CurrentState == Game.GameState.DealerKittySwap)
             {
-                Card clickedCard = cardViewModel.Card;
-                _game.AddCardtoPlayAreaTest(clickedCard);
-                PlayArea = new PlayAreaViewModel(_game.PlayArea);
-
-                // Remove the card from the hand that is represented by the CURRENT TURN
-                if (_game.CurrentPlayer == _game.PlayerOne)
-                    Player1Hand.Cards.Remove(cardViewModel);
-                else if (_game.CurrentPlayer == _game.PlayerTwo)
-                    Player2Hand.Cards.Remove(cardViewModel);           // This is directly modifying ONLY the GameViewModel props...
-                                                                        // Is that bad? do we also need to update Model stuff?
-                else if (_game.CurrentPlayer == _game.PlayerThree)    // Probably could create a remove card function
-                    Player3Hand.Cards.Remove(cardViewModel);          // or a function for this logic to clean this area up.
-                else if (_game.CurrentPlayer == _game.PlayerFour)
-                    Player4Hand.Cards.Remove(cardViewModel);
-
-                // Pass turns and update the buttons 
-                _game.Pass();
-                    
-                // 4th Card HAS been played. (Checked after every play)
-                if (_game.PlayArea.Count >= 4)
+                if (parameter is CardViewModel cardViewModel)
                 {
-
-                    Team winningTeam = Trick.DetermineTrickWinner(_game.PlayArea, _game.Team1, _game.Team2);
-                    MessageBox.Show("Trick Winners: " + winningTeam.TeamId);
-
-                    // Increment the trick counter based on winning team
-                    if (winningTeam.TeamId == Team.TeamID.TeamOne)
-                    {
-                        TeamOneTricks++;
-                        //Scoreboard.IncrementTrickCount(TeamOne);   // **** When trying to do this same method from the Scoreboard obj, doesnt work .... ***
-                    }
-                    else if (winningTeam.TeamId == Team.TeamID.TeamTwo)
-                    {
-                        TeamTwoTricks++;
-                        //Scoreboard.IncrementTrickCount(TeamTwo);
-                    }
-
-                    // Clear the _game instances playArea, and set the ViewModel prop to it's reset (empty) value.
-                    _game.PlayArea.Clear(); 
-                    PlayArea = new PlayAreaViewModel(_game.PlayArea);
-                }
-
-                // Signalling the end of a round... Set a boolean? or Do logic here?
-                if(_playedCardsCntr >= 20)
-                {
-                    _game.ChangeState(Game.GameState.Round); // This calls switch here ?
+                    SwapWithKitty(cardViewModel);
                     UpdateViewModelState();
-                    _playedCardsCntr = 0;
+                    MessageBox.Show("Trump suit is " + _game.TrumpSuit);
                 }
-
-            }   
+            } 
+            else if(_game.CurrentState == Game.GameState.Play)
+            {
+                if (parameter is CardViewModel cardViewModel)
+                {
+                    PlayCard(cardViewModel);
+                    UpdateViewModelState();
+                }
+            }
         }
 
-        private bool CanPlayCardExecute(object parameter)
+        private void PlayCard(CardViewModel cardViewModel)
         {
-            return true;
-        }
-
-        private void NewRound()
-        {
-            string RoundWinner = "";
-
-            if(TeamOneTricks >= 3)
-            {
-                RoundWinner = Team.TeamID.TeamOne.ToString();
-
-                /*if (TeamOne.MakerStatus == true)
-                {
-                    TeamOneScore++;
-                }
-                else
-                {
-                    TeamOneScore = TeamOneScore + 3;
-                }*/
-
-                TeamOneScore++;
-            }
-            else if(TeamTwoTricks >= 3)
-            {
-                RoundWinner = Team.TeamID.TeamTwo.ToString();
-
-                /*if (TeamTwo.MakerStatus == true)
-                {
-                    TeamTwoScore++;
-                }
-                else
-                {
-                    TeamTwoScore = TeamTwoScore + 3;
-                }*/
-
-                TeamTwoScore++;
-            }
-
-            MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
-
-            if (TeamOneScore >= 10 || TeamTwoScore >= 10)
-            {
-                _game.ChangeState(Game.GameState.EndOfGame);
-                UpdateViewModelState();
-            }
-
-            Deck = _game.Deck;
+            _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
             Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
             Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-            Kitty = new KittyViewModel(_game.Kitty);
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
 
-            TeamOneTricks = 0;
-            TeamTwoTricks = 0;
+            _game.CheckTrickWinner();
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
         }
 
-        private void EndOfGame()
+        private bool CanClickCardExecute(object parameter)
         {
-            MessageBox.Show("End of game.");
+            return true;
         }
-    }
 
+        private void SwapWithKitty(CardViewModel cardViewModel)
+        {
+            _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
+            Kitty = new KittyViewModel(_game.Kitty);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+        }
+
+        private void Play()
+        {
+            Player1PostKittyTurn = Visibility.Collapsed;
+            Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
+            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
+            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
+            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+
+        }
+
+        private void UpdateScore()
+        {
+            TeamOne = _game.Team1;
+            TeamTwo = _game.Team2;
+            TeamOneTricks = _game.TeamOneTricks;
+            TeamTwoTricks = _game.TeamTwoTricks;
+            TeamOneScore = _game.TeamOneScore;
+            TeamTwoScore = _game.TeamTwoScore;
+        }
+
+        // private void EndOfGame()
+        // {
+        //     MessageBox.Show("End of game.");
+        // }
+    }
 }

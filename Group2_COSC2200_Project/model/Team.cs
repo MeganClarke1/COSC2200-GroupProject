@@ -42,8 +42,9 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public Team(TeamID _teamId, List<Player> _teamPlayers)
         {
-            this.TeamId = _teamId;
-            this.TeamPlayers = _teamPlayers;
+            TeamId = _teamId;
+            TeamPlayers = _teamPlayers;
+            MakerStatus = false;
         }
 
         /// <summary>

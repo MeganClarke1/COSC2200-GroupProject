@@ -1,4 +1,6 @@
-﻿namespace Group2_COSC2200_Project.model
+﻿using System.Net.Security;
+
+namespace Group2_COSC2200_Project.model
 {
     /// <summary>
     /// Represents the general game logic for the game.
@@ -25,6 +27,25 @@
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="kittyCard"></param>
+        /// <returns></returns>
+        public static List<Card.Suits> SetNonKittySuits(Card kittyCard)
+        {
+            List<Card.Suits> nonKittySuits = new List<Card.Suits>();
+
+            foreach(Card.Suits suit in Enum.GetValues(typeof(Card.Suits)))
+            {
+                if (suit != kittyCard.Suit)
+                {
+                    nonKittySuits.Add(suit);
+                }
+            }
+            return nonKittySuits;
+        }
+
+        /// <summary>
         /// Takes a TurnList, moves the first player in the list, to the end of the list.
         /// Returns a list of players where the first player is the current turn
         /// </summary>
@@ -44,6 +65,44 @@
 
             return TurnList;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TurnList"></param>
+        /// <returns></returns>
+        public static List<Player> RotateToDealer(List<Player> TurnList)
+        {
+            if (TurnList[0].IsDealer)
+            {
+                return TurnList;
+            }
+            while (!TurnList[0].IsDealer)
+            {
+                NextTurn(TurnList);
+            }
+            return TurnList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TurnList"></param>
+        /// <returns></returns>
+        public static List<Player> RotateToFirstTurn(List<Player> TurnList)
+        {
+            if (TurnList[TurnList.Count - 1].IsDealer)
+            {
+                return TurnList; 
+            }
+            while (!TurnList[TurnList.Count - 1].IsDealer)
+            {
+                NextTurn(TurnList);
+            }
+
+            return TurnList;
+        }
+        
 
         /// <summary>
         /// Will set the isDealer Status of the player in the last position of the turnList to dealer.
