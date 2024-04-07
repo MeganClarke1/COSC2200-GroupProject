@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Markup;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -11,7 +12,8 @@ namespace Group2_COSC2200_Project.model
             Deal,
             TrumpSelectionFromKitty,
             TrumpSelectionPostKitty,
-            Round
+            Round,
+            EndOfGame
         }
         public GameState CurrentState { get; private set; }
 
@@ -52,6 +54,12 @@ namespace Group2_COSC2200_Project.model
                     break;
                 case GameState.TrumpSelectionPostKitty:
                     //TrumpSelectionPostKitty();
+                    break;
+                case GameState.Round: //added (brody)
+                    NewRound();
+                    break;
+                case GameState.EndOfGame: 
+                    EndOfGame();
                     break;
             }
         }
@@ -115,6 +123,38 @@ namespace Group2_COSC2200_Project.model
         public void AddCardtoPlayAreaTest(Card CardToAdd)
         {
             PlayArea.Add(CardToAdd);
+        }
+
+        //added (brody)
+        // Creates a new deck (effectively shuffling the cards back into the deck), then performs the same functionality as start game.
+        public void NewRound()
+        {   
+            
+            // Set the state to Round
+            CurrentState = GameState.Round;
+
+            // Recreate a new deck, since the old one is used up.
+            Deck newDeck = new Deck();
+
+            // Clear the players hands
+            PlayerOne.PlayerHand.Cards.Clear();
+            PlayerTwo.PlayerHand.Cards.Clear();
+            PlayerThree.PlayerHand.Cards.Clear();
+            PlayerFour.PlayerHand.Cards.Clear();
+
+            // Deal new hands.
+            GameFunctionality.DealCards(newDeck, TurnList);
+
+            // Clear the kitty, and re-determine a new kitty.
+            Kitty.Clear();
+            Kitty.Add(newDeck.DetermineKitty());
+
+        }
+
+        public void EndOfGame()
+        {
+            CurrentState = GameState.EndOfGame;
+            MessageBox.Show("10 Points Reached, End of Game.");
         }
 
     }

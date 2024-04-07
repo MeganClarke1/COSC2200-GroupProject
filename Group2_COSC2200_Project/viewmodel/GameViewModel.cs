@@ -33,7 +33,10 @@ namespace Group2_COSC2200_Project.viewmodel
         private Team _teamTwo;
         private int _teamOneTricks;
         private int _teamTwoTricks;
+        private int _teamOneScore;
+        private int _teamTwoScore = 9;
         private Scoreboard _scoreBoard;
+        private int _playedCardsCntr;
         private Visibility _started = Visibility.Visible;
 
         public Scoreboard Scoreboard
@@ -71,6 +74,32 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     _teamTwoTricks = value;
                     OnPropertyChanged(nameof(TeamTwoTricks));
+                }
+            }
+        }
+
+        public int TeamOneScore
+        {
+            get => _teamOneScore;
+            set
+            {
+                if (_teamOneScore != value)
+                {
+                    _teamOneScore = value;
+                    OnPropertyChanged(nameof(TeamOneScore));
+                }
+            }
+        }
+
+        public int TeamTwoScore
+        {
+            get => _teamTwoScore;
+            set
+            {
+                if (_teamTwoScore != value)
+                {
+                    _teamTwoScore = value;
+                    OnPropertyChanged(nameof(TeamTwoScore));
                 }
             }
         }
@@ -284,6 +313,12 @@ namespace Group2_COSC2200_Project.viewmodel
                 case Game.GameState.TrumpSelectionFromKitty:
                     TrumpSelectionFromKitty();
                     break;
+                case Game.GameState.Round:
+                    NewRound();   
+                    break;
+                case Game.GameState.EndOfGame:
+                    EndOfGame();
+                    break;
             }
         }
 
@@ -357,6 +392,7 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PlayCardExecute(object parameter)
         {
 
+            _playedCardsCntr++; // For checking if 20 cards have been played
 
             // This is fetching a cardViewModel when a card is clicked
             // Therefore, must fetch that cardViewModel's .Card property (which is the card object)
@@ -383,9 +419,9 @@ namespace Group2_COSC2200_Project.viewmodel
                 // 4th Card HAS been played. (Checked after every play)
                 if (_game.PlayArea.Count >= 4)
                 {
-                    MessageBox.Show("Everyone has played a card. Time to see who wins!");
+
                     Team winningTeam = Trick.DetermineTrickWinner(_game.PlayArea, _game.Team1, _game.Team2);
-                    MessageBox.Show("Winning Team: " + winningTeam.TeamId);
+                    MessageBox.Show("Trick Winners: " + winningTeam.TeamId);
 
                     // Increment the trick counter based on winning team
                     if (winningTeam.TeamId == Team.TeamID.TeamOne)
@@ -403,12 +439,80 @@ namespace Group2_COSC2200_Project.viewmodel
                     _game.PlayArea.Clear(); 
                     PlayArea = new PlayAreaViewModel(_game.PlayArea);
                 }
+
+                // Signalling the end of a round... Set a boolean? or Do logic here?
+                if(_playedCardsCntr >= 20)
+                {
+                    _game.ChangeState(Game.GameState.Round); // This calls switch here ?
+                    UpdateViewModelState();
+                    _playedCardsCntr = 0;
+                }
+
             }   
         }
 
         private bool CanPlayCardExecute(object parameter)
         {
             return true;
+        }
+
+        private void NewRound()
+        {
+            string RoundWinner = "";
+
+            if(TeamOneTricks >= 3)
+            {
+                RoundWinner = Team.TeamID.TeamOne.ToString();
+
+                /*if (TeamOne.MakerStatus == true)
+                {
+                    TeamOneScore++;
+                }
+                else
+                {
+                    TeamOneScore = TeamOneScore + 3;
+                }*/
+
+                TeamOneScore++;
+            }
+            else if(TeamTwoTricks >= 3)
+            {
+                RoundWinner = Team.TeamID.TeamTwo.ToString();
+
+                /*if (TeamTwo.MakerStatus == true)
+                {
+                    TeamTwoScore++;
+                }
+                else
+                {
+                    TeamTwoScore = TeamTwoScore + 3;
+                }*/
+
+                TeamTwoScore++;
+            }
+
+            MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
+
+            if (TeamOneScore >= 10 || TeamTwoScore >= 10)
+            {
+                _game.ChangeState(Game.GameState.EndOfGame);
+                UpdateViewModelState();
+            }
+
+            Deck = _game.Deck;
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Kitty = new KittyViewModel(_game.Kitty);
+
+            TeamOneTricks = 0;
+            TeamTwoTricks = 0;
+        }
+
+        private void EndOfGame()
+        {
+            MessageBox.Show("End of game.");
         }
     }
 
