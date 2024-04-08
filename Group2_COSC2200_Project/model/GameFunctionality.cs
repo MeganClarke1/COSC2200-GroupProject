@@ -35,7 +35,7 @@ namespace Group2_COSC2200_Project.model
         {
             List<Card.Suits> nonKittySuits = new List<Card.Suits>();
 
-            foreach(Card.Suits suit in Enum.GetValues(typeof(Card.Suits)))
+            foreach (Card.Suits suit in Enum.GetValues(typeof(Card.Suits)))
             {
                 if (suit != kittyCard.Suit)
                 {
@@ -93,7 +93,7 @@ namespace Group2_COSC2200_Project.model
         {
             if (TurnList[TurnList.Count - 1].IsDealer)
             {
-                return TurnList; 
+                return TurnList;
             }
             while (!TurnList[TurnList.Count - 1].IsDealer)
             {
@@ -102,7 +102,7 @@ namespace Group2_COSC2200_Project.model
 
             return TurnList;
         }
-        
+
 
         /// <summary>
         /// Will set the isDealer Status of the player in the last position of the turnList to dealer.
@@ -181,6 +181,17 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        public static void SetLeadSuitValues(Card.Suits leadSuit, Card.Suits trumpSuit, List<Player> turnList)
+        {
+            foreach (Player player in turnList)
+            {
+                foreach (Card card in player.PlayerHand.Cards)
+                {
+                    card.SetLeadSuitValue(leadSuit, trumpSuit);
+                }
+            }
+        }
+
         /// <summary>
         /// Deals cards to players in the specified turn order, following the order of 3 cards in a row to each
         /// player, then two cards in a row to each player.
@@ -207,6 +218,16 @@ namespace Group2_COSC2200_Project.model
                 }
             }
         }
+
+        // public static Player GetPlayerWithHighCard(List<Card> playArea)
+        // {
+        //     Card highCard = null;
+        // 
+        //     foreach(Card card in playArea)
+        //     {
+        // 
+        //     }
+        // }
 
         /*// 2 Options: Loop through each player (bad performance) or, simply use the turnList to call the function in order of the turnlist
         // Eg. TurnList[0].PassOrOrderUp
