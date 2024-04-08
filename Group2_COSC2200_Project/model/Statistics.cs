@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows;
+using System.Reflection;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -142,15 +143,26 @@ namespace Group2_COSC2200_Project.model
         public static Statistics LoadStatistics(string uniqueID) // **** static now
         {
 
-            // Construct the file path for the stats.json file in the Data folder ... Intended to work even even this is not being run on local.
-            string dataFolderPath = Path.Combine(Environment.CurrentDirectory, "data");
-            string jsonFilePath = Path.Combine(dataFolderPath, "stats.json");
+            // Step out of the current directory to reach the base directory
+            string currentDirectory = Directory.GetCurrentDirectory();
+            MessageBox.Show(currentDirectory);
+
+            // Navigate up two levels to reach the base directory
+            string baseDirectory2 = Directory.GetParent(Directory.GetParent(currentDirectory).FullName).FullName;
+
+            // Navigate another level up
+            string baseDirectory3 = Directory.GetParent(baseDirectory2).FullName;
+
+            // Combine that relative position twice with data and stats file.
+            string relativeJSONpath1 = Path.Combine(baseDirectory3, "data");
+            string relativeJSONpath2 = Path.Combine(relativeJSONpath1, "stats.json");
+            MessageBox.Show(relativeJSONpath2);
 
             string hardCorePathTest = @"C:\Users\brody\Source\Repos\COSC2200-GroupProject\Group2_COSC2200_Project\data\stats.json";
 
             // Read JSON data into a dictionary with unique ID as the key
-            string json = File.ReadAllText(hardCorePathTest);
-            
+            string json = File.ReadAllText(relativeJSONpath2);
+
             Dictionary<string, Statistics> statisticsDict = JsonConvert.DeserializeObject<Dictionary<string, Statistics>>(json);
 
             // Check if the dictionary contains the unique ID
