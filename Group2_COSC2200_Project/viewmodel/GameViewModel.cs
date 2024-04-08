@@ -403,7 +403,7 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void UpdateViewModelState()
         {
-            UpdateScore();
+            RefreshUI();
             switch (_game.CurrentState)
             {
                 case Game.GameState.Initialize:
@@ -562,27 +562,19 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            RefreshUI();
 
             _game.CheckTrickWinner();
-            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            RefreshUI();
         }
 
         private void SwapWithKitty(CardViewModel cardViewModel)
         {
             _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
-            Kitty = new KittyViewModel(_game.Kitty);
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            RefreshUI();
         }
 
-        private void UpdateScore()
+        public void RefreshUI()
         {
             TeamOne = _game.Team1;
             TeamTwo = _game.Team2;
@@ -590,6 +582,13 @@ namespace Group2_COSC2200_Project.viewmodel
             TeamTwoTricks = _game.TeamTwoTricks;
             TeamOneScore = _game.TeamOneScore;
             TeamTwoScore = _game.TeamTwoScore;
+
+            Kitty = new KittyViewModel(_game.Kitty);
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
         }
 
         // private void EndOfGame()

@@ -73,13 +73,12 @@ namespace Group2_COSC2200_Project.model
         public void Initialize()
         {
             CurrentState = GameState.Initialize;
-
             Deck = new Deck();
             Kitty = new List<Card>();
-            PlayerOne = (new Player(1, "Player 1"));
-            PlayerTwo = (new Player(2, "Player 2"));
-            PlayerThree = (new Player(3, "Player 3"));
-            PlayerFour = (new Player(4, "Player 4"));
+            PlayerOne = new Player(1, "Player 1", false);
+            PlayerTwo = new Player(2, "Player 2", true);
+            PlayerThree = new Player(3, "Player 3", true);
+            PlayerFour = new Player(4, "Player 4", true);
             Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree));
             Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
@@ -105,6 +104,11 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.TrumpSelectionFromKitty;
             TurnsTaken = 0;
             CurrentPlayer = TurnList[0];
+
+            if (CurrentPlayer.isAI)
+            {
+                AIDecisionFromKitty(CurrentPlayer);
+            } 
         }
 
         public void TrumpSelectionPostKitty()
@@ -120,6 +124,15 @@ namespace Group2_COSC2200_Project.model
         {
             CurrentState = GameState.DealerKittySwap;
             TurnList = GameFunctionality.RotateToDealer(TurnList);
+            CurrentPlayer = TurnList[0];
+        }
+
+        public void Play()
+        {
+            CurrentState = GameState.Play;
+            TurnsTaken = 0;
+            GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
+            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             CurrentPlayer = TurnList[0];
         }
 
@@ -145,6 +158,10 @@ namespace Group2_COSC2200_Project.model
 
             // RESET the current player to the new player's whose turn it is
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.isAI)
+            {
+                AIDecisionFromKitty(CurrentPlayer);
+            }
         }
 
         public void OrderUpPostKitty(Card.Suits trumpSuit)
@@ -173,6 +190,78 @@ namespace Group2_COSC2200_Project.model
             Kitty.Add(playerCard);
             currentPlayer.PlayerHand.AddCard(kittyCard);
             ChangeState(GameState.Play);
+        }
+
+        public void AIDecisionFromKitty(Player currentPlayer)
+        {
+            int sameSuitCount = 0;
+            foreach (Card card in currentPlayer.PlayerHand.Cards)
+            {
+                if (card.Suit == Kitty[0].Suit)
+                {
+                    sameSuitCount++;
+                }
+            }
+            if (sameSuitCount >= 3)
+            {
+                TrumpSuit = Kitty[0].Suit;
+                MessageBox.Show(CurrentPlayer.PlayerName + " has order it up!.");
+                ChangeState(GameState.DealerKittySwap);
+            }
+            else
+            {
+                MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
+                TurnsTaken++;
+                if (TurnsTaken >= TurnList.Count)
+                {
+                    ChangeState(GameState.TrumpSelectionPostKitty);
+                    return;
+                }
+                // Change turns 
+                GameFunctionality.NextTurn(TurnList);
+                // RESET the current player to the new player's whose turn it is
+                CurrentPlayer = TurnList[0];
+                if (CurrentPlayer.isAI)
+                {
+                    AIDecisionFromKitty(CurrentPlayer);
+                }
+            }
+        }
+
+        public void AIDecisionPostKitty(Player currentPlayer)
+        {
+            int sameSuitCount = 0;
+            foreach (Card card in currentPlayer.PlayerHand.Cards)
+            {
+                if (card.Suit == Kitty[0].Suit)
+                {
+                    sameSuitCount++;
+                }
+            }
+            if (sameSuitCount >= 3)
+            {
+                TrumpSuit = Kitty[0].Suit;
+                MessageBox.Show(CurrentPlayer.PlayerName + " has order it up!.");
+                ChangeState(GameState.DealerKittySwap);
+            }
+            else
+            {
+                MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
+                TurnsTaken++;
+                if (TurnsTaken >= TurnList.Count)
+                {
+                    ChangeState(GameState.TrumpSelectionPostKitty);
+                    return;
+                }
+                // Change turns 
+                GameFunctionality.NextTurn(TurnList);
+                // RESET the current player to the new player's whose turn it is
+                CurrentPlayer = TurnList[0];
+                if (CurrentPlayer.isAI)
+                {
+                    AIDecisionFromKitty(CurrentPlayer);
+                }
+            }
         }
 
         /// <summary>
@@ -305,15 +394,6 @@ namespace Group2_COSC2200_Project.model
             {
                 ChangeState(GameState.EndOfGame);
             }
-        }
-
-        public void Play()
-        {
-            CurrentState = GameState.Play;
-            TurnsTaken = 0;
-            GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
-            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
-            CurrentPlayer = TurnList[0];
         }
 
         //added (brody)
