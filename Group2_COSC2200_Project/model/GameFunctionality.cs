@@ -229,10 +229,39 @@ namespace Group2_COSC2200_Project.model
                 if (highCard == null || playArea[i].Value > highCard.Value)
                 {
                     highCard = playArea[i];
-                    playerWithHighCard = turnList[i];
+                }
+            }
+            foreach (Player player in turnList)
+            {
+                if (player.PlayerID == highCard.CardsAssociatedToPlayers)
+                {
+                    playerWithHighCard = player;
+                    break;
                 }
             }
             return playerWithHighCard;
+        }
+
+        public static List<Player> RotateToTrickWinner(List<Player> turnList, Player winningPlayer)
+        {
+            while (turnList[0] != winningPlayer)
+            {
+                turnList = NextTurn(turnList);
+            }
+            return turnList;
+        }
+
+        public static List<Player> ChangeDealer(Player currentDealer, Player newDealer, List<Player> turnList)
+        {
+            if (currentDealer.IsDealer)
+            {
+                currentDealer.IsDealer = false;
+            }
+            if (!newDealer.IsDealer)
+            {
+                newDealer.IsDealer = true;
+            }
+            return RotateToFirstTurn(turnList);
         }
 
         /*// 2 Options: Loop through each player (bad performance) or, simply use the turnList to call the function in order of the turnlist

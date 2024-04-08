@@ -60,6 +60,8 @@ namespace Group2_COSC2200_Project.model
             // Fetch the player who owned the card that has the highest value.
             int winningPlayerId = highCard.CardsAssociatedToPlayers;
 
+            MessageBox.Show("Player with ID " + winningPlayerId + " has won the hand");
+
             // Initialize an empty winningTeam to hold the result.
             Team winningTeam = null;
 

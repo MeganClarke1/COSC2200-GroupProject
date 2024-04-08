@@ -26,8 +26,6 @@ namespace Group2_COSC2200_Project.viewmodel
         private KittyViewModel _kitty;
         private PlayAreaViewModel _playArea;
 
-        private Deck _deck;
-
         private Visibility _player1Turn = Visibility.Collapsed;
         private Visibility _player2Turn = Visibility.Collapsed;
         private Visibility _player3Turn = Visibility.Collapsed;
@@ -220,19 +218,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     _kitty = value;
                     OnPropertyChanged(nameof(Kitty));
-                }
-            }
-        }
-
-        public Deck Deck
-        {
-            get => _deck;
-            set
-            {
-                if (_deck != value)
-                {
-                    _deck = value;
-                    OnPropertyChanged(nameof(Deck));
                 }
             }
         }
@@ -465,6 +450,8 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
             _game.TrumpSelectionFromKitty();
             UpdateViewModelState();
+            MessageBox.Show("The Dealer is " + _game.TurnList[3].PlayerName + " and the current top kitty suit is " 
+                + _game.Kitty[0].Suit + ".");
         }
 
         private void OrderUpPostKittyExecute(Card.Suits trumpSuit)
