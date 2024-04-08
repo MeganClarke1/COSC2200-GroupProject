@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Group2_COSC2200_Project.view.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Group2_COSC2200_Project.view"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="../assets/images/classic/playing_surface.jpg"/>
+        </Grid.Background>
+
+        <!-- Title and Subtitle -->
+        <Grid VerticalAlignment="Top" Margin="0,226,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Euchre" FontSize="100" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+            <TextBlock Text="A Thrilling Trick Taking Game" FontSize="24" Foreground="White" HorizontalAlignment="Center" Margin="0,122,0,21" Grid.RowSpan="2"/>
+        </Grid>
+
+        <!-- Buttons -->
+        <Grid VerticalAlignment="Top" Margin="0,408,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Content="New Game" Command="{Binding NewGameCommand}" HorizontalAlignment="Center" FontSize="24" Width="160"/>
+            <Button Content="Continue" Command="" HorizontalAlignment="Center" FontSize="24" Width="160" Margin="0,10,0,0" Grid.Row="1"/>
+        </Grid>
+    </Grid>
+</UserControl>

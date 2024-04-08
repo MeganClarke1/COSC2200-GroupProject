@@ -32,14 +32,19 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public List<Player> TeamPlayers { get; private set; }
 
+        /// <summary>
+        /// Represents if a team has called the trump suit (Are the makers).
+        /// </summary>
+        public bool MakerStatus {  get; private set; }
 
         /// <summary>
         /// Constructor for a team object.
         /// </summary>
         public Team(TeamID _teamId, List<Player> _teamPlayers)
         {
-            this.TeamId = _teamId;
-            this.TeamPlayers = _teamPlayers;
+            TeamId = _teamId;
+            TeamPlayers = _teamPlayers;
+            MakerStatus = false;
         }
 
         /// <summary>

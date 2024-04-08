@@ -1,13 +1,12 @@
-﻿namespace Group2_COSC2200_Project.model
+﻿using System.Net.Security;
+
+namespace Group2_COSC2200_Project.model
 {
     /// <summary>
     /// Represents the general game logic for the game.
     /// </summary>
     class GameFunctionality
     {
-
-        public Card.Suits Trump;
-
         /// <summary>
         /// Static method to merge 2 team lists into one turn list for game functionality construction
         /// Takes 2 lists of players (teams), and merges them into 1 turnlist, where player turns alternate between teams.
@@ -25,6 +24,25 @@
             TurnList.Add(TeamTwo[1]);
 
             return TurnList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="kittyCard"></param>
+        /// <returns></returns>
+        public static List<Card.Suits> SetNonKittySuits(Card kittyCard)
+        {
+            List<Card.Suits> nonKittySuits = new List<Card.Suits>();
+
+            foreach(Card.Suits suit in Enum.GetValues(typeof(Card.Suits)))
+            {
+                if (suit != kittyCard.Suit)
+                {
+                    nonKittySuits.Add(suit);
+                }
+            }
+            return nonKittySuits;
         }
 
         /// <summary>
@@ -47,6 +65,44 @@
 
             return TurnList;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TurnList"></param>
+        /// <returns></returns>
+        public static List<Player> RotateToDealer(List<Player> TurnList)
+        {
+            if (TurnList[0].IsDealer)
+            {
+                return TurnList;
+            }
+            while (!TurnList[0].IsDealer)
+            {
+                NextTurn(TurnList);
+            }
+            return TurnList;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TurnList"></param>
+        /// <returns></returns>
+        public static List<Player> RotateToFirstTurn(List<Player> TurnList)
+        {
+            if (TurnList[TurnList.Count - 1].IsDealer)
+            {
+                return TurnList; 
+            }
+            while (!TurnList[TurnList.Count - 1].IsDealer)
+            {
+                NextTurn(TurnList);
+            }
+
+            return TurnList;
+        }
+        
 
         /// <summary>
         /// Will set the isDealer Status of the player in the last position of the turnList to dealer.
