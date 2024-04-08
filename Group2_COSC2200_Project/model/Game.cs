@@ -13,7 +13,6 @@ namespace Group2_COSC2200_Project.model
             TrumpSelectionPostKitty,
             DealerKittySwap,
             Play,
-            NewRound,
             EndOfGame
         }
         public GameState CurrentState { get; private set; }
@@ -104,8 +103,23 @@ namespace Group2_COSC2200_Project.model
         public void TrumpSelectionFromKitty() // HANDLES ONLY BUTTON ENABLING
         {
             CurrentState = GameState.TrumpSelectionFromKitty;
-            MessageBox.Show("Current Kitty " + Kitty[0].Suit);
             TurnsTaken = 0;
+            CurrentPlayer = TurnList[0];
+        }
+
+        public void TrumpSelectionPostKitty()
+        {
+            CurrentState = GameState.TrumpSelectionPostKitty;
+            TurnsTaken = 0;
+            NonKittySuits = GameFunctionality.SetNonKittySuits(Kitty[0]);
+            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
+            CurrentPlayer = TurnList[0];
+        }
+
+        public void DealerKittySwap()
+        {
+            CurrentState = GameState.DealerKittySwap;
+            TurnList = GameFunctionality.RotateToDealer(TurnList);
             CurrentPlayer = TurnList[0];
         }
 
@@ -123,7 +137,6 @@ namespace Group2_COSC2200_Project.model
             TurnsTaken++;
             if (TurnsTaken >= TurnList.Count)
             {
-                MessageBox.Show("Pick a trump suit.");
                 ChangeState(GameState.TrumpSelectionPostKitty);
                 return;
             }
@@ -131,15 +144,6 @@ namespace Group2_COSC2200_Project.model
             GameFunctionality.NextTurn(TurnList);
 
             // RESET the current player to the new player's whose turn it is
-            CurrentPlayer = TurnList[0];
-        }
-
-        public void TrumpSelectionPostKitty()
-        {
-            CurrentState = GameState.TrumpSelectionPostKitty;
-            TurnsTaken = 0;
-            NonKittySuits = GameFunctionality.SetNonKittySuits(Kitty[0]);
-            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             CurrentPlayer = TurnList[0];
         }
 
@@ -161,19 +165,15 @@ namespace Group2_COSC2200_Project.model
             CurrentPlayer = TurnList[0];
         }
 
-        public void DealerKittySwap()
+        public void SwapWithKitty(Player currentPlayer, Card card)
         {
-            CurrentState = GameState.DealerKittySwap;
-            TurnList = GameFunctionality.RotateToDealer(TurnList);
-            CurrentPlayer = TurnList[0];
+            Card kittyCard = Kitty[0];
+            Card playerCard = currentPlayer.PlayerHand.RemoveCard(card);
+            Kitty.Remove(Kitty[0]);
+            Kitty.Add(playerCard);
+            currentPlayer.PlayerHand.AddCard(kittyCard);
+            ChangeState(GameState.Play);
         }
-
-        /// TEST FUNCTION - CAN DELETE LATER *************
-        public void AddCardtoPlayAreaTest(Card CardToAdd)
-        {
-            PlayArea.Add(CardToAdd);
-        }
-
 
         /// <summary>
         /// This method os called when a player plays a card. It first checks if it is the first card to be played in
@@ -190,7 +190,7 @@ namespace Group2_COSC2200_Project.model
             {
                 // if it is the first card then set the lead suit
                 LeadSuit = card.Suit;
-                // update the GameFunctionality class
+                // Set the card values for lead suit
                 GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
             }
             else
@@ -233,7 +233,6 @@ namespace Group2_COSC2200_Project.model
         {
             if (TurnsTaken >= 4)
             {
-                TurnsTaken = 0;
                 Team winningTeam = Trick.DetermineTrickWinner(PlayArea, Team1, Team2);
                 MessageBox.Show("Trick Winners: " + winningTeam.TeamId.ToString());
 
@@ -248,6 +247,10 @@ namespace Group2_COSC2200_Project.model
                     TeamTwoTricks++;
                     //Scoreboard.IncrementTrickCount(TeamTwo);
                 }
+
+                TurnsTaken = 0;
+                TurnList = GameFunctionality.RotateToTrickWinner(TurnList, GameFunctionality.GetPlayerWithHighCard(PlayArea, TurnList));
+                CurrentPlayer = TurnList[0];
                 PlayArea.Clear();
 
                 if (PlayedCardsCounter >= 20)
@@ -333,12 +336,18 @@ namespace Group2_COSC2200_Project.model
             TeamOneTricks = 0;
             TeamTwoTricks = 0;
 
+            TurnList = GameFunctionality.ChangeDealer(GameFunctionality.RotateToDealer(TurnList)[0],
+                                                      GameFunctionality.RotateToFirstTurn(TurnList)[0],
+                                                      TurnList);
+            CurrentPlayer = TurnList[0];
+
             // Deal new hands.
             GameFunctionality.DealCards(Deck, TurnList);
 
             // Clear the kitty, and re-determine a new kitty.
             Kitty.Clear();
             Kitty.Add(Deck.DetermineKitty());
+            ChangeState(GameState.TrumpSelectionFromKitty);
         }
 
         public void EndOfGame()
@@ -347,14 +356,5 @@ namespace Group2_COSC2200_Project.model
             MessageBox.Show("10 Points Reached, End of Game.");
         }
 
-        public void SwapWithKitty(Player currentPlayer, Card card)
-        {
-            Card kittyCard = Kitty[0];
-            Card playerCard = currentPlayer.PlayerHand.RemoveCard(card);
-            Kitty.Remove(Kitty[0]);
-            Kitty.Add(playerCard);
-            currentPlayer.PlayerHand.AddCard(kittyCard);
-            ChangeState(GameState.Play);
-        }
     }
 }

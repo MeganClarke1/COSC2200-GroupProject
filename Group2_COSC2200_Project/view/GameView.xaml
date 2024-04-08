@@ -224,7 +224,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Player 2" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Player 3" VerticalAlignment="Top" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="1186,0,0,0" TextWrapping="Wrap" Text="Player 4" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
-
+        <TextBlock HorizontalAlignment="Left" Margin="923,591,0,0" TextWrapping="Wrap" Text="Kitty" VerticalAlignment="Top" Width="50" FontSize="24" Foreground="White" Background="Transparent" RenderTransformOrigin="0.398,0.184"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,678,0,0" TextWrapping="Wrap" Visibility="{Binding HasTrumpSuit}" Text="{Binding TrumpSuit}" VerticalAlignment="Top" Width="412" FontSize="24" Foreground="White" Background="Transparent"/>
     </Grid>
 </UserControl>

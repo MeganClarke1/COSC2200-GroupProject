@@ -46,7 +46,7 @@
         /// <summary>
         /// Gets the suit of the card.
         /// </summary>
-        public Suits Suit { get; }
+        public Suits Suit { get; set; }
 
         /// <summary>
         /// Gets the rank of the card.
@@ -141,6 +141,7 @@
             else if (Colour == trumpColour && Suit != trumpSuit && Rank == Ranks.Jack)
             {
                 Value = 20; // Set the value of the left bower to 20, making it the second highest value
+                Suit = trumpSuit;
             }
         }
 
