@@ -13,6 +13,7 @@ namespace Group2_COSC2200_Project.model
             TrumpSelectionPostKitty,
             DealerKittySwap,
             Play,
+            NewRound,
             EndOfGame
         }
         public GameState CurrentState { get; private set; }
@@ -175,6 +176,11 @@ namespace Group2_COSC2200_Project.model
 
         public void PlayCard(Player currentPlayer, Card card)
         {
+            if (TurnsTaken == 0)
+            {
+                LeadSuit = card.Suit;
+                GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
+            }
             PlayArea.Add(currentPlayer.PlayerHand.RemoveCard(card));
             TurnsTaken++;
             PlayedCardsCounter++;
@@ -259,8 +265,9 @@ namespace Group2_COSC2200_Project.model
 
         public void Play()
         {
-            TurnsTaken = 0;
             CurrentState = GameState.Play;
+            TurnsTaken = 0;
+            GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             CurrentPlayer = TurnList[0];
         }
@@ -270,6 +277,7 @@ namespace Group2_COSC2200_Project.model
         public void NewRound()
         {
             PlayedCardsCounter = 0;
+            TurnsTaken = 0;
 
             // Recreate a new deck, since the old one is used up.
             Deck = new Deck();
