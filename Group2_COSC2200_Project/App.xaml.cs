@@ -24,11 +24,11 @@ namespace Group2_COSC2200_Project
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _navigationStore.CurrentViewModel = new MenuViewModel(_navigationStore); // The Default view on app startup
+            _navigationStore.CurrentViewModel = new MenuViewModel(_navigationStore, null); // The Default view on app startup
 
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel(_navigationStore) // 3. This takes the navigationStore as an arugment ?
+                DataContext = new MainViewModel(_navigationStore) // 3. This takes the navigationStore as an arugment 
             };
             MainWindow.Show();
             base.OnStartup(e);

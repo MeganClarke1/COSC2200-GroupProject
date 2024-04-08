@@ -7,6 +7,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -29,32 +30,32 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// Represnts the player's unique id.
         /// </summary>
-        public int PlayerID {  get; private set; }
+        public int PlayerID {  get; set; }
         
         /// <summary>
         /// The player's name.
         /// </summary>
-        public string PlayerName { get; private set; }
+        public string PlayerName { get; set; }
 
         /// <summary>
         /// Player wins.
         /// </summary>
-        public int PlayerWins { get; private set; }
+        public int PlayerWins { get; set; }
 
         /// <summary>
         /// Player losses.
         /// </summary>
-        public int PlayerLosses { get; private set; }
+        public int PlayerLosses { get; set; }
 
         /// <summary>
         /// Player's total games.
         /// </summary>
-        public int TotalGames { get; private set; }
+        public int TotalGames { get; set; }
 
         /// <summary>
         /// Players current streak.
         /// </summary>
-        public int CurrentStreak {  get; private set; }
+        public int CurrentStreak {  get; set; }
 
         /// <summary>
         /// Tracks the last game result for determining current streak.
@@ -64,7 +65,12 @@ namespace Group2_COSC2200_Project.model
         ///            the value of previousGameResult. If it's ==, then that means they're either on a win streak(++), or loss streak (++). 
         ///            Now we can determine streak length, and then type of streak (win/loss), via the current result of the game that was just played.
         /// </summary>
-        public LastGameResult previousGameResult { get; private set; } 
+        public LastGameResult previousGameResult { get; set; } 
+
+        public Statistics()
+        {
+
+        }
 
         /// <summary>
         /// Constructor - For initialization after a player creates a profile. (Initialized to 0 for stats)
@@ -133,23 +139,34 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         /// <param name="uniqueID"> The unique id to fetch the given corresponding statistics record from the JSON.</param>
         /// <returns> playerStatistics - a Statistics object representing the player's stats. Or null if no record found. </returns>
-        public Statistics LoadStatistics(int uniqueID)
+        public static Statistics LoadStatistics(string uniqueID) // **** static now
         {
 
             // Construct the file path for the stats.json file in the Data folder ... Intended to work even even this is not being run on local.
-            string dataFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            string dataFolderPath = Path.Combine(Environment.CurrentDirectory, "data");
             string jsonFilePath = Path.Combine(dataFolderPath, "stats.json");
 
+            string hardCorePathTest = @"C:\Users\brody\Source\Repos\COSC2200-GroupProject\Group2_COSC2200_Project\data\stats.json";
+
             // Read JSON data into a dictionary with unique ID as the key
-            string json = File.ReadAllText(jsonFilePath);
-            Dictionary<int, Statistics> statisticsDict = JsonConvert.DeserializeObject<Dictionary<int, Statistics>>(json);
+            string json = File.ReadAllText(hardCorePathTest);
+            
+            Dictionary<string, Statistics> statisticsDict = JsonConvert.DeserializeObject<Dictionary<string, Statistics>>(json);
 
             // Check if the dictionary contains the unique ID
             if (statisticsDict.ContainsKey(uniqueID))
             {
-                Statistics playerStatistics = statisticsDict[uniqueID];
-
-                return playerStatistics; 
+                Statistics playerStatistics = new Statistics(); // Create a new instance of Statistics
+                                                                // Populate the properties of the new Statistics object with data from the dictionary
+                var statsFromDict = statisticsDict[uniqueID];
+                playerStatistics.PlayerID = statsFromDict.PlayerID;
+                playerStatistics.PlayerName = statsFromDict.PlayerName;
+                playerStatistics.PlayerWins = statsFromDict.PlayerWins;
+                playerStatistics.PlayerLosses = statsFromDict.PlayerLosses;
+                playerStatistics.TotalGames = statsFromDict.TotalGames;
+                playerStatistics.CurrentStreak = statsFromDict.CurrentStreak;
+                playerStatistics.previousGameResult = statsFromDict.previousGameResult;
+                return playerStatistics;
             }
             else
             {
