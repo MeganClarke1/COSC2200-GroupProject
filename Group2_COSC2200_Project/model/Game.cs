@@ -174,16 +174,57 @@ namespace Group2_COSC2200_Project.model
             PlayArea.Add(CardToAdd);
         }
 
+
+        /// <summary>
+        /// This method os called when a player plays a card. It first checks if it is the first card to be played in
+        /// the round. If it is then the plated card's suit is set to the lead suit. The card is moved to the playing
+        /// area and removed from the player's hand. If the player is not the first to play then their hand is checked
+        /// to see if they have any cards in the lead suit. These cards must be played as per the rules of the game.
+        /// </summary>
+        /// <param name="currentPlayer">The current Player object</param>
+        /// <param name="card">The selected card object to play</param>
         public void PlayCard(Player currentPlayer, Card card)
         {
+            // check if the card is the first played in the round
             if (TurnsTaken == 0)
             {
+                // if it is the first card then set the lead suit
                 LeadSuit = card.Suit;
+                // update the GameFunctionality class
                 GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
             }
+            else
+            {
+                // if it is not the first card to be played then check if it follows the set lead suit
+                bool hasLeadSuit = false;
+                // loop through the player hand to see if they have a card in the lead suit
+                foreach (var playerCard in currentPlayer.PlayerHand.Cards)
+                {
+                    // If they do then mark that they have the lead suit
+                    if (playerCard.Suit == LeadSuit)
+                    {
+                        hasLeadSuit = true;
+                        break;
+                    }
+                }
+
+                // When a card is played check if they have a lead suit card in their hand and if the card played
+                // matches the lead suit.
+                if (hasLeadSuit && card.Suit != LeadSuit)
+                {
+                    // If the play is not valid display a message box and return to the beginning of the function
+                    MessageBox.Show("The suit lead was: " + LeadSuit + ". You must play a card of that suit if you have one");
+                    return;
+                }
+            }
+
+            // If the play is valid
+            // Add the card to the playing area and remove form the player's hand
             PlayArea.Add(currentPlayer.PlayerHand.RemoveCard(card));
+            // Increase counters for turns taken and played cards
             TurnsTaken++;
             PlayedCardsCounter++;
+            // update the player to the next player in the turn list
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
         }
