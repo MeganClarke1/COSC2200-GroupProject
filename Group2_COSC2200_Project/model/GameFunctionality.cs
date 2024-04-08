@@ -219,15 +219,21 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
-        // public static Player GetPlayerWithHighCard(List<Card> playArea)
-        // {
-        //     Card highCard = null;
-        // 
-        //     foreach(Card card in playArea)
-        //     {
-        // 
-        //     }
-        // }
+        public static Player GetPlayerWithHighCard(List<Card> playArea, List<Player> turnList)
+        {
+            Card highCard = null;
+            Player playerWithHighCard = null;
+
+            for (int i = 0; i < playArea.Count; i++)
+            {
+                if (highCard == null || playArea[i].Value > highCard.Value)
+                {
+                    highCard = playArea[i];
+                    playerWithHighCard = turnList[i];
+                }
+            }
+            return playerWithHighCard;
+        }
 
         /*// 2 Options: Loop through each player (bad performance) or, simply use the turnList to call the function in order of the turnlist
         // Eg. TurnList[0].PassOrOrderUp
