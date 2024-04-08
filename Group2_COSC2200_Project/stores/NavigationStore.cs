@@ -17,6 +17,9 @@ namespace Group2_COSC2200_Project.stores
 
         private ViewModelBase _currentViewModel; //Using OUR viewModelBase (not gala's)
 
+        /// <summary>
+        /// Dynamically set the value of the CurrentViewModel 
+        /// </summary>
         public ViewModelBase CurrentViewModel
         {
             get => _currentViewModel;
@@ -29,6 +32,9 @@ namespace Group2_COSC2200_Project.stores
 
         public event Action CurrentViewModelChanged;
 
+        /// <summary>
+        /// Notify when a ViewModel has been changed.
+        /// </summary>
         private void OnCurrentViewModelChanged()
         {
             CurrentViewModelChanged?.Invoke();

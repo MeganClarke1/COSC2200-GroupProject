@@ -1,18 +1,11 @@
 ﻿{
   "500": {
-    "PlayerName": "John",
+    "PlayerName": "Jocelyn Cocque",
     "PlayerWins": 10,
     "PlayerLosses": 5,
     "TotalGames": 15,
     "CurrentStreak": 3,
     "previousGameResult": 1
-  },
-  "501": {
-    "PlayerName": "Alice",
-    "PlayerWins": 8,
-    "PlayerLosses": 7,
-    "TotalGames": 15,
-    "CurrentStreak": -2,
-    "previousGameResult": 2
+
   }
 }

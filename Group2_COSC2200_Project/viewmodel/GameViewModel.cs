@@ -53,6 +53,8 @@ namespace Group2_COSC2200_Project.viewmodel
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
         private String _trumpSuit = "";
 
+        private Statistics playerStats;
+
         public Scoreboard Scoreboard
         {
             get => _scoreBoard;
@@ -390,8 +392,8 @@ namespace Group2_COSC2200_Project.viewmodel
 
         // public bool Player2Turn => _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
 
-        public GameViewModel()
-        {   
+        public GameViewModel(Statistics _playerStats) // ***** added parameter on constructor
+        {
             UpdateViewModelState();
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute);
@@ -399,6 +401,15 @@ namespace Group2_COSC2200_Project.viewmodel
             ClickCardCommand = new RelayCommand<object>(ClickCardExecute);
             OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
             PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
+            // Works w/ continue (with player data), otherwise, new game needs to create player data.
+            if (_playerStats != null)
+            {
+                MessageBox.Show("Player Name from JSON: " + _playerStats.PlayerName);
+            }
+            else
+            {
+                MessageBox.Show("Player has selected new game... Need to create profile.");
+            }
         }
 
         private void UpdateViewModelState()
