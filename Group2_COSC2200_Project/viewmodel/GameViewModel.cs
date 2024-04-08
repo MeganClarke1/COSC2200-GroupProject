@@ -53,7 +53,7 @@ namespace Group2_COSC2200_Project.viewmodel
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
         private String _trumpSuit = "";
 
-        private Statistics playerStats;
+        private Statistics _GVMplayerStats;
 
         public Scoreboard Scoreboard
         {
@@ -401,14 +401,15 @@ namespace Group2_COSC2200_Project.viewmodel
             ClickCardCommand = new RelayCommand<object>(ClickCardExecute);
             OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
             PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
-            // Works w/ continue (with player data), otherwise, new game needs to create player data.
+            // Works w/ continue (with player data), otherwise, *TODO* new game needs to create player data.
             if (_playerStats != null)
             {
-                MessageBox.Show("Player Name from JSON: " + _playerStats.PlayerName);
+                _GVMplayerStats = _playerStats; // assign to GameViewModel container for that player's stats object,
+                MessageBox.Show("Player Name from JSON: " + _GVMplayerStats.PlayerName);
             }
             else
             {
-                MessageBox.Show("Player has selected new game... Need to create profile.");
+                MessageBox.Show("Player has selected new game... Need to create profile."); //temporary
             }
         }
 
