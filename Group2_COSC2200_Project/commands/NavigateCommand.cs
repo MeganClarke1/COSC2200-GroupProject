@@ -12,6 +12,7 @@ namespace Group2_COSC2200_Project.commands
     /// <summary>
     /// The navigate command will be used to navigate between view Models.
     /// </summary>
+    /// //Test
     public class NavigateCommand : CommandBase
     {
         // The navigation store property monitors the navigationStore property (which when changed will dynamically 
