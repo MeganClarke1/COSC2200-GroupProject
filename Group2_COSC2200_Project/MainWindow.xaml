@@ -5,9 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Group2_COSC2200_Project" 
         xmlns:view="clr-namespace:Group2_COSC2200_Project.view"
+        xmlns:vms="clr-namespace:Group2_COSC2200_Project.viewmodel"
         mc:Ignorable="d"
         Title="Euchre Game" Height="760" Width="1290" ResizeMode="NoResize">
     <Grid>
-        <view:GameView DataContext="{Binding CurrentViewModel}" />
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:MenuViewModel}">
+                <view:MenuView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:GameViewModel}">
+                <view:GameView/>
+            </DataTemplate>
+        </Grid.Resources>
+        <!-- <view:GameView DataContext="{Binding CurrentViewModel}" /> -->
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+
     </Grid>
 </Window>
