@@ -1,4 +1,4 @@
-﻿/*using Group2_COSC2200_Project.viewmodel;
+﻿using Group2_COSC2200_Project.viewmodel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,13 +26,13 @@ namespace Group2_COSC2200_Project.view
             InitializeComponent();
         }
 
-        private void NewGame_Click(object sender, RoutedEventArgs e)
+        /*private void NewGame_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MainViewModel mainViewModel)
+            *//*if (DataContext is MainViewModel mainViewModel)
             {
                 mainViewModel.SwitchToGameViewModel();
-            }
-        }
+            }*//*
+        }*/
     }
 }
-*/
+
