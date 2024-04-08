@@ -49,7 +49,11 @@ namespace Group2_COSC2200_Project.viewmodel
         private int _teamOneScore;
         private int _teamTwoScore;
         private Scoreboard _scoreBoard;
+
         private Visibility _started = Visibility.Visible;
+
+        private Visibility _hasTrumpSuit = Visibility.Collapsed;
+        private String _trumpSuit = "";
 
         public Scoreboard Scoreboard
         {
@@ -373,17 +377,43 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        public Visibility HasTrumpSuit
+        {
+            get => _hasTrumpSuit;
+            set
+            {
+                if (_hasTrumpSuit != value)
+                {
+                    _hasTrumpSuit = value;
+                    OnPropertyChanged(nameof(HasTrumpSuit));
+                }
+            }
+        }
+
+        public String TrumpSuit
+        {
+            get => _trumpSuit;
+            set
+            {
+                if (_trumpSuit != value)
+                {
+                    _trumpSuit = "Current Trump suit: " + value;
+                    OnPropertyChanged(nameof(TrumpSuit));
+                }
+            }
+        }
+
         // public bool Player2Turn => _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
 
         public GameViewModel()
         {   
             UpdateViewModelState();
-            OrderUpCommand = new RelayCommand<object>(OrderUpExecute, CanOrderUpExecute);
-            PassCommand = new RelayCommand<object>(PassExecute, CanPassExecute);
-            StartCommand = new RelayCommand<object>(StartExecute, CanStartExecute);
-            ClickCardCommand = new RelayCommand<object>(ClickCardExecute, CanClickCardExecute);
-            OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute, CanOrderUpPostKittyExecute);
-            PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute, CanPassPostKittyExecute);
+            OrderUpCommand = new RelayCommand<object>(OrderUpExecute);
+            PassCommand = new RelayCommand<object>(PassExecute);
+            StartCommand = new RelayCommand<object>(StartExecute);
+            ClickCardCommand = new RelayCommand<object>(ClickCardExecute);
+            OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
+            PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
         }
 
         private void UpdateViewModelState()
@@ -422,21 +452,11 @@ namespace Group2_COSC2200_Project.viewmodel
             MessageBox.Show(_game.CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
         }
 
-        private bool CanOrderUpExecute(object parameter)
-        {
-            return true;
-        }
-
         private void PassExecute(object parameter)
         {
             _game.PassFromKitty();
             UpdateViewModelState();
             MessageBox.Show("Your Turn: " + _game.CurrentPlayer.PlayerName);
-        }
-
-        private bool CanPassExecute(object parameter)
-        {
-            return true;
         }
 
         private void StartExecute(object parameter)
@@ -447,21 +467,11 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
         }
 
-        private bool CanStartExecute(object parameter)
-        {
-            return true;
-        }
-
         private void OrderUpPostKittyExecute(Card.Suits trumpSuit)
         {
             _game.OrderUpPostKitty(trumpSuit);
             UpdateViewModelState();
             MessageBox.Show("Trump suit is " + _game.TrumpSuit);
-        }
-
-        private bool CanOrderUpPostKittyExecute(Card.Suits trumpSuit)
-        {
-            return true;
         }
 
         private void PassPostKittyExecute(object parameter)
@@ -471,9 +481,35 @@ namespace Group2_COSC2200_Project.viewmodel
             MessageBox.Show("Your Turn: " + _game.CurrentPlayer.PlayerName);
         }
 
-        private bool CanPassPostKittyExecute(object parameter)
+        /// <summary>
+        /// Adds a card from a hand to the play area, removes it from hand.
+        /// If it is the 4th card to be played, automatically evaulates the winning result of the play area. 
+        /// Is bound to a button on each card in a player's hand. When clicked, will passed the clicked object to this
+        /// function, and add that clicked card to the PlayArea of the game instance. Sets the GameViewModel property PlayArea
+        /// to the newly add to game instance play area.
+        /// 
+        /// </summary>
+        /// <param name="parameter"> The object passed from the Command {binding} in the GameView.xaml. In this case, will be a 
+        /// CardViewModel object of the clicked card. </param>
+        private void ClickCardExecute(object parameter)
         {
-            return true;
+            if (_game.CurrentState == Game.GameState.DealerKittySwap)
+            {
+                if (parameter is CardViewModel cardViewModel)
+                {
+                    SwapWithKitty(cardViewModel);
+                    UpdateViewModelState();
+                    MessageBox.Show("Trump suit is " + _game.TrumpSuit);
+                }
+            }
+            else if (_game.CurrentState == Game.GameState.Play)
+            {
+                if (parameter is CardViewModel cardViewModel)
+                {
+                    PlayCard(cardViewModel);
+                    UpdateViewModelState();
+                }
+            }
         }
 
         private void Start()
@@ -520,35 +556,20 @@ namespace Group2_COSC2200_Project.viewmodel
             Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
         }
 
-        /// <summary>
-        /// Adds a card from a hand to the play area, removes it from hand.
-        /// If it is the 4th card to be played, automatically evaulates the winning result of the play area. 
-        /// Is bound to a button on each card in a player's hand. When clicked, will passed the clicked object to this
-        /// function, and add that clicked card to the PlayArea of the game instance. Sets the GameViewModel property PlayArea
-        /// to the newly add to game instance play area.
-        /// 
-        /// </summary>
-        /// <param name="parameter"> The object passed from the Command {binding} in the GameView.xaml. In this case, will be a 
-        /// CardViewModel object of the clicked card. </param>
-        private void ClickCardExecute(object parameter)
+        private void Play()
         {
-            if (_game.CurrentState == Game.GameState.DealerKittySwap)
-            {
-                if (parameter is CardViewModel cardViewModel)
-                {
-                    SwapWithKitty(cardViewModel);
-                    UpdateViewModelState();
-                    MessageBox.Show("Trump suit is " + _game.TrumpSuit);
-                }
-            } 
-            else if(_game.CurrentState == Game.GameState.Play)
-            {
-                if (parameter is CardViewModel cardViewModel)
-                {
-                    PlayCard(cardViewModel);
-                    UpdateViewModelState();
-                }
-            }
+            HasTrumpSuit = Visibility.Visible;
+            TrumpSuit = _game.TrumpSuit.ToString();
+            Player1PostKittyTurn = Visibility.Collapsed;
+            Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
+            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
+            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
+            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
         }
 
         private void PlayCard(CardViewModel cardViewModel)
@@ -564,11 +585,6 @@ namespace Group2_COSC2200_Project.viewmodel
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
         }
 
-        private bool CanClickCardExecute(object parameter)
-        {
-            return true;
-        }
-
         private void SwapWithKitty(CardViewModel cardViewModel)
         {
             _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
@@ -577,21 +593,6 @@ namespace Group2_COSC2200_Project.viewmodel
             Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-        }
-
-        private void Play()
-        {
-            Player1PostKittyTurn = Visibility.Collapsed;
-            Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
-            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
-            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
-            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-            PlayArea = new PlayAreaViewModel(_game.PlayArea);
-
         }
 
         private void UpdateScore()
