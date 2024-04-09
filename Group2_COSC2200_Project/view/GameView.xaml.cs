@@ -1,4 +1,23 @@
-﻿using System;
+﻿/// <file>
+///   <summary>
+///     File Name: GameView.xaml.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: April 1, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This file contains the code behind for our Game View. Including a messagebox popup for the rules.
+///   </description>
+/// </file>
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +39,9 @@ namespace Group2_COSC2200_Project.view
     /// </summary>
     public partial class GameView : UserControl
     {
-
+        /// <summary>
+        /// The string which will be used to populate the rules messagebox.
+        /// </summary>
         public String rulesString =
             "Euchre Rules" +
             "\r\nThese are the rules used for this version of Euchre. There are many variations possible, " +
@@ -71,11 +92,19 @@ namespace Group2_COSC2200_Project.view
             "losing team gets no points." +
             "\r\n\r\nWinning\r\nA team wins once it has gotten 10 points.";
 
+        /// <summary>
+        /// Initialization of the GameView constructor
+        /// </summary>
         public GameView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// The on click event of the rules menu item from the game View. Will present a messagebox with the rules.
+        /// </summary>
+        /// <param name="sender"> The Sending object. </param>
+        /// <param name="e"> The routed event object. </param>
         private void RulesMenuItem_Click(object sender, RoutedEventArgs e)
         {
             // Show a message box with the rules

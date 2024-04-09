@@ -1,4 +1,22 @@
-﻿using System.Net.Security;
+﻿/// <file>
+///   <summary>
+///     File Name: GameFunctionality.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: March 24, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents the game logic for the game.
+///   </description>
+/// </file>
+
+using System.Net.Security;
 
 namespace Group2_COSC2200_Project.model
 {

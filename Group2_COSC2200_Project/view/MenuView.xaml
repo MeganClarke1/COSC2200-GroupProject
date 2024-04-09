@@ -1,4 +1,12 @@
-﻿<UserControl x:Class="Group2_COSC2200_Project.view.MenuView"
+﻿<!--
+    Filename: MenuView.xaml
+    Author: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+    Created: April 5, 2024
+    Last Modified: April 9, 2024
+    Description: This XAML file defines the layout and appearance of the main MenuView.
+-->
+    
+<UserControl x:Class="Group2_COSC2200_Project.view.MenuView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

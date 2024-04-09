@@ -1,4 +1,22 @@
-﻿using System;
+﻿/// <file>
+///   <summary>
+///     File Name: Scoreboard.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: April 6, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents a Scoreboard for the game.
+///   </description>
+/// </file>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -7,6 +25,9 @@ using System.Threading.Tasks;
 
 namespace Group2_COSC2200_Project.model
 {
+    /// <summary>
+    /// Scoreboard will track tricks/wins for each team.
+    /// </summary>
     public  class Scoreboard
     {
 
