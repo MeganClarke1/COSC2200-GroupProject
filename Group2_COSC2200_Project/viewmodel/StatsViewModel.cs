@@ -38,6 +38,8 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         public ICommand BackCommand { get; }
 
+        public ICommand ResetStatsCommand { get; }
+
         /// <summary>
         /// Represents the players stats.
         /// </summary>
@@ -148,6 +150,8 @@ namespace Group2_COSC2200_Project.viewmodel
         public StatsViewModel(NavigationStore _navigationStore, Statistics _playerStats) 
         {
             BackCommand = new BackCommand(_navigationStore);
+
+            ResetStatsCommand = new ResetStatsCommand(_navigationStore, _playerStats);
 
             PlayerStats = _playerStats;
             _playerName = PlayerStats.PlayerName;
