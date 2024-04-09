@@ -296,6 +296,7 @@ namespace Group2_COSC2200_Project.model
             // Increase counters for turns taken and played cards
             TurnsTaken++;
             PlayedCardsCounter++;
+            CheckTrickWinner();
             // update the player to the next player in the turn list
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];

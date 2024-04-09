@@ -640,9 +640,6 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
             RefreshUI();
-
-            _game.CheckTrickWinner();
-            RefreshUI();
         }
 
         private void SwapWithKitty(CardViewModel cardViewModel)
