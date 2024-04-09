@@ -639,9 +639,6 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             switch (_game.CurrentState)
             {
-                case GameState.Initialize:
-                    // 
-                    break;
                 case GameState.Start:
                     Start();
                     break;

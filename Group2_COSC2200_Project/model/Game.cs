@@ -128,11 +128,12 @@ namespace Group2_COSC2200_Project.model
             Kitty.Add(Deck.DetermineKitty());
         }
 
-        public void TrumpSelectionFromKitty() // HANDLES ONLY BUTTON ENABLING
+        public void TrumpSelectionFromKitty() 
         {
             CurrentState = GameState.TrumpSelectionFromKitty;
             TurnsTaken = 0;
             CurrentPlayer = TurnList[0];
+            RaiseOnAction();
             MessageBox.Show("The Dealer is " + TurnList[3].PlayerName + " and the current top kitty suit is "
                 + Kitty[0].Suit + ". " + CurrentPlayer.PlayerName + " is up.");
             if (CurrentPlayer.IsAI)
@@ -149,6 +150,7 @@ namespace Group2_COSC2200_Project.model
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             Kitty.Clear();
             CurrentPlayer = TurnList[0];
+            RaiseOnAction();
             MessageBox.Show("No one ordered it up. "+ CurrentPlayer.PlayerName + " is up.");
             if (CurrentPlayer.IsAI)
             {
@@ -161,6 +163,7 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.DealerKittySwap;
             TurnList = GameFunctionality.RotateToDealer(TurnList);
             CurrentPlayer = TurnList[0];
+            RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName +  "can swap one of their cards with the top kitty card.");
             if (CurrentPlayer.IsAI)
             {
@@ -175,6 +178,7 @@ namespace Group2_COSC2200_Project.model
             GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             CurrentPlayer = TurnList[0];
+            RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " will start the round.");
             if (CurrentPlayer.IsAI)
             {
@@ -229,9 +233,9 @@ namespace Group2_COSC2200_Project.model
                 MessageBox.Show("Dealer must pick a suit!");
                 return;
             }
+            MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
-            MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
             if (CurrentPlayer.IsAI) 
             {
                 AIDecisionPostKitty(CurrentPlayer);
@@ -244,6 +248,7 @@ namespace Group2_COSC2200_Project.model
             currentPlayer.PlayerHand.RemoveCard(card);
             Kitty.Remove(Kitty[0]);
             currentPlayer.PlayerHand.AddCard(kittyCard);
+            kittyCard.CardsAssociatedToPlayers = currentPlayer.PlayerID;
             RaiseOnAction();
             ChangeState(GameState.Play);
         }
@@ -424,6 +429,7 @@ namespace Group2_COSC2200_Project.model
                     {
                         trumpPicked = true;
                         TrumpSuit = NonKittySuits[i];
+                        RaiseOnAction();
                         MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
                         ChangeState(GameState.Play);
                         return;
@@ -497,6 +503,7 @@ namespace Group2_COSC2200_Project.model
             currentPlayer.PlayerHand.RemoveCard(cardToSwap);
             Kitty.Remove(Kitty[0]);
             currentPlayer.PlayerHand.AddCard(kittyCard);
+            kittyCard.CardsAssociatedToPlayers = currentPlayer.PlayerID;
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has swapped their card.");
             ChangeState(GameState.Play);
@@ -664,9 +671,17 @@ namespace Group2_COSC2200_Project.model
 
                 TeamTwoScore++;
             }
+            RaiseOnAction();
             MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
-            CheckGameWinner();
-            NewRound();
+            if (TeamOneScore >= 10 || TeamTwoScore >= 10)
+            {
+                CheckGameWinner();
+                return;
+            } 
+            else
+            {
+                NewRound();
+            }
         }
 
         public void CheckGameWinner()
@@ -711,7 +726,6 @@ namespace Group2_COSC2200_Project.model
 
             Kitty.Add(Deck.DetermineKitty());
             RaiseOnAction();
-            MessageBox.Show("stop here.");
             ChangeState(GameState.TrumpSelectionFromKitty);
         }
 
