@@ -28,8 +28,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button Content="New Game" Command="{Binding NewGameCommand}" HorizontalAlignment="Center" FontSize="24" Width="160"/>
-            <Button Content="Continue" Command="{Binding ContinueCommand}" HorizontalAlignment="Center" FontSize="24" Width="160" Margin="0,10,0,0" Grid.Row="1"/>
+            <Button Content="Play Game" Command="{Binding ContinueCommand}" HorizontalAlignment="Center" FontSize="24" Width="160"/>
+            <Button Content="Stats" Command="{Binding StatsViewCommand}" HorizontalAlignment="Center" FontSize="24" Width="160" Margin="0,10,0,0" Grid.Row="1"/>
+           
         </Grid>
     </Grid>
 </UserControl>
