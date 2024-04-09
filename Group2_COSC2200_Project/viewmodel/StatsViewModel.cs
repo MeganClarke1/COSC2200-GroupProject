@@ -102,7 +102,7 @@ namespace Group2_COSC2200_Project.viewmodel
             _currentStreak = PlayerStats.CurrentStreak;
 
 
-            MessageBox.Show(PlayerStats.PlayerID.ToString());
+
 
 
         } 
