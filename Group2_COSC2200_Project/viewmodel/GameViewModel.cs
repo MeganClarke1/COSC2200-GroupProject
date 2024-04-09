@@ -617,7 +617,10 @@ namespace Group2_COSC2200_Project.viewmodel
             ClickCardCommand = new RelayCommand<object>(ClickCardExecute);
             OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
             PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
-            // Works w/ continue (with player data), otherwise, *TODO* new game needs to create player data.
+
+            _game.OnAIAction += OnActionHandler;
+
+            // Works w/ continue (with player data), otherwise, new game needs to create player data.
             if (_playerStats != null)
             {
                 _GVMplayerStats = _playerStats; // assign to GameViewModel container for that player's stats object,
@@ -660,6 +663,11 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        private void OnActionHandler(object sender, EventArgs e)
+        {
+            UpdateViewModelState();
+        }
+
         private void OrderUpExecute(object parameter)
         {
             _game.OrderUpFromKitty();
@@ -688,7 +696,8 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             _game.OrderUpPostKitty(trumpSuit);
             UpdateViewModelState();
-            MessageBox.Show("Trump suit is " + _game.TrumpSuit);
+            _game.ChangeState(GameState.Play);
+            UpdateViewModelState();
         }
 
         private void PassPostKittyExecute(object parameter)
@@ -830,10 +839,5 @@ namespace Group2_COSC2200_Project.viewmodel
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
         }
-
-        // private void EndOfGame()
-        // {
-        //     MessageBox.Show("End of game.");
-        // }
     }
 }

@@ -17,7 +17,6 @@
 /// </file>
 
 using System.Windows;
-using System.Windows.Markup;
 
 namespace Group2_COSC2200_Project.model
 {
@@ -40,6 +39,7 @@ namespace Group2_COSC2200_Project.model
             EndOfGame
         }
         public GameState CurrentState { get; private set; }
+        public event EventHandler OnAIAction;
         public Player PlayerOne { get; private set; }
         public Player PlayerTwo { get; private set; }
         public Player PlayerThree { get; private set; }
@@ -115,6 +115,12 @@ namespace Group2_COSC2200_Project.model
             TeamTwoScore = 8;
         }
 
+        protected virtual void RaiseOnAction()
+        {
+            // Check if there are any subscribers
+            OnAIAction?.Invoke(this, EventArgs.Empty);
+        }
+
         public void Start()
         {
             CurrentState = GameState.Start;
@@ -172,12 +178,16 @@ namespace Group2_COSC2200_Project.model
         public void OrderUpFromKitty()
         {
             TrumpSuit = Kitty[0].Suit;
+            RaiseOnAction();
+            MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!");
             // TODO :Set Maker status from the team of which the player that ordered up belongs to 
         }
 
         // These handle what happens when ANY user clicks pass
         public void PassFromKitty()
         {
+            RaiseOnAction();
+            MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
             TurnsTaken++;
             if (TurnsTaken >= TurnList.Count)
             {
@@ -198,11 +208,14 @@ namespace Group2_COSC2200_Project.model
         public void OrderUpPostKitty(Card.Suits trumpSuit)
         {
             TrumpSuit = trumpSuit;
-            ChangeState(GameState.Play);
+            RaiseOnAction();
+            MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
         }
 
         public void PassPostKitty()
         {
+            RaiseOnAction();
+            MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
             TurnsTaken++;
             if (TurnsTaken >= TurnList.Count)
             {
@@ -223,6 +236,7 @@ namespace Group2_COSC2200_Project.model
             currentPlayer.PlayerHand.RemoveCard(card);
             Kitty.Remove(Kitty[0]);
             currentPlayer.PlayerHand.AddCard(kittyCard);
+            RaiseOnAction();
             ChangeState(GameState.Play);
         }
 
@@ -239,8 +253,17 @@ namespace Group2_COSC2200_Project.model
             // check if the card is the first played in the round
             if (TurnsTaken == 0)
             {
-                // if it is the first card then set the lead suit
-                LeadSuit = card.Suit;
+                // Check if the card played is the Left bower, this means that the lead suit is not the suit on the
+                // card, but actually the Trump suit
+                if (IsLeftBower(card))
+                {
+                    LeadSuit = TrumpSuit;
+                }
+                else
+                {
+                    LeadSuit = card.Suit;
+                }
+                
                 // Set the card values for lead suit
                 GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
             }
@@ -252,7 +275,7 @@ namespace Group2_COSC2200_Project.model
                 foreach (var playerCard in currentPlayer.PlayerHand.Cards)
                 {
                     // If they do then mark that they have the lead suit
-                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && playerCard.Colour == PlayArea[0].Colour && playerCard.Rank == Card.Ranks.Jack))
+                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && IsLeftBower(card)))
                     {
                         hasLeadSuit = true;
                         break;
@@ -272,12 +295,53 @@ namespace Group2_COSC2200_Project.model
             // If the play is valid
             // Add the card to the playing area and remove form the player's hand
             PlayArea.Add(currentPlayer.PlayerHand.RemoveCard(card));
+            RaiseOnAction();
+            MessageBox.Show(CurrentPlayer.PlayerName + " has played their card.");
             // Increase counters for turns taken and played cards
             TurnsTaken++;
             PlayedCardsCounter++;
             // update the player to the next player in the turn list
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI)
+            {
+                AIPlayCard(CurrentPlayer);
+            }
+        }
+
+        /// <summary>
+        /// Takes a card object and checks if the card is the Left Bower by matching the colour of the card if
+        /// it is a Jack. This is required to comply with play rules.
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
+        public bool IsLeftBower(Card card)
+        {
+            // delcare a local variable for if the card is the Left Bower
+            bool isLeftBower = false;
+
+            // Only check the suit if the card is a Jack
+            if (card.Rank == Card.Ranks.Jack)
+            {
+                // Compare each suit to see if the card is the correct Left Bower for the already determined Trump suit
+                switch (TrumpSuit)
+                {
+                    case Card.Suits.Hearts:
+                        isLeftBower = card.Suit == Card.Suits.Diamonds; // Diamonds are the same color as Hearts
+                        break;
+                    case Card.Suits.Diamonds:
+                        isLeftBower = card.Suit == Card.Suits.Hearts; // Hearts are the same color as Diamonds
+                        break;
+                    case Card.Suits.Clubs:
+                        isLeftBower = card.Suit == Card.Suits.Spades; // Spades are the same color as Clubs
+                        break;
+                    case Card.Suits.Spades:
+                        isLeftBower = card.Suit == Card.Suits.Clubs; // Clubs are the same color as Spades
+                        break;
+                }
+            }
+            // if the card is not a jack it cannot be a bower and return false
+            return false;
         }
 
         public void AIDecisionFromKitty(Player currentPlayer)
@@ -295,20 +359,20 @@ namespace Group2_COSC2200_Project.model
             if (sameSuitCount >= 3)
             {
                 TrumpSuit = Kitty[0].Suit;
+                RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!.");
                 ChangeState(GameState.DealerKittySwap);
             }
             else
             {
+                RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
                 if (TurnsTaken >= TurnList.Count)
                 {
                     ChangeState(GameState.TrumpSelectionPostKitty);
                     return;
                 }
-                // Change turns 
                 GameFunctionality.NextTurn(TurnList);
-                // RESET the current player to the new player's whose turn it is
                 CurrentPlayer = TurnList[0];
                 if (CurrentPlayer.IsAI)
                 {
@@ -351,6 +415,7 @@ namespace Group2_COSC2200_Project.model
                 }
                 if (!trumpPicked)
                 {
+                    RaiseOnAction();
                     MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
                     GameFunctionality.NextTurn(TurnList);
                     CurrentPlayer = TurnList[0];
@@ -373,6 +438,7 @@ namespace Group2_COSC2200_Project.model
                     }
                 }
                 TrumpSuit = NonKittySuits[highestCounterIndex];
+                RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
                 ChangeState(GameState.Play);
             }
@@ -415,17 +481,89 @@ namespace Group2_COSC2200_Project.model
             currentPlayer.PlayerHand.RemoveCard(cardToSwap);
             Kitty.Remove(Kitty[0]);
             currentPlayer.PlayerHand.AddCard(kittyCard);
+            RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has swapped their card.");
             ChangeState(GameState.Play);
         }
 
         public void AIPlayCard(Player currentPlayer)
         {
-            if (TurnsTaken == 0)
+            Card cardToPlay = null;
+
+            if (TurnsTaken == 0) // AI Player is first turn
             {
-                
-                // Set the card values for lead suit
+                foreach (Card card in currentPlayer.PlayerHand.Cards)
+                {
+                    if (cardToPlay == null || card.Value > cardToPlay.Value)
+                    {
+                        cardToPlay = card;
+                    }
+                }
+                LeadSuit = cardToPlay.Suit;
                 GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
+            }
+            else // AI player is not first turn
+            {
+                bool hasLeadSuit = false;
+                // Check if they have a card in the lead suit
+                foreach (Card card in  CurrentPlayer.PlayerHand.Cards)
+                {
+                    if (card.Suit == LeadSuit)
+                    {
+                        hasLeadSuit = true;
+                        break;
+                    }
+                }
+                // AI player has lead suit and must play a card from that suit
+                if (hasLeadSuit)
+                {
+                    List<Card> playableCards = new List<Card>();
+
+                    foreach (Card card in currentPlayer.PlayerHand.Cards)
+                    {
+                        // Check for lead suit or left bower
+                        if (card.Suit == LeadSuit || (card.Colour == PlayArea[0].Colour && card.Rank == Card.Ranks.Jack))
+                        {
+                            playableCards.Add(card);
+                        }
+                    }
+                    // Get the highest card in the hand to play
+                    foreach (Card card in playableCards)
+                    {
+                        if (cardToPlay == null || card.Value > cardToPlay.Value)
+                        {
+                            cardToPlay = card;
+                        }
+                    }
+
+                }
+                // AI player does not have lead suit and can play any card
+                else
+                {
+                    // Get highest card
+                    foreach (Card card in currentPlayer.PlayerHand.Cards)
+                    {
+                        if (cardToPlay == null || card.Value > cardToPlay.Value)
+                        {
+                            cardToPlay = card;
+                        }
+                    }
+                }
+            }
+            PlayArea.Add(currentPlayer.PlayerHand.RemoveCard(cardToPlay));
+            RaiseOnAction();
+            MessageBox.Show(CurrentPlayer.PlayerName + " has played their card.");
+
+            TurnsTaken++;
+            PlayedCardsCounter++;
+
+            CheckTrickWinner();
+
+            GameFunctionality.NextTurn(TurnList);
+            CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI)
+            {
+                AIPlayCard(CurrentPlayer);
             }
         }
 
@@ -448,14 +586,19 @@ namespace Group2_COSC2200_Project.model
                     //Scoreboard.IncrementTrickCount(TeamTwo);
                 }
 
-                TurnsTaken = 0;
-                TurnList = GameFunctionality.RotateToTrickWinner(TurnList, GameFunctionality.GetPlayerWithHighCard(PlayArea, TurnList));
-                CurrentPlayer = TurnList[0];
-                PlayArea.Clear();
-
                 if (PlayedCardsCounter >= 20)
                 {
                     CheckRoundWinner();
+                }
+
+                MessageBox.Show("The next trick will begin!");
+                TurnsTaken = 0;
+                TurnList = GameFunctionality.RotateToTrickWinner(TurnList, GameFunctionality.GetPlayerWithHighCard(PlayArea, TurnList));
+                PlayArea.Clear();
+                CurrentPlayer = TurnList[0];
+                if (CurrentPlayer.IsAI)
+                {
+                    AIPlayCard(CurrentPlayer);
                 }
             }
         }
