@@ -73,13 +73,12 @@ namespace Group2_COSC2200_Project.model
         public void Initialize()
         {
             CurrentState = GameState.Initialize;
-
             Deck = new Deck();
             Kitty = new List<Card>();
-            PlayerOne = (new Player(1, "Player 1"));
-            PlayerTwo = (new Player(2, "Player 2"));
-            PlayerThree = (new Player(3, "Player 3"));
-            PlayerFour = (new Player(4, "Player 4"));
+            PlayerOne = new Player(1, "Player 1", false);
+            PlayerTwo = new Player(2, "Player 2", true);
+            PlayerThree = new Player(3, "Player 3", true);
+            PlayerFour = new Player(4, "Player 4", true);
             Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree));
             Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
@@ -105,6 +104,10 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.TrumpSelectionFromKitty;
             TurnsTaken = 0;
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI)
+            {
+                AIDecisionFromKitty(CurrentPlayer);
+            } 
         }
 
         public void TrumpSelectionPostKitty()
@@ -113,7 +116,12 @@ namespace Group2_COSC2200_Project.model
             TurnsTaken = 0;
             NonKittySuits = GameFunctionality.SetNonKittySuits(Kitty[0]);
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
+            Kitty.Clear();
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI)
+            {
+                AIDecisionPostKitty(CurrentPlayer);
+            }
         }
 
         public void DealerKittySwap()
@@ -121,13 +129,25 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.DealerKittySwap;
             TurnList = GameFunctionality.RotateToDealer(TurnList);
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI)
+            {
+                AISwapWithKitty(CurrentPlayer);
+            }
+        }
+
+        public void Play()
+        {
+            CurrentState = GameState.Play;
+            TurnsTaken = 0;
+            GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
+            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
+            CurrentPlayer = TurnList[0];
         }
 
         // These handle what happens when ANY user clicks order up 
         public void OrderUpFromKitty()
         {
             TrumpSuit = Kitty[0].Suit;
-            ChangeState(GameState.DealerKittySwap);
             // TODO :Set Maker status from the team of which the player that ordered up belongs to 
         }
 
@@ -145,6 +165,10 @@ namespace Group2_COSC2200_Project.model
 
             // RESET the current player to the new player's whose turn it is
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI)
+            {
+                AIDecisionFromKitty(CurrentPlayer);
+            }
         }
 
         public void OrderUpPostKitty(Card.Suits trumpSuit)
@@ -163,14 +187,17 @@ namespace Group2_COSC2200_Project.model
             }
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
+            if (CurrentPlayer.IsAI) 
+            {
+                AIDecisionPostKitty(CurrentPlayer);
+            }
         }
 
         public void SwapWithKitty(Player currentPlayer, Card card)
         {
             Card kittyCard = Kitty[0];
-            Card playerCard = currentPlayer.PlayerHand.RemoveCard(card);
+            currentPlayer.PlayerHand.RemoveCard(card);
             Kitty.Remove(Kitty[0]);
-            Kitty.Add(playerCard);
             currentPlayer.PlayerHand.AddCard(kittyCard);
             ChangeState(GameState.Play);
         }
@@ -201,7 +228,7 @@ namespace Group2_COSC2200_Project.model
                 foreach (var playerCard in currentPlayer.PlayerHand.Cards)
                 {
                     // If they do then mark that they have the lead suit
-                    if (playerCard.Suit == LeadSuit)
+                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && playerCard.Colour == PlayArea[0].Colour && playerCard.Rank == Card.Ranks.Jack))
                     {
                         hasLeadSuit = true;
                         break;
@@ -227,6 +254,155 @@ namespace Group2_COSC2200_Project.model
             // update the player to the next player in the turn list
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
+        }
+
+        public void AIDecisionFromKitty(Player currentPlayer)
+        {
+            TurnsTaken++;
+
+            int sameSuitCount = 0;
+            foreach (Card card in currentPlayer.PlayerHand.Cards)
+            {
+                if (card.Suit == Kitty[0].Suit)
+                {
+                    sameSuitCount++;
+                }
+            }
+            if (sameSuitCount >= 3)
+            {
+                TrumpSuit = Kitty[0].Suit;
+                MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!.");
+                ChangeState(GameState.DealerKittySwap);
+            }
+            else
+            {
+                MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
+                if (TurnsTaken >= TurnList.Count)
+                {
+                    ChangeState(GameState.TrumpSelectionPostKitty);
+                    return;
+                }
+                // Change turns 
+                GameFunctionality.NextTurn(TurnList);
+                // RESET the current player to the new player's whose turn it is
+                CurrentPlayer = TurnList[0];
+                if (CurrentPlayer.IsAI)
+                {
+                    AIDecisionFromKitty(CurrentPlayer);
+                }
+            }
+        }
+
+        public void AIDecisionPostKitty(Player currentPlayer)
+        {
+            TurnsTaken++;
+
+            int[] suitCounts = new int[NonKittySuits.Count];
+
+            foreach (Card card in currentPlayer.PlayerHand.Cards)
+            {
+                for (int i = 0; i < NonKittySuits.Count; i++)
+                {
+                    if (card.Suit == NonKittySuits[i])
+                    {
+                        suitCounts[i]++;
+                    }
+                }
+            }
+
+            if (TurnsTaken < TurnList.Count) // Not the dealer
+            {
+                bool trumpPicked = false;
+
+                for (int i = 0; i < NonKittySuits.Count; i++)
+                {
+                    if (suitCounts[i] >= 3)
+                    {
+                        trumpPicked = true;
+                        TrumpSuit = NonKittySuits[i];
+                        MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
+                        ChangeState(GameState.Play);
+                        return;
+                    }
+                }
+                if (!trumpPicked)
+                {
+                    MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
+                    GameFunctionality.NextTurn(TurnList);
+                    CurrentPlayer = TurnList[0];
+                    if (CurrentPlayer.IsAI)
+                    {
+                        AIDecisionPostKitty(CurrentPlayer);
+                    }
+                }
+
+            } 
+            else // Dealer must go
+            {
+                int highestCounterIndex = 0;
+
+                for (int i = 0; i < NonKittySuits.Count; i++)
+                {
+                    if (suitCounts[i] > highestCounterIndex)
+                    {
+                        highestCounterIndex = i;
+                    }
+                }
+                TrumpSuit = NonKittySuits[highestCounterIndex];
+                MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
+                ChangeState(GameState.Play);
+            }
+        }
+
+        public void AISwapWithKitty(Player currentPlayer)
+        {
+            Card kittyCard = Kitty[0];
+            Card cardToSwap = null;
+            int sameSuitCount = 0;
+            foreach (Card card in currentPlayer.PlayerHand.Cards)
+            {
+                if (card.Suit == kittyCard.Suit)
+                {
+                    sameSuitCount++;
+                }
+            }
+            if (sameSuitCount >= 2)
+            {
+                foreach (Card card in currentPlayer.PlayerHand.Cards)
+                {
+                    if (card.Suit != kittyCard.Suit || !(card.Colour == kittyCard.Colour && card.Rank == Card.Ranks.Jack))
+                    {
+                        cardToSwap = card;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                cardToSwap = currentPlayer.PlayerHand.Cards[0];
+                foreach (Card card in currentPlayer.PlayerHand.Cards)
+                {
+                    if (card.Value < cardToSwap.Value)
+                    {
+                        cardToSwap = card;
+                    }
+                }
+            }
+            currentPlayer.PlayerHand.RemoveCard(cardToSwap);
+            Kitty.Remove(Kitty[0]);
+            currentPlayer.PlayerHand.AddCard(kittyCard);
+            MessageBox.Show(CurrentPlayer.PlayerName + " has swapped their card.");
+            ChangeState(GameState.Play);
+        }
+
+        public void AIPlayCard(Player currentPlayer)
+        {
+            if (TurnsTaken == 0)
+            {
+                
+                // Set the card values for lead suit
+                GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
+            }
         }
 
         public void CheckTrickWinner()
@@ -305,15 +481,6 @@ namespace Group2_COSC2200_Project.model
             {
                 ChangeState(GameState.EndOfGame);
             }
-        }
-
-        public void Play()
-        {
-            CurrentState = GameState.Play;
-            TurnsTaken = 0;
-            GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
-            TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
-            CurrentPlayer = TurnList[0];
         }
 
         //added (brody)

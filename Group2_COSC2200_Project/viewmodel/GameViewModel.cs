@@ -5,6 +5,7 @@ using System.ComponentModel;
 
 using System.Windows;
 using System.Windows.Input;
+using static Group2_COSC2200_Project.model.Game;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
@@ -442,28 +443,27 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void UpdateViewModelState()
         {
-            UpdateScore();
             switch (_game.CurrentState)
             {
-                case Game.GameState.Initialize:
+                case GameState.Initialize:
                     // 
                     break;
-                case Game.GameState.Start:
+                case GameState.Start:
                     Start();
                     break;
-                case Game.GameState.TrumpSelectionFromKitty:
+                case GameState.TrumpSelectionFromKitty:
                     TrumpSelectionFromKitty();
                     break;
-                case Game.GameState.Play:
+                case GameState.Play:
                     Play();
                     break;
-                case Game.GameState.EndOfGame:
+                case GameState.EndOfGame:
                     //EndOfGame();
                     break;
-                case Game.GameState.TrumpSelectionPostKitty:
+                case GameState.TrumpSelectionPostKitty:
                     TrumpSelectionPostKitty();
                     break;
-                case Game.GameState.DealerKittySwap:
+                case GameState.DealerKittySwap:
                     DealerKittySwap();
                     break;
             }
@@ -473,14 +473,14 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             _game.OrderUpFromKitty();
             UpdateViewModelState();
-            MessageBox.Show(_game.CurrentPlayer.PlayerName + " gets to swap one of their cards with the kitty.");
+            _game.ChangeState(GameState.DealerKittySwap);
+            UpdateViewModelState();
         }
 
         private void PassExecute(object parameter)
         {
             _game.PassFromKitty();
             UpdateViewModelState();
-            MessageBox.Show("Your Turn: " + _game.CurrentPlayer.PlayerName);
         }
 
         private void StartExecute(object parameter)
@@ -504,7 +504,6 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             _game.PassPostKitty();
             UpdateViewModelState();
-            MessageBox.Show("Your Turn: " + _game.CurrentPlayer.PlayerName);
         }
 
         /// <summary>
@@ -568,6 +567,7 @@ namespace Group2_COSC2200_Project.viewmodel
             Player2Turn = Visibility.Collapsed;
             Player3Turn = Visibility.Collapsed;
             Player4Turn = Visibility.Collapsed;
+            Kitty = new KittyViewModel(_game.Kitty);
         }
 
         private void DealerKittySwap()
@@ -584,6 +584,10 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void Play()
         {
+            Player1Turn = Visibility.Collapsed;
+            Player2Turn = Visibility.Collapsed;
+            Player3Turn = Visibility.Collapsed;
+            Player4Turn = Visibility.Collapsed;
             HasTrumpSuit = Visibility.Visible;
             if (_game.TurnsTaken == 0)
             {
@@ -601,32 +605,25 @@ namespace Group2_COSC2200_Project.viewmodel
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            Kitty = new KittyViewModel(_game.Kitty);
         }
 
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
-            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            RefreshUI();
 
             _game.CheckTrickWinner();
-            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            RefreshUI();
         }
 
         private void SwapWithKitty(CardViewModel cardViewModel)
         {
             _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
-            Kitty = new KittyViewModel(_game.Kitty);
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            RefreshUI();
         }
 
-        private void UpdateScore()
+        private void RefreshUI()
         {
             TeamOne = _game.Team1;
             TeamTwo = _game.Team2;
@@ -634,6 +631,13 @@ namespace Group2_COSC2200_Project.viewmodel
             TeamTwoTricks = _game.TeamTwoTricks;
             TeamOneScore = _game.TeamOneScore;
             TeamTwoScore = _game.TeamTwoScore;
+
+            Kitty = new KittyViewModel(_game.Kitty);
+            PlayArea = new PlayAreaViewModel(_game.PlayArea);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
         }
 
         // private void EndOfGame()

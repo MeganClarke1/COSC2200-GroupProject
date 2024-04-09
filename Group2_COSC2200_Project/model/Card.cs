@@ -141,7 +141,6 @@
             else if (Colour == trumpColour && Suit != trumpSuit && Rank == Ranks.Jack)
             {
                 Value = 20; // Set the value of the left bower to 20, making it the second highest value
-                Suit = trumpSuit;
             }
         }
 

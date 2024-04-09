@@ -26,15 +26,21 @@
         public bool IsDealer { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsAI { get; set; }
+
+        /// <summary>
         /// Constructor for a Player Object. 
         /// _isDealer can be set to false until Team and TurnList Creation (Game Functionality)
         /// </summary>
-        public Player(int _playerID, string _playerName)
+        public Player(int _playerID, string _playerName, bool isAI)
         {
             PlayerID = _playerID;
             PlayerName = _playerName;
             PlayerHand = new Hand();
             IsDealer = false;
+            IsAI = isAI;
         }
     }
 }
