@@ -18,7 +18,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// <summary>
         /// The NewGameCommand ICommand implementation.
         /// </summary>
-        public ICommand NewGameCommand {  get; }
+        public ICommand StatsViewCommand {  get; }
         public ICommand ContinueCommand { get; } // *** Added new continue command
         
         /// <summary>
@@ -28,7 +28,7 @@ namespace Group2_COSC2200_Project.viewmodel
         public MenuViewModel(NavigationStore navigationStore, Statistics playerStats) // ** added the playerstats param
         {
 
-            NewGameCommand = new NavigateCommand(navigationStore, null); // **** passing null stats to new game (eventually needs to pass a text field with player name... or a blank stats object with player name input)
+            StatsViewCommand = new StatsPageCommand(navigationStore, playerStats); // **** passing null stats to new game (eventually needs to pass a text field with player name... or a blank stats object with player name input)
             ContinueCommand = new FetchStatsCommand(navigationStore, playerStats); // *** passing playerStats arg
 
         }

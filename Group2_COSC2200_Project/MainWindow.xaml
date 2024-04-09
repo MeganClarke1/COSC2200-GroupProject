@@ -16,6 +16,9 @@
             <DataTemplate DataType="{x:Type vms:GameViewModel}">
                 <view:GameView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:StatsViewModel}">
+                <view:StatsView/>
+            </DataTemplate>
         </Grid.Resources>
         <!-- <view:GameView DataContext="{Binding CurrentViewModel}" /> -->
         <ContentControl Content="{Binding CurrentViewModel}"/>
