@@ -93,46 +93,47 @@ namespace Group2_COSC2200_Project.model
         /// Deserializes the entire JSON into a list for logic, then serializes it back to the JSON.
         /// </summary>
         /// <param name="statsToJSON"></param>
-        public void SaveStatistics(Statistics statsToJSON)
+        public static bool SaveStatistics(Statistics statsToJSON)
         {
-            // Intitalize a dictionary of Statistics objects... Will Hold the contents of the JSON file where the key is PLayer ID.
-            Dictionary<int, Statistics> statisticsDict;
+            // Step out of the current directory to reach the base directory
+            string currentDirectory = Directory.GetCurrentDirectory();
 
-            // Construct the file path for the stats.json file in the Data folder ... Intended to work even even this is not being run on local.
-            string dataFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-            string jsonFilePath = Path.Combine(dataFolderPath, "stats.json");
+            // Navigate up two levels to reach the base directory
+            string baseDirectory2 = Directory.GetParent(Directory.GetParent(currentDirectory).FullName).FullName;
 
-            // Read the content of the JSON file
-            string json = File.ReadAllText(jsonFilePath);
+            // Navigate another level up
+            string baseDirectory3 = Directory.GetParent(baseDirectory2).FullName;
 
-            // File is empty, or doesn't exist, so Initialize the statisticsList as an empty list of Statistics objects.
-            if (string.IsNullOrWhiteSpace(json)) 
+            // Combine that relative position twice with data and stats file.
+            string relativeJSONpath1 = Path.Combine(baseDirectory3, "data");
+            string relativeJSONpath2 = Path.Combine(relativeJSONpath1, "stats.json");
+
+            try
             {
-                statisticsDict = new Dictionary<int, Statistics>(); 
-            }
+                // Read the content of the JSON file
+                string json = File.ReadAllText(relativeJSONpath2);
 
-            // File Exists/Is Populated, so deserialize it into the dictionary.
-            else 
+                // Deserialize the JSON into a dictionary with the "500" identifier
+                var statsContainer = JsonConvert.DeserializeObject<Dictionary<string, Statistics>>(json);
+
+                // Update the statistics for the player
+                statsContainer["500"] = statsToJSON;
+
+                // Serialize the dictionary back to JSON and write to the file
+                string updatedJson = JsonConvert.SerializeObject(statsContainer, Formatting.Indented);
+                File.WriteAllText(relativeJSONpath2, updatedJson);
+
+                return true; // Return true indicating successful update
+            }
+            catch (Exception ex)
             {
-                statisticsDict = JsonConvert.DeserializeObject<Dictionary<int, Statistics>>(json); 
+                // Handle any exceptions (e.g., file not found, serialization error)
+                Console.WriteLine($"Error updating statistics file: {ex.Message}");
+                return false; // Return false indicating failure
             }
-
-            // Check if the PlayerID already exists in the dictionary, so update the existing record.
-            if (statisticsDict.ContainsKey(statsToJSON.PlayerID))
-            {
-                statisticsDict[statsToJSON.PlayerID] = statsToJSON;
-            }
-
-            // Player record doesn't exist, so add a new record.
-            else
-            {
-                statisticsDict.Add(statsToJSON.PlayerID, statsToJSON);
-            }
-
-            // Serialize the dictionary back to JSON and write to file
-            string updatedJson = JsonConvert.SerializeObject(statisticsDict, Formatting.Indented); 
-            File.WriteAllText(jsonFilePath, updatedJson); 
         }
+
+
 
         /// <summary>
         /// Takes a unique ID to identify the player record in the JSON. Deserializes the JSON into a dictionary, where the key is the player ID.
@@ -144,7 +145,6 @@ namespace Group2_COSC2200_Project.model
         {
 
             // Step out of the current directory to reach the base directory
-            
             string currentDirectory = Directory.GetCurrentDirectory();
 
 

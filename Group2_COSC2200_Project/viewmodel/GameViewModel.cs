@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Group2_COSC2200_Project.commands;
 using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -18,6 +19,7 @@ namespace Group2_COSC2200_Project.viewmodel
         public ICommand PassPostKittyCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
         public ICommand ClickCardCommand { get; private set; }
+        public ICommand SaveStatsCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -54,6 +56,20 @@ namespace Group2_COSC2200_Project.viewmodel
         private String _trumpSuit = "";
 
         private Statistics _GVMplayerStats;
+        public String _playerName;
+
+        public String PlayerName
+        {
+            get => _playerName;
+            set
+            {
+                if (_playerName != value)
+                {
+                    _playerName = value;
+                    OnPropertyChanged(nameof(PlayerName));
+                }
+            }
+        }
 
         public Scoreboard Scoreboard
         {
@@ -406,6 +422,9 @@ namespace Group2_COSC2200_Project.viewmodel
             {
                 _GVMplayerStats = _playerStats; // assign to GameViewModel container for that player's stats object,
                 MessageBox.Show("Player Name from JSON: " + _GVMplayerStats.PlayerName);
+                PlayerName = _GVMplayerStats.PlayerName;
+                _GVMplayerStats.TotalGames++;
+                SaveStatsCommand = new SaveStatsCommand(_GVMplayerStats);
             }
             else
             {
