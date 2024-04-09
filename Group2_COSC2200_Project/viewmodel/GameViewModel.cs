@@ -618,7 +618,7 @@ namespace Group2_COSC2200_Project.viewmodel
             OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
             PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
 
-            _game.OnAIAction += OnActionHandler;
+            _game.OnAction += OnActionHandler;
 
             // Works w/ continue (with player data), otherwise, new game needs to create player data.
             if (_playerStats != null)
@@ -688,8 +688,6 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
             _game.TrumpSelectionFromKitty();
             UpdateViewModelState();
-            MessageBox.Show("The Dealer is " + _game.TurnList[3].PlayerName + " and the current top kitty suit is " 
-                + _game.Kitty[0].Suit + ".");
         }
 
         private void OrderUpPostKittyExecute(Card.Suits trumpSuit)
@@ -724,7 +722,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     SwapWithKitty(cardViewModel);
                     UpdateViewModelState();
-                    MessageBox.Show("Trump suit is " + _game.TrumpSuit);
                 }
             }
             else if (_game.CurrentState == Game.GameState.Play)
@@ -811,9 +808,6 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
-            RefreshUI();
-
-            _game.CheckTrickWinner();
             RefreshUI();
         }
 

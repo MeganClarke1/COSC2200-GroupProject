@@ -39,7 +39,7 @@ namespace Group2_COSC2200_Project.model
             EndOfGame
         }
         public GameState CurrentState { get; private set; }
-        public event EventHandler OnAIAction;
+        public event EventHandler OnAction;
         public Player PlayerOne { get; private set; }
         public Player PlayerTwo { get; private set; }
         public Player PlayerThree { get; private set; }
@@ -117,8 +117,7 @@ namespace Group2_COSC2200_Project.model
 
         protected virtual void RaiseOnAction()
         {
-            // Check if there are any subscribers
-            OnAIAction?.Invoke(this, EventArgs.Empty);
+            OnAction?.Invoke(this, EventArgs.Empty);
         }
 
         public void Start()
@@ -134,6 +133,8 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.TrumpSelectionFromKitty;
             TurnsTaken = 0;
             CurrentPlayer = TurnList[0];
+            MessageBox.Show("The Dealer is " + TurnList[3].PlayerName + " and the current top kitty suit is "
+                + Kitty[0].Suit + ". " + CurrentPlayer.PlayerName + " is up.");
             if (CurrentPlayer.IsAI)
             {
                 AIDecisionFromKitty(CurrentPlayer);
@@ -148,6 +149,7 @@ namespace Group2_COSC2200_Project.model
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             Kitty.Clear();
             CurrentPlayer = TurnList[0];
+            MessageBox.Show("No one ordered it up. "+ CurrentPlayer.PlayerName + " is up.");
             if (CurrentPlayer.IsAI)
             {
                 AIDecisionPostKitty(CurrentPlayer);
@@ -159,6 +161,7 @@ namespace Group2_COSC2200_Project.model
             CurrentState = GameState.DealerKittySwap;
             TurnList = GameFunctionality.RotateToDealer(TurnList);
             CurrentPlayer = TurnList[0];
+            MessageBox.Show(CurrentPlayer.PlayerName +  "can swap one of their cards with the top kitty card.");
             if (CurrentPlayer.IsAI)
             {
                 AISwapWithKitty(CurrentPlayer);
@@ -172,6 +175,11 @@ namespace Group2_COSC2200_Project.model
             GameFunctionality.SetTrumpSuitValues(TrumpSuit, TurnList);
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
             CurrentPlayer = TurnList[0];
+            MessageBox.Show(CurrentPlayer.PlayerName + " will start the round.");
+            if (CurrentPlayer.IsAI)
+            {
+                AIPlayCard(CurrentPlayer);
+            }
         }
 
         // These handle what happens when ANY user clicks order up 
@@ -215,7 +223,6 @@ namespace Group2_COSC2200_Project.model
         public void PassPostKitty()
         {
             RaiseOnAction();
-            MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
             TurnsTaken++;
             if (TurnsTaken >= TurnList.Count)
             {
@@ -224,6 +231,7 @@ namespace Group2_COSC2200_Project.model
             }
             GameFunctionality.NextTurn(TurnList);
             CurrentPlayer = TurnList[0];
+            MessageBox.Show(CurrentPlayer.PlayerName + " has passed.");
             if (CurrentPlayer.IsAI) 
             {
                 AIDecisionPostKitty(CurrentPlayer);
@@ -301,11 +309,19 @@ namespace Group2_COSC2200_Project.model
             TurnsTaken++;
             PlayedCardsCounter++;
             // update the player to the next player in the turn list
-            GameFunctionality.NextTurn(TurnList);
-            CurrentPlayer = TurnList[0];
-            if (CurrentPlayer.IsAI)
+            if (TurnsTaken >= TurnList.Count)
             {
-                AIPlayCard(CurrentPlayer);
+                CheckTrickWinner();
+                return;
+            } 
+            else
+            {
+                GameFunctionality.NextTurn(TurnList);
+                CurrentPlayer = TurnList[0];
+                if (CurrentPlayer.IsAI)
+                {
+                    AIPlayCard(CurrentPlayer);
+                }
             }
         }
 
@@ -557,19 +573,25 @@ namespace Group2_COSC2200_Project.model
             TurnsTaken++;
             PlayedCardsCounter++;
 
-            CheckTrickWinner();
-
-            GameFunctionality.NextTurn(TurnList);
-            CurrentPlayer = TurnList[0];
-            if (CurrentPlayer.IsAI)
+            if (TurnsTaken >= TurnList.Count)
             {
-                AIPlayCard(CurrentPlayer);
+                CheckTrickWinner();
+                return;
+            }
+            else
+            {
+                GameFunctionality.NextTurn(TurnList);
+                CurrentPlayer = TurnList[0];
+                if (CurrentPlayer.IsAI)
+                {
+                    AIPlayCard(CurrentPlayer);
+                }
             }
         }
 
         public void CheckTrickWinner()
         {
-            if (TurnsTaken >= 4)
+            if (TurnsTaken >= TurnList.Count)
             {
                 Team winningTeam = Trick.DetermineTrickWinner(PlayArea, Team1, Team2);
                 MessageBox.Show("Trick Winners: " + winningTeam.TeamId.ToString());
@@ -586,19 +608,24 @@ namespace Group2_COSC2200_Project.model
                     //Scoreboard.IncrementTrickCount(TeamTwo);
                 }
 
+                RaiseOnAction();
+
                 if (PlayedCardsCounter >= 20)
                 {
                     CheckRoundWinner();
-                }
-
-                MessageBox.Show("The next trick will begin!");
-                TurnsTaken = 0;
-                TurnList = GameFunctionality.RotateToTrickWinner(TurnList, GameFunctionality.GetPlayerWithHighCard(PlayArea, TurnList));
-                PlayArea.Clear();
-                CurrentPlayer = TurnList[0];
-                if (CurrentPlayer.IsAI)
+                    return;
+                } 
+                else
                 {
-                    AIPlayCard(CurrentPlayer);
+                    MessageBox.Show("The next trick will begin!");
+                    TurnsTaken = 0;
+                    TurnList = GameFunctionality.RotateToTrickWinner(TurnList, GameFunctionality.GetPlayerWithHighCard(PlayArea, TurnList));
+                    PlayArea.Clear();
+                    CurrentPlayer = TurnList[0];
+                    if (CurrentPlayer.IsAI)
+                    {
+                        AIPlayCard(CurrentPlayer);
+                    }
                 }
             }
         }
@@ -680,7 +707,11 @@ namespace Group2_COSC2200_Project.model
 
             // Clear the kitty, and re-determine a new kitty.
             Kitty.Clear();
+            PlayArea.Clear();
+
             Kitty.Add(Deck.DetermineKitty());
+            RaiseOnAction();
+            MessageBox.Show("stop here.");
             ChangeState(GameState.TrumpSelectionFromKitty);
         }
 
