@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Group2_COSC2200_Project.commands;
 using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ namespace Group2_COSC2200_Project.viewmodel
         public ICommand PassPostKittyCommand { get; private set; }
         public ICommand StartCommand { get; private set; }
         public ICommand ClickCardCommand { get; private set; }
+        public ICommand SaveStatsCommand { get; private set; }
 
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
@@ -52,9 +54,25 @@ namespace Group2_COSC2200_Project.viewmodel
         private Visibility _started = Visibility.Visible;
 
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
+        private Visibility _hasLeadSuit = Visibility.Collapsed;
         private String _trumpSuit = "";
+        private String _leadSuit = "";
 
-        private Statistics playerStats;
+        private Statistics _GVMplayerStats;
+        public String _playerName;
+
+        public String PlayerName
+        {
+            get => _playerName;
+            set
+            {
+                if (_playerName != value)
+                {
+                    _playerName = value;
+                    OnPropertyChanged(nameof(PlayerName));
+                }
+            }
+        }
 
         public Scoreboard Scoreboard
         {
@@ -378,6 +396,19 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        public Visibility HasLeadSuit
+        {
+            get => _hasLeadSuit;
+            set
+            {
+                if (_hasLeadSuit != value)
+                {
+                    _hasLeadSuit = value;
+                    OnPropertyChanged(nameof(HasLeadSuit));
+                }
+            }
+        }
+
         public String TrumpSuit
         {
             get => _trumpSuit;
@@ -387,6 +418,18 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     _trumpSuit = "Current Trump suit: " + value;
                     OnPropertyChanged(nameof(TrumpSuit));
+                }
+            }
+        }
+        public String LeadSuit
+        {
+            get => _leadSuit;
+            set
+            {
+                if (_leadSuit != value)
+                {
+                    _leadSuit = "Current Lead suit: " + value;
+                    OnPropertyChanged(nameof(LeadSuit));
                 }
             }
         }
@@ -408,11 +451,15 @@ namespace Group2_COSC2200_Project.viewmodel
             // Works w/ continue (with player data), otherwise, new game needs to create player data.
             if (_playerStats != null)
             {
-                MessageBox.Show("Player Name from JSON: " + _playerStats.PlayerName);
+                _GVMplayerStats = _playerStats; // assign to GameViewModel container for that player's stats object,
+                MessageBox.Show("Player Name from JSON: " + _GVMplayerStats.PlayerName);
+                PlayerName = _GVMplayerStats.PlayerName;
+                _GVMplayerStats.TotalGames++;
+                SaveStatsCommand = new SaveStatsCommand(_GVMplayerStats);
             }
             else
             {
-                MessageBox.Show("Player has selected new game... Need to create profile.");
+                MessageBox.Show("Player has selected new game... Need to create profile."); //temporary
             }
         }
 
@@ -570,7 +617,12 @@ namespace Group2_COSC2200_Project.viewmodel
             Player3Turn = Visibility.Collapsed;
             Player4Turn = Visibility.Collapsed;
             HasTrumpSuit = Visibility.Visible;
+            if (_game.TurnsTaken == 0)
+            {
+                HasLeadSuit = Visibility.Visible;
+            }
             TrumpSuit = _game.TrumpSuit.ToString();
+            LeadSuit = _game.LeadSuit.ToString();
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
             Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;

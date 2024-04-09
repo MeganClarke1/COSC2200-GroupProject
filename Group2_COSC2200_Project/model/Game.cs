@@ -228,11 +228,40 @@ namespace Group2_COSC2200_Project.model
         /// <param name="card">The selected card object to play</param>
         public void PlayCard(Player currentPlayer, Card card)
         {
+
+            bool isLeftBower = false;
+
+            // if it is the first card then set the lead suit
+            if (card.Rank == Card.Ranks.Jack)
+            {
+                switch (TrumpSuit)
+                {
+                    case Card.Suits.Hearts:
+                        isLeftBower = card.Suit == Card.Suits.Diamonds; // Diamonds are the same color as Hearts
+                        break;
+                    case Card.Suits.Diamonds:
+                        isLeftBower = card.Suit == Card.Suits.Hearts; // Hearts are the same color as Diamonds
+                        break;
+                    case Card.Suits.Clubs:
+                        isLeftBower = card.Suit == Card.Suits.Spades; // Spades are the same color as Clubs
+                        break;
+                    case Card.Suits.Spades:
+                        isLeftBower = card.Suit == Card.Suits.Clubs; // Clubs are the same color as Spades
+                        break;
+                }
+            }
             // check if the card is the first played in the round
             if (TurnsTaken == 0)
             {
-                // if it is the first card then set the lead suit
-                LeadSuit = card.Suit;
+                if (isLeftBower)
+                {
+                    LeadSuit = TrumpSuit;
+                }
+                else
+                {
+                    LeadSuit = card.Suit;
+                }
+                
                 // Set the card values for lead suit
                 GameFunctionality.SetLeadSuitValues(LeadSuit, TrumpSuit, TurnList);
             }
@@ -244,7 +273,7 @@ namespace Group2_COSC2200_Project.model
                 foreach (var playerCard in currentPlayer.PlayerHand.Cards)
                 {
                     // If they do then mark that they have the lead suit
-                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && playerCard.Colour == PlayArea[0].Colour && playerCard.Rank == Card.Ranks.Jack))
+                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && isLeftBower))
                     {
                         hasLeadSuit = true;
                         break;
