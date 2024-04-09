@@ -1,4 +1,22 @@
-﻿using Group2_COSC2200_Project.model;
+﻿/// <file>
+///   <summary>
+///     File Name: MainWindow.xaml.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: Feb 27, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents the mainWindow, another entry point defining the parent window.
+///   </description>
+/// </file>
+
+using Group2_COSC2200_Project.model;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;

@@ -1,4 +1,22 @@
-﻿using Group2_COSC2200_Project.model;
+﻿/// <file>
+///   <summary>
+///     File Name: CardViewModel.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: April 1, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents a ViewModel for a Card.
+///   </description>
+/// </file>
+
+using Group2_COSC2200_Project.model;
 
 namespace Group2_COSC2200_Project.viewmodel
 {

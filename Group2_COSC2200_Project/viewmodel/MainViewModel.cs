@@ -1,7 +1,29 @@
-﻿using Group2_COSC2200_Project.stores;
+﻿/// <file>
+///   <summary>
+///     File Name: MainViewModel.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: Apr 1, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents the MainViewModel, This viewModel is a traffic light that monitors the currentViewModel
+///         and renders various Views based on what argument is passed to the navigationStore.
+///   </description>
+/// </file>
+
+using Group2_COSC2200_Project.stores;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
+    /// <summary>
+    /// To act as the main routing for our ViewModels.
+    /// </summary>
     public class MainViewModel : ViewModelBase
     {
 
@@ -22,6 +44,9 @@ namespace Group2_COSC2200_Project.viewmodel
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
+        /// <summary>
+        /// Monitor for changes to the currentViewModel.
+        /// </summary>
         private void OnCurrentViewModelChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));

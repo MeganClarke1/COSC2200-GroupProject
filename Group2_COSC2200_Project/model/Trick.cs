@@ -1,4 +1,22 @@
-﻿using System;
+﻿/// <file>
+///   <summary>
+///     File Name: Trick.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: April 1, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents ONE trick for the game.
+///   </description>
+/// </file>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +32,12 @@ namespace Group2_COSC2200_Project.model
     {
         /// <summary>
         /// A list of cards that have been played during the round.
-        /// </summary>
+/*        /// </summary>
         public List<Card> PlayedCards { get; private set; }
 
         public Card WinningCard { get; private set; }
 
-        public Card.Suits LeadSuit {  get; private set; }
+        public Card.Suits LeadSuit {  get; private set; }*/
 
         public Team TrickWinningTeam { get; private set; }
 

@@ -1,4 +1,22 @@
-﻿using Group2_COSC2200_Project.viewmodel;
+﻿/// <file>
+///   <summary>
+///     File Name: MenuView.xaml.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: April 5, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This file contains the code behind for our Menu View. 
+///   </description>
+/// </file>
+
+using Group2_COSC2200_Project.viewmodel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
