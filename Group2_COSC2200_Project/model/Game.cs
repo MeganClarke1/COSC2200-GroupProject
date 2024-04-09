@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Windows;
-using System.Windows.Markup;
+﻿using System.Windows;
 
 namespace Group2_COSC2200_Project.model
 {
