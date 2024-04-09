@@ -1,4 +1,22 @@
-﻿using System;
+﻿/// <file>
+///   <summary>
+///     File Name: Statistics.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: April 2, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents a players statistics
+///   </description>
+/// </file>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,8 +49,8 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// Represnts the player's unique id.
         /// </summary>
-        public int PlayerID {  get; set; }
-        
+        public int PlayerID { get; set; }
+
         /// <summary>
         /// The player's name.
         /// </summary>
@@ -56,7 +74,7 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// Players current streak.
         /// </summary>
-        public int CurrentStreak {  get; set; }
+        public int CurrentStreak { get; set; }
 
         /// <summary>
         /// Tracks the last game result for determining current streak.
@@ -66,7 +84,7 @@ namespace Group2_COSC2200_Project.model
         ///            the value of previousGameResult. If it's ==, then that means they're either on a win streak(++), or loss streak (++). 
         ///            Now we can determine streak length, and then type of streak (win/loss), via the current result of the game that was just played.
         /// </summary>
-        public LastGameResult previousGameResult { get; set; } 
+        public LastGameResult previousGameResult { get; set; }
 
         public Statistics()
         {
@@ -77,7 +95,7 @@ namespace Group2_COSC2200_Project.model
         /// Constructor - For initialization after a player creates a profile. (Initialized to 0 for stats)
         /// </summary>
         public Statistics(int _PlayerId, string _PlayerName, int _PlayerWins, int _PlayerLosses, int _TotalGames, int _CurrentStreak, LastGameResult _previousGameResult)
-        { 
+        {
             this.PlayerID = _PlayerId;
             this.PlayerName = _PlayerName;
             this.PlayerWins = _PlayerWins;
@@ -193,9 +211,51 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         /// <notes> *** MAY need to also pass it a blank statistics object to make determining the new values easier. </notes>
         /// <param name="uniqueID"></param>
-        public void ResetStats(int uniqueID)
+        public static bool ResetStatistics(Statistics statsToJSON)
         {
-            ///<todo> Do We NEED Reset stats? RE: Extra feature...? </todo>
+            try
+            {
+                // Set all fields to 0 except PlayerID and PlayerName
+                statsToJSON.PlayerWins = 0;
+                statsToJSON.PlayerLosses = 0;
+                statsToJSON.TotalGames = 0;
+                statsToJSON.CurrentStreak = 0;
+                statsToJSON.previousGameResult = 0;
+
+                // Step out of the current directory to reach the base directory
+                string currentDirectory = Directory.GetCurrentDirectory();
+
+                // Navigate up two levels to reach the base directory
+                string baseDirectory2 = Directory.GetParent(Directory.GetParent(currentDirectory).FullName).FullName;
+
+                // Navigate another level up
+                string baseDirectory3 = Directory.GetParent(baseDirectory2).FullName;
+
+                // Combine that relative position twice with data and stats file.
+                string relativeJSONpath1 = Path.Combine(baseDirectory3, "data");
+                string relativeJSONpath2 = Path.Combine(relativeJSONpath1, "stats.json");
+
+                // Read the content of the JSON file
+                string json = File.ReadAllText(relativeJSONpath2);
+
+                // Deserialize the JSON into a dictionary with the "500" identifier
+                var statsContainer = JsonConvert.DeserializeObject<Dictionary<string, Statistics>>(json);
+
+                // Update the statistics for the player
+                statsContainer["500"] = statsToJSON;
+
+                // Serialize the dictionary back to JSON and write to the file
+                string updatedJson = JsonConvert.SerializeObject(statsContainer, Formatting.Indented);
+                File.WriteAllText(relativeJSONpath2, updatedJson);
+
+                return true; // Return true indicating successful update
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions (e.g., file not found, serialization error)
+                Console.WriteLine($"Error updating statistics file: {ex.Message}");
+                return false; // Return false indicating failure
+            }
         }
 
     }

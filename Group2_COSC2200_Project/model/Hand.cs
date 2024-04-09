@@ -1,4 +1,22 @@
-﻿namespace Group2_COSC2200_Project.model
+﻿/// <file>
+///   <summary>
+///     File Name: Hand.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: March 24, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents a Hand object for the game.
+///   </description>
+/// </file>
+
+namespace Group2_COSC2200_Project.model
 {
     /// <summary>
     /// Represents a hand of cards held by a player in the Euchre game.

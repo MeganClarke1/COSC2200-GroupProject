@@ -1,4 +1,22 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿/// <file>
+///   <summary>
+///     File Name: GameViewModel.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: Apr 1, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents the GameViewModel, which is the main view when players are playing a game.
+///   </description>
+/// </file>
+
+using GalaSoft.MvvmLight.Command;
 using Group2_COSC2200_Project.commands;
 using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
@@ -10,18 +28,48 @@ using static Group2_COSC2200_Project.model.Game;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
+    /// <summary>
+    /// The GameViewModel represents the view when user is playing the game.
+    /// </summary>
     public class GameViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Constructs a new game object automatically.
+        /// </summary>
         private Game _game = new();
 
+        /// <summary>
+        /// Command to order up a kitty suit.
+        /// </summary>
         public ICommand OrderUpCommand { get; private set; }
+        /// <summary>
+        /// Command to pass on the kitty suit.
+        /// </summary>
         public ICommand PassCommand { get; private set; }
+        /// <summary>
+        /// Command to order a trump suit up after the initial ktty round.
+        /// </summary>
         public ICommand OrderUpPostKittyCommand {  get; private set; }
+        /// <summary>
+        /// Command to pass a trump suit up after the initial kitty round.
+        /// </summary>
         public ICommand PassPostKittyCommand { get; private set; }
+        /// <summary>
+        /// Command to start the game. (deal cards, create teams, etc)
+        /// </summary>
         public ICommand StartCommand { get; private set; }
+        /// <summary>
+        /// Command to be executed when a player clicks a card to play
+        /// </summary>
         public ICommand ClickCardCommand { get; private set; }
+        /// <summary>
+        /// Command to exectute when save stats button is clicked.
+        /// </summary>
         public ICommand SaveStatsCommand { get; private set; }
 
+        /// <summary>
+        /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
+        /// </summary>
         private HandViewModel _player1Hand;
         private HandViewModel _player2Hand;
         private HandViewModel _player3Hand;
@@ -29,20 +77,35 @@ namespace Group2_COSC2200_Project.viewmodel
         private KittyViewModel _kitty;
         private PlayAreaViewModel _playArea;
 
+        /// <summary>
+        /// Setting visibility of the player turns to collapsed so it can't be seen.
+        /// </summary>
         private Visibility _player1Turn = Visibility.Collapsed;
         private Visibility _player2Turn = Visibility.Collapsed;
         private Visibility _player3Turn = Visibility.Collapsed;
         private Visibility _player4Turn = Visibility.Collapsed;
 
+        /// <summary>
+        /// Setting the visibility for Turns post initial kitty round to also be unseen.
+        /// </summary>
         private Visibility _player1PostKittyTurn = Visibility.Collapsed;
 
+        /// <summary>
+        /// Tracking boolean status for is players can click their cards based on if it's their turn.
+        /// </summary>
         private bool _player1CanClickCard;
         private bool _player2CanClickCard;
         private bool _player3CanClickCard;
         private bool _player4CanClickCard;
 
+        /// <summary>
+        /// Initializing a list of Suits that are available for selection as the trump suit after the kitty round.
+        /// </summary>
         private List<Card.Suits> _nonKittySuits;
 
+        /// <summary>
+        /// Initializing more properties to keep track of via IMontior for view changes. Will be mutated to update the view.
+        /// </summary>
         private Team _teamOne;
         private Team _teamTwo;
         private int _teamOneTricks;
@@ -51,16 +114,36 @@ namespace Group2_COSC2200_Project.viewmodel
         private int _teamTwoScore;
         private Scoreboard _scoreBoard;
 
+        /// <summary>
+        /// Setting initial visibiltiy of the started property to visible.
+        /// </summary>
         private Visibility _started = Visibility.Visible;
 
+        /// <summary>
+        /// Hiding these properties to create invisible tracks not seen by the user.
+        /// </summary>
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
         private Visibility _hasLeadSuit = Visibility.Collapsed;
+
+        /// <summary>
+        /// Intializing empty Strings to store the trump suit and lead suit for comparison during play.
+        /// </summary>
         private String _trumpSuit = "";
         private String _leadSuit = "";
 
+        /// <summary>
+        /// A container for storage of the player's statistics as passed to this view by the MenuView.
+        /// </summary>
         private Statistics _GVMplayerStats;
+
+        /// <summary>
+        /// A public property for setting via the player's statistics to dyanmically update player one's name on the view.
+        /// </summary>
         public String _playerName;
 
+        /// <summary>
+        /// Monitoring the playername for changes.
+        /// </summary>
         public String PlayerName
         {
             get => _playerName;
@@ -74,6 +157,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring the scoreboard for changes.
+        /// </summary>
         public Scoreboard Scoreboard
         {
             get => _scoreBoard;
@@ -87,6 +173,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring team one tricks for changes.
+        /// </summary>
         public int TeamOneTricks
         {
             get => _teamOneTricks;
@@ -100,6 +189,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring teamTwo tricks for changes.
+        /// </summary>
         public int TeamTwoTricks
         {
             get => _teamTwoTricks;
@@ -113,6 +205,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring teamOne Score for changes.
+        /// </summary>
         public int TeamOneScore
         {
             get => _teamOneScore;
@@ -126,6 +221,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring teamTwo Score for changes.
+        /// </summary>
         public int TeamTwoScore
         {
             get => _teamTwoScore;
@@ -139,6 +237,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring teamOn for changes.
+        /// </summary>
         public Team TeamOne
         {
             get => _teamOne;
@@ -152,6 +253,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring teamTwo for changes.
+        /// </summary>
         public Team TeamTwo
         {
             get => _teamTwo;
@@ -165,6 +269,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring the playArea (cards played) for changes.
+        /// </summary>
         public PlayAreaViewModel PlayArea
         {
             get => _playArea;
@@ -178,6 +285,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player hand for changes.
+        /// </summary>
         public HandViewModel Player1Hand
         {
             get => _player1Hand;
@@ -191,6 +301,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player hand for changes.
+        /// </summary>
         public HandViewModel Player2Hand
         {
             get => _player2Hand;
@@ -204,6 +317,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player hand for changes.
+        /// </summary>
         public HandViewModel Player3Hand
         {
             get => _player3Hand;
@@ -217,6 +333,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player hand for changes.
+        /// </summary>
         public HandViewModel Player4Hand
         {
             get => _player4Hand;
@@ -230,6 +349,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Kitty for changes.
+        /// </summary>
         public KittyViewModel Kitty
         {
             get => _kitty;
@@ -243,6 +365,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player turn for changes.
+        /// </summary>
         public Visibility Player1Turn
         {
             get { return _player1Turn; }
@@ -256,6 +381,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player turn for changes.
+        /// </summary>
         public Visibility Player2Turn
         {
             get { return _player2Turn; }
@@ -269,6 +397,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player turn for changes.
+        /// </summary>
         public Visibility Player3Turn
         {
             get { return _player3Turn; }
@@ -282,6 +413,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player turn for changes.
+        /// </summary>
         public Visibility Player4Turn
         {
             get { return _player4Turn; }
@@ -295,6 +429,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player turn post kitty round for changes.
+        /// </summary>
         public Visibility Player1PostKittyTurn
         {
             get { return _player1PostKittyTurn; }
@@ -308,6 +445,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player ability to click card for changes.
+        /// </summary>
         public bool Player1CanClickCard
         {
             get => _player1CanClickCard;
@@ -321,6 +461,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player ability to click card for changes.
+        /// </summary>
         public bool Player2CanClickCard
         {
             get => _player2CanClickCard;
@@ -334,6 +477,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player ability to click card for changes.
+        /// </summary>
         public bool Player3CanClickCard
         {
             get => _player3CanClickCard;
@@ -347,6 +493,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Player ability to click card for changes.
+        /// </summary>
         public bool Player4CanClickCard
         {
             get => _player4CanClickCard;
@@ -360,6 +509,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring list of non kitty suits for changes.
+        /// </summary>
         public List<Card.Suits> NonKittySuits
         {
             get => _nonKittySuits;
@@ -370,6 +522,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Started for changes.
+        /// </summary>
         public Visibility Started
         {
             get => _started;
@@ -383,6 +538,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring HasTrumpSuit for changes.
+        /// </summary>
         public Visibility HasTrumpSuit
         {
             get => _hasTrumpSuit;
@@ -396,6 +554,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring has lead suit for changes.
+        /// </summary>
         public Visibility HasLeadSuit
         {
             get => _hasLeadSuit;
@@ -409,6 +570,9 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Montioring Trump suit for changes.
+        /// </summary>
         public String TrumpSuit
         {
             get => _trumpSuit;
@@ -421,6 +585,10 @@ namespace Group2_COSC2200_Project.viewmodel
                 }
             }
         }
+
+        /// <summary>
+        /// Montioring Lead suit for changes.
+        /// </summary>
         public String LeadSuit
         {
             get => _leadSuit;
@@ -436,6 +604,10 @@ namespace Group2_COSC2200_Project.viewmodel
 
         // public bool Player2Turn => _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
 
+        /// <summary>
+        /// The constructor for the GameViewModel.
+        /// </summary>
+        /// <param name="_playerStats"> Accepts plaer stats from the menuView and passes that to its own view. </param>
         public GameViewModel(Statistics _playerStats) // ***** added parameter on constructor
         {
             UpdateViewModelState();

@@ -1,4 +1,22 @@
-﻿using System;
+﻿/// <file>
+///   <summary>
+///     File Name: Team.cs
+///   </summary>
+///   <author>
+///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
+///   </author>
+///   <created>
+///     Created: Apr 1, 2024
+///   </created>
+///   <lastModified>
+///     Last Modified: April 9, 2024
+///   </lastModified>
+///   <description>
+///     Description: This class represents a Team object for the game.
+///   </description>
+/// </file>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

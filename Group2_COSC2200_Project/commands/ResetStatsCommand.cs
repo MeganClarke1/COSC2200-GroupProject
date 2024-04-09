@@ -1,19 +1,19 @@
 ﻿/// <file>
 ///   <summary>
-///     File Name: SaveStatsCommand.cs
+///     File Name: ResetStatsCommand.cs
 ///   </summary>
 ///   <author>
 ///     Authors: Brody Dentinger, Megan Clarke, Colin Eade, Muhammad Yasir Patel
 ///   </author>
 ///   <created>
-///     Created: April 8, 2024
+///     Created: April 9, 2024
 ///   </created>
 ///   <lastModified>
 ///     Last Modified: April 9, 2024
 ///   </lastModified>
 ///   <description>
-///     Description: This will be used as a save stats command for when the user clicks "save stats" in the menu.
-///         Takes a statistics object and replaces the current stats record in the stats.json file with updated stats.
+///     Description: This will be used as a reset stats command to be executed on click of the reset stats button on the stats View.
+///         Will reset the players stats back to 0.
 ///   </description>
 /// </file>
 
@@ -30,10 +30,15 @@ using System.Windows;
 namespace Group2_COSC2200_Project.commands
 {
     /// <summary>
-    /// SaveStatsCommand will be used for when a player saves stats from menu.
+    /// SaveStatsCommand will be used for when a player resets stats from menu.
     /// </summary>
-    public class SaveStatsCommand : CommandBase
+    public class ResetStatsCommand : CommandBase
     {
+        /// <summary>
+        /// The Navigation CurrentViewModel that will be stored in our navigation store.
+        /// </summary>
+        private readonly NavigationStore _navigationStore;
+
         /// <summary>
         /// The statistics object to be passed into the json.
         /// </summary>
@@ -43,9 +48,10 @@ namespace Group2_COSC2200_Project.commands
         /// The constructor of this command takes a players stats object, and updates the field for this class.
         /// </summary>
         /// <param name="playerStats"></param>
-        public SaveStatsCommand(Statistics playerStats)
+        public ResetStatsCommand(NavigationStore navigationStore, Statistics playerStats)
         {
             _playerStats = playerStats;
+            _navigationStore = navigationStore;
         }
 
         /// <summary>
@@ -55,13 +61,15 @@ namespace Group2_COSC2200_Project.commands
         public override void Execute(object parameter)
         {
             // Fetch stats from JSON file here
-            if (Statistics.SaveStatistics(_playerStats)) // "Error" here because the object has not been initialized yet.
-                                                         // Will be on system launch.
+            if (Statistics.ResetStatistics(_playerStats)) 
+                                                         
             {
-                MessageBox.Show("Successfully Saved Stats.");
+                // Navigate back to the stats view to refresh.
+                _navigationStore.CurrentViewModel = new StatsViewModel(_navigationStore, _playerStats);
+               
+                // Notify user of update.
+                MessageBox.Show("Successfully Reset Stats.");
             }
-
         }
     }
-
 }
