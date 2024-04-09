@@ -229,7 +229,9 @@ namespace Group2_COSC2200_Project.model
             // check if the card is the first played in the round
             if (TurnsTaken == 0)
             {
-                if (isLeftBower)
+                // Check if the card played is the Left bower, this means that the lead suit is not the suit on the
+                // card, but actually the Trump suit
+                if (IsLeftBower(card))
                 {
                     LeadSuit = TrumpSuit;
                 }
@@ -249,7 +251,7 @@ namespace Group2_COSC2200_Project.model
                 foreach (var playerCard in currentPlayer.PlayerHand.Cards)
                 {
                     // If they do then mark that they have the lead suit
-                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && isLeftBower))
+                    if (playerCard.Suit == LeadSuit || (LeadSuit == TrumpSuit && IsLeftBower(card)))
                     {
                         hasLeadSuit = true;
                         break;
@@ -281,6 +283,41 @@ namespace Group2_COSC2200_Project.model
             {
                 AIPlayCard(CurrentPlayer);
             }
+        }
+
+        /// <summary>
+        /// Takes a card object and checks if the card is the Left Bower by matching the colour of the card if
+        /// it is a Jack. This is required to comply with play rules.
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
+        public bool IsLeftBower(Card card)
+        {
+            // delcare a local variable for if the card is the Left Bower
+            bool isLeftBower = false;
+
+            // Only check the suit if the card is a Jack
+            if (card.Rank == Card.Ranks.Jack)
+            {
+                // Compare each suit to see if the card is the correct Left Bower for the already determined Trump suit
+                switch (TrumpSuit)
+                {
+                    case Card.Suits.Hearts:
+                        isLeftBower = card.Suit == Card.Suits.Diamonds; // Diamonds are the same color as Hearts
+                        break;
+                    case Card.Suits.Diamonds:
+                        isLeftBower = card.Suit == Card.Suits.Hearts; // Hearts are the same color as Diamonds
+                        break;
+                    case Card.Suits.Clubs:
+                        isLeftBower = card.Suit == Card.Suits.Spades; // Spades are the same color as Clubs
+                        break;
+                    case Card.Suits.Spades:
+                        isLeftBower = card.Suit == Card.Suits.Clubs; // Clubs are the same color as Spades
+                        break;
+                }
+            }
+            // if the card is not a jack it cannot be a bower and return false
+            return false;
         }
 
         public void AIDecisionFromKitty(Player currentPlayer)
