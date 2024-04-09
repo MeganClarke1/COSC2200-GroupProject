@@ -144,8 +144,9 @@ namespace Group2_COSC2200_Project.model
         {
 
             // Step out of the current directory to reach the base directory
+            
             string currentDirectory = Directory.GetCurrentDirectory();
-            MessageBox.Show(currentDirectory);
+
 
             // Navigate up two levels to reach the base directory
             string baseDirectory2 = Directory.GetParent(Directory.GetParent(currentDirectory).FullName).FullName;
@@ -156,7 +157,7 @@ namespace Group2_COSC2200_Project.model
             // Combine that relative position twice with data and stats file.
             string relativeJSONpath1 = Path.Combine(baseDirectory3, "data");
             string relativeJSONpath2 = Path.Combine(relativeJSONpath1, "stats.json");
-            MessageBox.Show(relativeJSONpath2);
+
 
             string hardCorePathTest = @"C:\Users\brody\Source\Repos\COSC2200-GroupProject\Group2_COSC2200_Project\data\stats.json";
 
