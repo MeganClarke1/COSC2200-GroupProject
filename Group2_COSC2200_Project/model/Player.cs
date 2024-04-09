@@ -28,7 +28,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public bool isAI { get; set; }
+        public bool IsAI { get; set; }
 
         /// <summary>
         /// Constructor for a Player Object. 
@@ -40,7 +40,7 @@
             PlayerName = _playerName;
             PlayerHand = new Hand();
             IsDealer = false;
-            this.isAI = isAI;
+            IsAI = isAI;
         }
     }
 }

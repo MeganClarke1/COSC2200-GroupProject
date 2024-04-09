@@ -10,6 +10,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="../assets/images/classic/playing_surface.jpg"/>
         </Grid.Background>
+        <Image Source="../assets/images/classic/card_back.png" Margin="904,453,286,133"/>
         <Grid Margin="125,50,125,50">
             <Grid.RowDefinitions>
                 <RowDefinition/>
