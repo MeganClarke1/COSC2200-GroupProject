@@ -4,6 +4,12 @@ namespace Group2_COSC2200_Project.viewmodel
 {
     public class CardViewModel : ViewModelBase
     {
+
+        /// <summary>
+        /// Static property to set the base image path
+        /// </summary>
+        public static string BaseImagePath { get; set; } = "../assets/images/classic";
+
         /// <summary>
         /// The Card model this ViewModel represents.
         /// </summary>
@@ -16,7 +22,7 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             get
             {
-                return $"../assets/images/classic/{Card.Rank.ToString().ToLower()}_of_{Card.Suit.ToString().ToLower()}.png";
+                return $"{BaseImagePath}/{Card.Rank.ToString().ToLower()}_of_{Card.Suit.ToString().ToLower()}.png";
             }
         }
 

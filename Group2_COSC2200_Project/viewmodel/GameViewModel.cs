@@ -51,7 +51,9 @@ namespace Group2_COSC2200_Project.viewmodel
         private Visibility _started = Visibility.Visible;
 
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
+        private Visibility _hasLeadSuit = Visibility.Collapsed;
         private String _trumpSuit = "";
+        private String _leadSuit = "";
 
         private Statistics _GVMplayerStats;
 
@@ -377,6 +379,19 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        public Visibility HasLeadSuit
+        {
+            get => _hasLeadSuit;
+            set
+            {
+                if (_hasLeadSuit != value)
+                {
+                    _hasLeadSuit = value;
+                    OnPropertyChanged(nameof(HasLeadSuit));
+                }
+            }
+        }
+
         public String TrumpSuit
         {
             get => _trumpSuit;
@@ -386,6 +401,18 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     _trumpSuit = "Current Trump suit: " + value;
                     OnPropertyChanged(nameof(TrumpSuit));
+                }
+            }
+        }
+        public String LeadSuit
+        {
+            get => _leadSuit;
+            set
+            {
+                if (_leadSuit != value)
+                {
+                    _leadSuit = "Current Lead suit: " + value;
+                    OnPropertyChanged(nameof(LeadSuit));
                 }
             }
         }
@@ -558,7 +585,12 @@ namespace Group2_COSC2200_Project.viewmodel
         private void Play()
         {
             HasTrumpSuit = Visibility.Visible;
+            if (_game.TurnsTaken == 0)
+            {
+                HasLeadSuit = Visibility.Visible;
+            }
             TrumpSuit = _game.TrumpSuit.ToString();
+            LeadSuit = _game.LeadSuit.ToString();
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
             Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
