@@ -807,6 +807,10 @@ namespace Group2_COSC2200_Project.viewmodel
                 HasLeadSuit = Visibility.Visible;
             }
             TrumpSuit = _game.TrumpSuit.ToString();
+
+            // log trump suit selected
+            Logging.LogTrumpSuit(TrumpSuit);
+
             LeadSuit = _game.LeadSuit.ToString();
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;

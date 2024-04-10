@@ -68,7 +68,7 @@ namespace Group2_COSC2200_Project.model
             {
                 using (StreamWriter writer = new StreamWriter(LogFilePath, true))
                 {
-                    writer.WriteLine("Player hands dealt:");
+                    writer.WriteLine($"{DateTime.Now}: Player hands dealt:");
                     writer.WriteLine($"Player 1 Hand: {string.Join(", ", player1Hand.Cards)}");
                     writer.WriteLine($"Player 2 Hand: {string.Join(", ", player2Hand.Cards)}");
                     writer.WriteLine($"Player 3 Hand: {string.Join(", ", player3Hand.Cards)}");
@@ -79,6 +79,25 @@ namespace Group2_COSC2200_Project.model
             catch (Exception ex)
             {
                 Console.WriteLine($"Error logging player hands dealt: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Trump suit logging.
+        /// </summary>
+        /// <param name="message"> The message to be logged. </param>
+        public static void LogTrumpSuit(string message)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(LogFilePath, true))
+                {
+                    writer.WriteLine($"{DateTime.Now}: {message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error logging game state: {ex.Message}");
             }
         }
 
