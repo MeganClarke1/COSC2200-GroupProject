@@ -111,8 +111,8 @@ namespace Group2_COSC2200_Project.model
             TeamOneTricks = 0;
             TeamTwoTricks = 0;
             PlayedCardsCounter = 0;
-            TeamOneScore = 8;
-            TeamTwoScore = 8;
+            TeamOneScore = 9;
+            TeamTwoScore = 9;
         }
 
         protected virtual void RaiseOnAction()
@@ -686,10 +686,15 @@ namespace Group2_COSC2200_Project.model
 
         public void CheckGameWinner()
         {
-            if (TeamOneScore >= 10 || TeamTwoScore >= 10)
+            if (TeamOneScore >= 10)
             {
-                ChangeState(GameState.EndOfGame);
+                MessageBox.Show("Team 1 has won the game! " + PlayerOne.PlayerName + " and " + PlayerThree.PlayerName + " are the winners!");
             }
+            else if (TeamTwoScore >= 10)
+            {
+                MessageBox.Show("Team 2 has won the game! " + PlayerTwo.PlayerName + " and " + PlayerFour.PlayerName + " are the winners!");
+            }
+            ChangeState(GameState.EndOfGame);
         }
 
         //added (brody)
@@ -732,7 +737,12 @@ namespace Group2_COSC2200_Project.model
         public void EndOfGame()
         {
             CurrentState = GameState.EndOfGame;
-            MessageBox.Show("10 Points Reached, End of Game.");
+            PlayerOne.PlayerHand.Cards.Clear();
+            PlayerTwo.PlayerHand.Cards.Clear();
+            PlayerThree.PlayerHand.Cards.Clear();
+            PlayerFour.PlayerHand.Cards.Clear();
+            Kitty.Clear();
+            PlayArea.Clear();
         }
 
     }
