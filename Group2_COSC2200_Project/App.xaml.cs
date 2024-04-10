@@ -17,11 +17,7 @@
 /// </file>
 
 using Group2_COSC2200_Project.viewmodel;
-using System.Configuration;
-using System.Data;
 using System.Windows;
-using Group2_COSC2200_Project.model;
-using System.Diagnostics;
 using Group2_COSC2200_Project.stores;
 
 namespace Group2_COSC2200_Project

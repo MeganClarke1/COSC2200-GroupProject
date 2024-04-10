@@ -16,18 +16,12 @@
 ///   </description>
 /// </file>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Group2_COSC2200_Project.model
 {
     /// <summary>
     /// Represents the entire game round (10 tricks) in the euchre game.
     /// </summary>
-    class Round
+    public class Round
     {
         /// <summary>
         /// A list of Trick Objects that the round is made up of.

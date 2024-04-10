@@ -41,7 +41,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// <summary>
         /// Static property to set the base image path
         /// </summary>
-        public static string BaseImagePath { get; set; } = $"../assets/images/classic";
+        public static string BaseImagePath { get; set; } = $"../assets/images/{Theme.GetTheme()}";
 
         /// <summary>
         /// The Card model this ViewModel represents.

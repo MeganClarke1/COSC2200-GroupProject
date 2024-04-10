@@ -16,14 +16,12 @@
 ///   </description>
 /// </file>
 
-using System.Net.Security;
-
 namespace Group2_COSC2200_Project.model
 {
     /// <summary>
     /// Represents the general game logic for the game.
     /// </summary>
-    class GameFunctionality
+    public class GameFunctionality
     {
         /// <summary>
         /// Static method to merge 2 team lists into one turn list for game functionality construction
