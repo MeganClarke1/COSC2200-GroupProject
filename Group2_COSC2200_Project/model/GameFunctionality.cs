@@ -9,7 +9,7 @@
 ///     Created: March 24, 2024
 ///   </created>
 ///   <lastModified>
-///     Last Modified: April 9, 2024
+///     Last Modified: April 10, 2024
 ///   </lastModified>
 ///   <description>
 ///     Description: This class represents the game logic for the game.
@@ -199,6 +199,13 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Loops through the turnlist to access each players hands, and sets the value of their cards based on the lead suit and 
+        ///     trump suit. This is used to determine who wins a hand.
+        /// </summary>
+        /// <param name="leadSuit"> The current lead suit </param>
+        /// <param name="trumpSuit"> The current trump suit </param>
+        /// <param name="turnList"> The current turnlist </param>
         public static void SetLeadSuitValues(Card.Suits leadSuit, Card.Suits trumpSuit, List<Player> turnList)
         {
             foreach (Player player in turnList)
@@ -237,8 +244,17 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Used to get the player with the high card out of all played cards in the play area.
+        ///     for every card in the play area determine the high card, placing the high card and the player who owns it in the 
+        ///     current highest for both containers. Returns player who owns the winning card.
+        /// </summary>
+        /// <param name="playArea"> The current play area </param>
+        /// <param name="turnList"> The current Turn List </param>
+        /// <returns></returns>
         public static Player GetPlayerWithHighCard(List<Card> playArea, List<Player> turnList)
         {
+            // Containers used to compare values against. Will end up with highest card and player who it belongs to.
             Card highCard = null;
             Player playerWithHighCard = null;
 
@@ -260,6 +276,13 @@ namespace Group2_COSC2200_Project.model
             return playerWithHighCard;
         }
 
+        /// <summary>
+        /// Once a trick ends, the person who won that trick starts the next trick.
+        ///     Determines this via manipulation of the turnlist by setting the winning player first in that list.
+        /// </summary>
+        /// <param name="turnList"> The current turn list </param>
+        /// <param name="winningPlayer"> The current winning player. </param>
+        /// <returns></returns>
         public static List<Player> RotateToTrickWinner(List<Player> turnList, Player winningPlayer)
         {
             while (turnList[0] != winningPlayer)
@@ -269,6 +292,14 @@ namespace Group2_COSC2200_Project.model
             return turnList;
         }
 
+        /// <summary>
+        /// Used to change the dealer status. Determined by accessing the current dealer in the turn list, changing their 
+        ///     Player.dealerStatus, and updating the new dealer's to true.
+        /// </summary>
+        /// <param name="currentDealer"> the current dealer </param>
+        /// <param name="newDealer"> The new dealer </param>
+        /// <param name="turnList"> the turnlist </param>
+        /// <returns></returns>
         public static List<Player> ChangeDealer(Player currentDealer, Player newDealer, List<Player> turnList)
         {
             if (currentDealer.IsDealer)
@@ -281,49 +312,5 @@ namespace Group2_COSC2200_Project.model
             }
             return RotateToFirstTurn(turnList);
         }
-
-        /*// 2 Options: Loop through each player (bad performance) or, simply use the turnList to call the function in order of the turnlist
-        // Eg. TurnList[0].PassOrOrderUp
-        //     TurnList[1].PassOrOrderUp
-        public static bool PassOrOrderUp(List<Player>turnList)
-        {
-            // Reference the property in game to see if we still need to ask for trump ( still false, meaning no one else has ordered up )
-            if (! game.gameTrumpOrdered)
-            {
-                // Check the current player in the turnlist
-                Player currentPlayer = turnList[0];
-
-                // Enable buttons for currentPlayer 
-                if (currentPlayer == playerOne) // playerOne should reference the player Object in Game properties
-                {
-                    // Enable player 1's buttons... Will need specific names on each button to reference
-
-                    // Prompt that user
-                    MessageBox.Show("Your Turn " + playerOne);
-                }
-
-            }
-            else
-            {
-                // disable all buttons
-            }
-        }
-
-        public static void playerOneOrder()
-        {
-            // change the gameTrumpOrder status to true
-            Game.gameTrumpOrdered = true;
-
-            // set trump suit property of game
-            Game.TrumpSuit = Card trumpCard.suit;
-
-            //disable all buttons
-        }
-
-        public static void playerOnePass()
-        {
-
-        }*/
-
     }
 }

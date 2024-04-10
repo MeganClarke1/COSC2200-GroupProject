@@ -61,7 +61,7 @@
             <Button ToolTipService.ToolTip="Click to declare this suit as trump" Content="{Binding NonKittySuits[1]}" CommandParameter="{Binding NonKittySuits[1]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <Button ToolTipService.ToolTip="Click to declare this suit as trump" Content="{Binding NonKittySuits[2]}" CommandParameter="{Binding NonKittySuits[2]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <Button ToolTipService.ToolTip="Click to pass to the next player" Content="Pass" Command="{Binding PassPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160" AutomationProperties.HelpText="HELP"/>
-            
+
             <!-- Player 2 Grid -->
             <Grid Width="500" Height="145" Margin="-178,237,708,238" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl ToolTipService.ToolTip="The cards in player 2's hand." Margin="5,0,5,10" ItemsSource="{Binding Player2Hand.Cards}">
@@ -82,7 +82,7 @@
                     <RotateTransform Angle="90"/>
                 </Grid.RenderTransform>
             </Grid>
-            
+
             <!-- Player 3 Grid -->
             <Grid Width="500" Height="145" Margin="265,0,265,475" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl ToolTipService.ToolTip="The cards in player 3's hand." Margin="5,0,5,10" ItemsSource="{Binding Player3Hand.Cards}">
@@ -121,7 +121,7 @@
                     <RotateTransform Angle="-90"/>
                 </Grid.RenderTransform>
             </Grid>
-            
+
             <!-- Player Area -->
             <Grid x:Name="playAreaGrid" Width="400" Height="145" Margin="315,238,315,238" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl ToolTipService.ToolTip="The play area where cards that have been played are displayed." Margin="5,0,5,10" ItemsSource="{Binding PlayArea.PlayedCards}">
@@ -139,7 +139,7 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </Grid>
-            
+
             <!-- Kitty -->
             <Grid Width="100" Height="145" Margin="772,402,158,72" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl ToolTipService.ToolTip="The top card of the kitty to be selected as trump." Margin="5,0,5,10" ItemsSource="{Binding Kitty.KittyCard}">
@@ -206,11 +206,11 @@
             </Grid>
 
         </Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="565,668,0,0" TextWrapping="Wrap" Text="{Binding PlayerName}" VerticalAlignment="Top" Width="228" FontSize="24" Foreground="White" Background="Transparent"/>
+        <TextBlock HorizontalAlignment="Left" Margin="619,675,0,0" TextWrapping="Wrap" Text="{Binding PlayerName}" VerticalAlignment="Top" Width="121" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Player 2" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Text="Player 3" VerticalAlignment="Top" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="1186,0,0,0" TextWrapping="Wrap" Text="Player 4" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
-        
+
         <TextBlock HorizontalAlignment="Left" Margin="923,591,0,0" TextWrapping="Wrap" Text="Kitty" VerticalAlignment="Top" Width="50" FontSize="24" Foreground="White" Background="Transparent" RenderTransformOrigin="0.398,0.184"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="10,615,0,0" TextWrapping="Wrap" Visibility="{Binding HasDealer}" Text="{Binding Dealer}" VerticalAlignment="Top" Width="412" FontSize="24" Foreground="White" Background="Transparent"/>
@@ -222,11 +222,14 @@
             <MenuItem Header="File">
                 <MenuItem Header="Save Stats" Command="{Binding SaveStatsCommand}"/>
             </MenuItem>
+            <MenuItem Header="Game">
+                <MenuItem Header="Main Menu" Command="{Binding ReturnCommand}"/>
+            </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="Rules" Click="RulesMenuItem_Click"/>
                 <MenuItem Header="User Guide" Click="UserGuideItem_Click"/>
             </MenuItem>
         </Menu>
     </Grid>
-    
+
 </UserControl>
