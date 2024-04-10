@@ -42,7 +42,7 @@ namespace Group2_COSC2200_Project.view
         /// <summary>
         /// The string which will be used to populate the rules messagebox.
         /// </summary>
-        public String rulesString =
+        public static String rulesString =
             "Euchre Rules" +
             "\r\nThese are the rules used for this version of Euchre. There are many variations possible, " +
             "so this might not be the exact way you're used to playing. " +

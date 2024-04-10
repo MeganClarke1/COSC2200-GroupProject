@@ -53,7 +53,7 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// Represents if a team has called the trump suit (Are the makers).
         /// </summary>
-        public bool MakerStatus {  get; private set; }
+        public bool MakerStatus {  get; set; }
 
         /// <summary>
         /// Constructor for a team object.
