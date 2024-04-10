@@ -30,7 +30,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Group2_COSC2200_Project.view
 {
@@ -118,8 +117,28 @@ namespace Group2_COSC2200_Project.view
         /// <param name="e"> The routed event object. </param>
         private void UserGuideItem_Click(object sender, RoutedEventArgs e)
         {
-            // Show a message box with the rules
-            MessageBox.Show("Placeholder", "User Guide", MessageBoxButton.OK, MessageBoxImage.Information);
+            // Step out of the current directory to reach the base directory
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            // Navigate up two levels to reach the base directory
+            string baseDirectory2 = Directory.GetParent(Directory.GetParent(currentDirectory).FullName).FullName;
+
+            // Navigate another level up
+            string baseDirectory3 = Directory.GetParent(baseDirectory2).FullName;
+
+            // Combine that relative position twice with data and stats file.
+            string relativeGuidePath = Path.Combine(baseDirectory3, "assets/guides/");
+            string relativeJSONpath2 = Path.Combine(relativeGuidePath, "EuchreUserGuideV1.0.pdf");
+            string pdfPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EuchreUserGuideV1.0.pdf");
+            try
+            {
+                System.Diagnostics.Process.Start(pdfPath);
+            }
+            catch (Exception ex)
+            {
+                // Handle the case where the default application could not be started.
+                MessageBox.Show($"Could not open the user guide: {pdfPath}");
+            }
         }
     }
 }
