@@ -66,7 +66,7 @@ namespace Group2_COSC2200_Project.commands
             _playerStats = Statistics.LoadStatistics("500");
 
             // Navigate to GameViewModel with fetched stats
-            _navigationStore.CurrentViewModel = new GameViewModel(_playerStats);
+            _navigationStore.CurrentViewModel = new GameViewModel(_playerStats, _navigationStore);
         }
     }
 

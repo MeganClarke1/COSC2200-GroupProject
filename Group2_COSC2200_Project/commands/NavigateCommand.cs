@@ -57,7 +57,7 @@ namespace Group2_COSC2200_Project.commands
         /// <param name="parameter"></param>
         public override void Execute(object parameter)
         {
-            _navigationStore.CurrentViewModel = new GameViewModel(_playerStats);
+            _navigationStore.CurrentViewModel = new GameViewModel(_playerStats, _navigationStore);
         }
     }
 }

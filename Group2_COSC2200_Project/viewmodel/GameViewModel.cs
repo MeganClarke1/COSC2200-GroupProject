@@ -19,6 +19,7 @@
 using GalaSoft.MvvmLight.Command;
 using Group2_COSC2200_Project.commands;
 using Group2_COSC2200_Project.model;
+using Group2_COSC2200_Project.stores;
 using System.Windows;
 using System.Windows.Input;
 using static Group2_COSC2200_Project.model.Game;
@@ -67,7 +68,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// <summary>
         /// Command to execute when a game ends and the user would like to return to the menu.
         /// </summary>
-        public ICommand EndCommand { get; private set; }
+        public ICommand ReturnCommand { get; private set; }
 
         /// <summary>
         /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
@@ -543,8 +544,6 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        #endregion
-
         /// <summary>
         /// 
         /// </summary>
@@ -561,13 +560,15 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        #endregion
+
         /// <summary>
         /// The constructor for the GameViewModel.
         ///     Thhis constructor serves to instantitate all needed data/commands for beginning a game of Euchre.
         ///     This includes button clicks, Updating the ViewModel, and opening a log file.
         /// </summary>
         /// <param name="_playerStats"> Accepts plaer stats from the menuView and passes that to its own view. </param>
-        public GameViewModel(Statistics _playerStats) // ***** added parameter on constructor
+        public GameViewModel(Statistics _playerStats, NavigationStore _navigationStore) // ***** added parameter on constructor
         {
             //logWriter = new StreamWriter("../../game_log.txt", true); // Open the log file for appending
             UpdateViewModelState();
@@ -585,11 +586,9 @@ namespace Group2_COSC2200_Project.viewmodel
             {
                 _GVMplayerStats = _playerStats; // assign to GameViewModel container for that player's stats object,
                 _game.PlayerOneStats = _GVMplayerStats; // Store the GVM player stats in GameView
-                MessageBox.Show("Player Name from JSON: " + _GVMplayerStats.PlayerName);
                 PlayerName = _GVMplayerStats.PlayerName;
-                //_GVMplayerStats.TotalGames++;
-
                 SaveStatsCommand = new SaveStatsCommand(_game.PlayerOneStats);
+                ReturnCommand = new ReturnPostGameCommand(_navigationStore, _game.PlayerOneStats);
             }
         }
 
