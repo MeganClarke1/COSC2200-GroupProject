@@ -35,7 +35,7 @@
     <None Remove="assets\images\classic\nine_of_diamonds.png" />
     <None Remove="assets\images\classic\nine_of_hearts.png" />
     <None Remove="assets\images\classic\nine_of_spades.png" />
-    <None Remove="assets\images\classic\playing_surface.jpg" />
+    <None Remove="assets\images\classic\playing_surface.png" />
     <None Remove="assets\images\classic\queen_of_clubs.png" />
     <None Remove="assets\images\classic\queen_of_diamonds.png" />
     <None Remove="assets\images\classic\queen_of_hearts.png" />
@@ -64,6 +64,7 @@
     <None Remove="assets\images\fantasyPixel\nine_of_diamonds.png" />
     <None Remove="assets\images\fantasyPixel\nine_of_hearts.png" />
     <None Remove="assets\images\fantasyPixel\nine_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\playing_surface.png" />
     <None Remove="assets\images\fantasyPixel\queen_of_clubs.png" />
     <None Remove="assets\images\fantasyPixel\queen_of_diamonds.png" />
     <None Remove="assets\images\fantasyPixel\queen_of_hearts.png" />
@@ -100,7 +101,7 @@
     <Resource Include="assets\images\classic\nine_of_diamonds.png" />
     <Resource Include="assets\images\classic\nine_of_hearts.png" />
     <Resource Include="assets\images\classic\nine_of_spades.png" />
-    <Resource Include="assets\images\classic\playing_surface.jpg" />
+    <Resource Include="assets\images\classic\playing_surface.png" />
     <Resource Include="assets\images\classic\queen_of_clubs.png" />
     <Resource Include="assets\images\classic\queen_of_diamonds.png" />
     <Resource Include="assets\images\classic\queen_of_hearts.png" />
@@ -129,6 +130,7 @@
     <Resource Include="assets\images\fantasyPixel\nine_of_diamonds.png" />
     <Resource Include="assets\images\fantasyPixel\nine_of_hearts.png" />
     <Resource Include="assets\images\fantasyPixel\nine_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\playing_surface.png" />
     <Resource Include="assets\images\fantasyPixel\queen_of_clubs.png" />
     <Resource Include="assets\images\fantasyPixel\queen_of_diamonds.png" />
     <Resource Include="assets\images\fantasyPixel\queen_of_hearts.png" />

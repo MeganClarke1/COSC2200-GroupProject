@@ -16,9 +16,8 @@
     <Grid>
 
         <Grid.Background>
-            <ImageBrush ImageSource="../assets/images/classic/playing_surface.jpg"/>
+            <ImageBrush ImageSource="{Binding BackgroundImagePath}"/>
         </Grid.Background>
-        <Image Source="../assets/images/classic/card_back.png" Margin="904,453,286,133"/>
         <Grid Margin="125,50,125,50">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -138,7 +137,7 @@
             </Grid>
             
             <!-- Kitty -->
-            <Grid Width="100" Height="145" Margin="772,402,158,72" RenderTransformOrigin="0.5,0.5">
+            <Grid Width="100" Height="145" Margin="749,232,181,243" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl ToolTipService.ToolTip="The top card of the kitty to be selected as trump." Margin="5,0,5,10" ItemsSource="{Binding Kitty.KittyCard}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -154,6 +153,8 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </Grid>
+
+            <TextBlock HorizontalAlignment="Left" Margin="774,367,0,0" TextWrapping="Wrap" Text="Kitty" VerticalAlignment="Top" Width="50" FontSize="24" Foreground="White" Background="Transparent" RenderTransformOrigin="0.398,0.184"/>
 
             <!-- Scoreboard -->
             <Grid ToolTipService.ToolTip="The score board for the current game." Grid.Row="0" HorizontalAlignment="Right" Margin="0,-21,-104,566" Background="White" Height="75">
@@ -207,8 +208,6 @@
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Player 2" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Text="Player 3" VerticalAlignment="Top" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="1186,0,0,0" TextWrapping="Wrap" Text="Player 4" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
-        
-        <TextBlock HorizontalAlignment="Left" Margin="923,591,0,0" TextWrapping="Wrap" Text="Kitty" VerticalAlignment="Top" Width="50" FontSize="24" Foreground="White" Background="Transparent" RenderTransformOrigin="0.398,0.184"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="10,615,0,0" TextWrapping="Wrap" Visibility="{Binding HasDealer}" Text="{Binding Dealer}" VerticalAlignment="Top" Width="412" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,646,0,0" TextWrapping="Wrap" Visibility="{Binding HasLeadSuit}" Text="{Binding LeadSuit}" VerticalAlignment="Top" Width="412" FontSize="24" Foreground="White" Background="Transparent"/>
@@ -222,6 +221,11 @@
             <MenuItem Header="Help">
                 <MenuItem Header="Rules" Click="RulesMenuItem_Click"/>
                 <MenuItem Header="User Guide" Click="UserGuideItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Theme">
+                <MenuItem Header="Classic" Command="{Binding ChangeThemeCommand}" CommandParameter="classic"/>
+                <MenuItem Header="Fantasy" Command="{Binding ChangeThemeCommand}" CommandParameter="fantasyPixel"/>
+                <MenuItem Header="Theme 3" Command="{Binding}"/>
             </MenuItem>
         </Menu>
     </Grid>

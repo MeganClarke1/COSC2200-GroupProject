@@ -41,7 +41,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// <summary>
         /// Static property to set the base image path
         /// </summary>
-        public static string BaseImagePath { get; set; } = "../assets/images/fantasyPixel";
+        public static string BaseImagePath { get; set; } = $"../assets/images/classic";
 
         /// <summary>
         /// The Card model this ViewModel represents.
@@ -73,6 +73,11 @@ namespace Group2_COSC2200_Project.viewmodel
         public CardViewModel(Card card)
         {
             Card = card;
+        }
+
+        public void RefreshImagePath()
+        {
+            OnPropertyChanged(nameof(ImagePath));
         }
     }
 }

@@ -69,6 +69,15 @@ namespace Group2_COSC2200_Project.viewmodel
         /// Command to execute when a game ends and the user would like to return to the menu.
         /// </summary>
         public ICommand ReturnCommand { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICommand ChangeThemeCommand { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private string _backgroundImagePath = "../assets/images/classic/playing_surface.png";
 
         /// <summary>
         /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
@@ -146,6 +155,18 @@ namespace Group2_COSC2200_Project.viewmodel
         public String _playerName;
 
         #region Monitored Properties
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BackgroundImagePath
+        {
+            get => _backgroundImagePath;
+            set
+            {
+                _backgroundImagePath = value;
+                OnPropertyChanged(nameof(BackgroundImagePath));
+            }
+        }
 
         /// <summary>
         /// Monitoring the playername for changes.
@@ -578,6 +599,7 @@ namespace Group2_COSC2200_Project.viewmodel
             ClickCardCommand = new RelayCommand<object>(ClickCardExecute);
             OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
             PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
+            ChangeThemeCommand = new RelayCommand<string>(ChangeThemeExecute);
 
             _game.OnAction += OnActionHandler;
 
@@ -623,6 +645,13 @@ namespace Group2_COSC2200_Project.viewmodel
         private void OnActionHandler(object sender, EventArgs e)
         {
             UpdateViewModelState();
+        }
+
+        private void ChangeThemeExecute(string theme)
+        {
+            CardViewModel.BaseImagePath = $"../assets/images/{theme}";
+            RefreshCards();
+            BackgroundImagePath = $"../assets/images/{theme}/playing_surface.png";
         }
 
         private void OrderUpExecute(object parameter)
@@ -673,7 +702,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// CardViewModel object of the clicked card. </param>
         private void ClickCardExecute(object parameter)
         {
-            if (_game.CurrentState == Game.GameState.DealerKittySwap)
+            if (_game.CurrentState == GameState.DealerKittySwap)
             {
                 if (parameter is CardViewModel cardViewModel)
                 {
@@ -681,7 +710,7 @@ namespace Group2_COSC2200_Project.viewmodel
                     UpdateViewModelState();
                 }
             }
-            else if (_game.CurrentState == Game.GameState.Play)
+            else if (_game.CurrentState == GameState.Play)
             {
                 if (parameter is CardViewModel cardViewModel)
                 {
@@ -806,5 +835,50 @@ namespace Group2_COSC2200_Project.viewmodel
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
         }
 
+        private void RefreshCards()
+        {
+            if (Player1Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player1Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Player2Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player2Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Player3Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player3Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Player4Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player4Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (PlayArea?.PlayedCards != null)
+            {
+                foreach (CardViewModel cardViewModel in PlayArea.PlayedCards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Kitty?.KittyCard != null)
+            {
+                foreach (CardViewModel cardViewModel in Kitty.KittyCard)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+        }
     }
 }
