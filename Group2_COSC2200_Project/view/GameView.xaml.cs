@@ -110,5 +110,16 @@ namespace Group2_COSC2200_Project.view
             // Show a message box with the rules
             MessageBox.Show(rulesString, "Game Rules", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        /// <summary>
+        /// On click event for the user guide.
+        /// </summary>
+        /// <param name="sender"> The Sending object. </param>
+        /// <param name="e"> The routed event object. </param>
+        private void UserGuideItem_Click(object sender, RoutedEventArgs e)
+        {
+            // Show a message box with the rules
+            MessageBox.Show("Placeholder", "User Guide", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

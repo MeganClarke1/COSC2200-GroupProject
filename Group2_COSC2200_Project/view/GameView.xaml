@@ -247,6 +247,7 @@
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="Rules" Click="RulesMenuItem_Click"/>
+                <MenuItem Header="User Guide" Click="UserGuideItem_Click"/>
             </MenuItem>
         </Menu>
     </Grid>

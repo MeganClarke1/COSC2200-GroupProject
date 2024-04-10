@@ -68,7 +68,7 @@ namespace Group2_COSC2200_Project.model
             {
                 using (StreamWriter writer = new StreamWriter(LogFilePath, true))
                 {
-                    writer.WriteLine("Player hands dealt:");
+                    writer.WriteLine($"{DateTime.Now}: Player hands dealt:");
                     writer.WriteLine($"Player 1 Hand: {string.Join(", ", player1Hand.Cards)}");
                     writer.WriteLine($"Player 2 Hand: {string.Join(", ", player2Hand.Cards)}");
                     writer.WriteLine($"Player 3 Hand: {string.Join(", ", player3Hand.Cards)}");
@@ -81,6 +81,95 @@ namespace Group2_COSC2200_Project.model
                 Console.WriteLine($"Error logging player hands dealt: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Trump suit logging.
+        /// </summary>
+        /// <param name="message"> The message to be logged. </param>
+        public static void LogTrumpSuit(string message)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(LogFilePath, true))
+                {
+                    writer.WriteLine($"{DateTime.Now}: Trump Suit Selected: {message}");
+                    writer.WriteLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error logging game state: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// For Logging played cards
+        /// </summary>
+        /// <param name="playerName"> The played who played the card </param>
+        /// <param name="card"> The card that was played. </param>
+        public static void LogPlayedCard(Player player, Card card)
+        {
+            try
+            {
+                string logMessage = $"{DateTime.Now}: {player.PlayerName} played {card.ToString()}";
+
+                using (StreamWriter writer = new StreamWriter(LogFilePath, true))
+                {
+                    writer.WriteLine(logMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error logging played card: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// For logging trick winner.
+        /// </summary>
+        /// <param name="winner"></param>
+        public static void LogTrickWinner(string winner)
+        {
+            try
+            {
+                string logMessage = $"{DateTime.Now}: Trick Winner - {winner}";
+
+                using (StreamWriter writer = new StreamWriter(LogFilePath, true))
+                {
+                    writer.WriteLine();
+                    writer.WriteLine(logMessage);
+                    writer.WriteLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error logging trick winner: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// To log the round winner.
+        /// </summary>
+        /// <param name="winner"> The winning team </param>
+        public static void LogRoundWinner(string winner)
+        {
+            try
+            {
+                string logMessage = $"{DateTime.Now}: Round Winner - {winner}";
+
+                using (StreamWriter writer = new StreamWriter(LogFilePath, true))
+                {
+                    writer.WriteLine();
+                    writer.WriteLine(logMessage);
+                    writer.WriteLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error logging round winner: {ex.Message}");
+            }
+        }
+
 
     }
 }
