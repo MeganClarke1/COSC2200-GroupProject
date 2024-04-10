@@ -62,6 +62,8 @@ namespace Group2_COSC2200_Project.model
         public int TeamOneScore { get; private set; }
         public int TeamTwoScore { get; private set; }
 
+        public Statistics PlayerOneStats { get; set; } // For storing player stats from GameViewModel
+
         public Game()
         {
             ChangeState(GameState.Initialize);
@@ -127,6 +129,7 @@ namespace Group2_COSC2200_Project.model
             GameFunctionality.SetDealer(TurnList);
             GameFunctionality.DealCards(Deck, TurnList);
             Kitty.Add(Deck.DetermineKitty());
+            PlayerOneStats.TotalGames++;
         }
 
         public void TrumpSelectionFromKitty() 
@@ -692,6 +695,7 @@ namespace Group2_COSC2200_Project.model
                 TeamTwoScore++;
             }
             RaiseOnAction();
+
             MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
 
             // Logging the winning team of the round.
@@ -699,6 +703,34 @@ namespace Group2_COSC2200_Project.model
 
             if (TeamOneScore >= 10 || TeamTwoScore >= 10)
             {
+                if (RoundWinner == Team.TeamID.TeamOne.ToString()) // If the round winner is team one (human team)
+                {
+                    // Increment player one's rounds won stat
+                    PlayerOneStats.PlayerWins++;
+
+                    // Check if their last game result was a win, if so, increment their streak
+                    if (PlayerOneStats.previousGameResult == Statistics.LastGameResult.Win)
+                    {
+                        PlayerOneStats.CurrentStreak++;
+                    }
+
+                    // Update their previous game result
+                    PlayerOneStats.previousGameResult = Statistics.LastGameResult.Win; 
+                }
+
+                // Player one has lost, do the same logic but for losses.
+                else
+                {
+                    PlayerOneStats.PlayerLosses++;
+
+                    if (PlayerOneStats.previousGameResult == Statistics.LastGameResult.Loss)
+                    {
+                        PlayerOneStats.CurrentStreak++;
+                    }
+
+                    PlayerOneStats.previousGameResult = Statistics.LastGameResult.Loss;
+                }
+
                 CheckGameWinner();
                 return;
             } 
