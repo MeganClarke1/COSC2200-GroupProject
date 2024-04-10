@@ -21,7 +21,7 @@ using Group2_COSC2200_Project.commands;
 using Group2_COSC2200_Project.model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using static Group2_COSC2200_Project.model.Game;
@@ -33,6 +33,7 @@ namespace Group2_COSC2200_Project.viewmodel
     /// </summary>
     public class GameViewModel : ViewModelBase
     {
+
         /// <summary>
         /// Constructs a new game object automatically.
         /// </summary>
@@ -602,14 +603,15 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
-        // public bool Player2Turn => _game.CurrentPlayer == _game.PlayerTwo && _game.trumpFromKitty;
-
         /// <summary>
         /// The constructor for the GameViewModel.
+        ///     Thhis constructor serves to instantitate all needed data/commands for beginning a game of Euchre.
+        ///     This includes button clicks, Updating the ViewModel, and opening a log file.
         /// </summary>
         /// <param name="_playerStats"> Accepts plaer stats from the menuView and passes that to its own view. </param>
         public GameViewModel(Statistics _playerStats) // ***** added parameter on constructor
         {
+            //logWriter = new StreamWriter("../../game_log.txt", true); // Open the log file for appending
             UpdateViewModelState();
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute);
@@ -731,13 +733,23 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        /// <summary>
+        /// Represents the start of the game, called by our state switch
+        /// </summary>
         private void Start()
         {
+            // log start time
+            Logging.LogStartGame(DateTime.Now); 
             Started = Visibility.Collapsed;
             Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
             Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+
+            // Log the player hands dealt
+            Logging.LogPlayerHandsDealt(_game.PlayerOne.PlayerHand, _game.PlayerTwo.PlayerHand,
+                                         _game.PlayerThree.PlayerHand, _game.PlayerFour.PlayerHand);
+
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
             TeamOne = new Team(_game.Team1.TeamId, _game.Team1.TeamPlayers);
@@ -745,6 +757,10 @@ namespace Group2_COSC2200_Project.viewmodel
             Scoreboard = new Scoreboard();
         }
 
+        /// <summary>
+        /// Represents the TrumpSelectionFromKitty phase of the game. Called from our state switch
+        ///     handles dyanmic turn based rounds.
+        /// </summary>
         private void TrumpSelectionFromKitty()
         {
             Player1Turn = _game.CurrentPlayer == _game.PlayerOne ? Visibility.Visible : Visibility.Collapsed;
@@ -753,6 +769,9 @@ namespace Group2_COSC2200_Project.viewmodel
             Player4Turn = _game.CurrentPlayer == _game.PlayerFour ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Represents the trump suit selection after the inital kitty voting round.
+        /// </summary>
         private void TrumpSelectionPostKitty()
         {
             NonKittySuits = _game.NonKittySuits;
