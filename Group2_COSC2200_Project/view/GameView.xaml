@@ -23,7 +23,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button ToolTipService.ToolTip="Click to return to the main menu." Content="Return to menu" Command="{Binding EndCommand}" Visibility="{Binding Ended}" HorizontalAlignment="Center" Margin="0,287,0,0" VerticalAlignment="Top" FontSize="24" Width="200"/>
+            <Button ToolTipService.ToolTip="Click to return to the main menu." Content="Return to menu" Command="{Binding ReturnCommand}" Visibility="{Binding Ended}" HorizontalAlignment="Center" Margin="0,287,0,0" VerticalAlignment="Top" FontSize="24" Width="200"/>
             <Button ToolTipService.ToolTip="Click to deal cards to all players and start the game." Content="Deal" Command="{Binding StartCommand}" Visibility="{Binding Started}" HorizontalAlignment="Center" Margin="0,287,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 1 Grid -->
             <Grid Width="500" Height="145" Margin="265,475,265,0">

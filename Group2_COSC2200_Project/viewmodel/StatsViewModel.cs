@@ -70,6 +70,8 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         public int _currentStreak {get; set;}
 
+        public Statistics.LastGameResult _lastGameResult { get; set;}
+
         /// <summary>
         /// The following section serves to monitor for changes to the classes properties being OnPropertyChanged, which will
         ///     dynamically update the view, because the fields on the view are bound to these properties values.
@@ -139,6 +141,19 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        public Statistics.LastGameResult LastGameResult
+        {
+            get => _lastGameResult;
+            set
+            {
+                if (_lastGameResult != value)
+                {
+                    _lastGameResult = value;
+                    OnPropertyChanged(nameof(CurrentStreak));
+                }
+            }
+        }
+
 
         /// <summary>
         /// The Constructor for the StatsViewModel. Takes the navigation viewModel and player stats as arugments.
@@ -159,6 +174,8 @@ namespace Group2_COSC2200_Project.viewmodel
             _playerLosses = PlayerStats.PlayerLosses;
             _totalGames = PlayerStats.TotalGames;
             _currentStreak = PlayerStats.CurrentStreak;
+            _lastGameResult = PlayerStats.previousGameResult;
+            
         } 
     }
 }

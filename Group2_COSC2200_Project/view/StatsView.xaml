@@ -24,9 +24,10 @@
         <TextBlock Text="Player Stats" FontSize="60" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,50,0,0"/>
 
         <!-- Stats Rows -->
-        <Border ToolTipService.ToolTip="Statistics for the player name that was entered." Background="LightGray" Margin="415,212,415,298">
+        <Border ToolTipService.ToolTip="Statistics for the player name that was entered." Background="LightGray" Margin="415,212,415,265">
             <Grid Margin="0,0,0,10">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -53,9 +54,13 @@
                     <TextBlock Text="Current Streak: " FontSize="30" Foreground="Black"/>
                     <TextBlock Text="{Binding CurrentStreak}" FontSize="30" Foreground="Black"/>
                 </StackPanel>
+                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Previous Game: " FontSize="30" Foreground="Black"/>
+                    <TextBlock Text="{Binding LastGameResult}" FontSize="30" Foreground="Black"/>
+                </StackPanel>
             </Grid>
         </Border>
-        <Button ToolTipService.ToolTip="Click to reset the stats page." Content="Reset Stats" Command="{Binding ResetStatsCommand}" HorizontalAlignment="Center" FontSize="24" Width="160" Margin="0,460,0,215"/>
-        <Button ToolTipService.ToolTip="Click to go back to the main menu." Content="Back" Command="{Binding BackCommand}" HorizontalAlignment="Left" FontSize="24" Width="107" Margin="10,18,0,657"/>
+        <Button ToolTipService.ToolTip="Click to reset the stats page." Content="Reset Stats" Command="{Binding ResetStatsCommand}" HorizontalAlignment="Center" FontSize="24" Width="160" Margin="0,509,0,166"/>
+        <Button ToolTipService.ToolTip="Click to go back to the main menu." Content="Back" Command="{Binding BackCommand}" HorizontalAlignment="Left" FontSize="24" Width="107" Margin="10,10,0,671"/>
     </Grid>
 </UserControl>

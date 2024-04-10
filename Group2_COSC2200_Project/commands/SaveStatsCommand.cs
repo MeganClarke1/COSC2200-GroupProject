@@ -54,14 +54,19 @@ namespace Group2_COSC2200_Project.commands
         /// <param name="parameter"></param>
         public override void Execute(object parameter)
         {
-            // Fetch stats from JSON file here
-            if (Statistics.SaveStatistics(_playerStats)) // "Error" here because the object has not been initialized yet.
-                                                         // Will be on system launch.
+            if (_playerStats != null)
             {
-                MessageBox.Show("Successfully Saved Stats.");
-            }
+                // Fetch stats from JSON file here
+                if (Statistics.SaveStatistics(_playerStats))
 
+                {
+                    MessageBox.Show("Successfully Saved Stats.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Save Currently Unavailable");
+            }
         }
     }
-
 }

@@ -2,10 +2,10 @@
   "500": {
     "PlayerID": 0,
     "PlayerName": "Jocelyn Cocque",
-    "PlayerWins": 0,
-    "PlayerLosses": 0,
-    "TotalGames": 0,
-    "CurrentStreak": 0,
-    "previousGameResult": 0
+    "PlayerWins": 6,
+    "PlayerLosses": 2,
+    "TotalGames": 10,
+    "CurrentStreak": 1,
+    "previousGameResult": 1
   }
 }
