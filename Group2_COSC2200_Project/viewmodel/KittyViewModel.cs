@@ -42,7 +42,10 @@ namespace Group2_COSC2200_Project.viewmodel
             // For each card in the list of card objects (the kitty), create a new CardViewModel, and add it to the list.
             foreach (Card card in kitty)
             {
-                CardViewModel cardViewModel = new CardViewModel(card);
+                CardViewModel cardViewModel = new CardViewModel(card)
+                {
+                    IsInKitty = true
+                };
                 KittyCard.Add(cardViewModel);
             }
         }

@@ -44,6 +44,34 @@
     <None Remove="assets\images\classic\ten_of_diamonds.png" />
     <None Remove="assets\images\classic\ten_of_hearts.png" />
     <None Remove="assets\images\classic\ten_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\ace_of_clubs.png" />
+    <None Remove="assets\images\fantasyPixel\ace_of_diamonds.png" />
+    <None Remove="assets\images\fantasyPixel\ace_of_hearts.png" />
+    <None Remove="assets\images\fantasyPixel\ace_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\card_back.png" />
+    <None Remove="assets\images\fantasyPixel\card_back_green.png" />
+    <None Remove="assets\images\fantasyPixel\card_back_red.png" />
+    <None Remove="assets\images\fantasyPixel\card_back_yellow.png" />
+    <None Remove="assets\images\fantasyPixel\jack_of_clubs.png" />
+    <None Remove="assets\images\fantasyPixel\jack_of_diamonds.png" />
+    <None Remove="assets\images\fantasyPixel\jack_of_hearts.png" />
+    <None Remove="assets\images\fantasyPixel\jack_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\king_of_clubs.png" />
+    <None Remove="assets\images\fantasyPixel\king_of_diamonds.png" />
+    <None Remove="assets\images\fantasyPixel\king_of_hearts.png" />
+    <None Remove="assets\images\fantasyPixel\king_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\nine_of_clubs.png" />
+    <None Remove="assets\images\fantasyPixel\nine_of_diamonds.png" />
+    <None Remove="assets\images\fantasyPixel\nine_of_hearts.png" />
+    <None Remove="assets\images\fantasyPixel\nine_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\queen_of_clubs.png" />
+    <None Remove="assets\images\fantasyPixel\queen_of_diamonds.png" />
+    <None Remove="assets\images\fantasyPixel\queen_of_hearts.png" />
+    <None Remove="assets\images\fantasyPixel\queen_of_spades.png" />
+    <None Remove="assets\images\fantasyPixel\ten_of_clubs.png" />
+    <None Remove="assets\images\fantasyPixel\ten_of_diamonds.png" />
+    <None Remove="assets\images\fantasyPixel\ten_of_hearts.png" />
+    <None Remove="assets\images\fantasyPixel\ten_of_spades.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,6 +105,34 @@
     <Resource Include="assets\images\classic\ten_of_diamonds.png" />
     <Resource Include="assets\images\classic\ten_of_hearts.png" />
     <Resource Include="assets\images\classic\ten_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\ace_of_clubs.png" />
+    <Resource Include="assets\images\fantasyPixel\ace_of_diamonds.png" />
+    <Resource Include="assets\images\fantasyPixel\ace_of_hearts.png" />
+    <Resource Include="assets\images\fantasyPixel\ace_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\card_back.png" />
+    <Resource Include="assets\images\fantasyPixel\card_back_green.png" />
+    <Resource Include="assets\images\fantasyPixel\card_back_red.png" />
+    <Resource Include="assets\images\fantasyPixel\card_back_yellow.png" />
+    <Resource Include="assets\images\fantasyPixel\jack_of_clubs.png" />
+    <Resource Include="assets\images\fantasyPixel\jack_of_diamonds.png" />
+    <Resource Include="assets\images\fantasyPixel\jack_of_hearts.png" />
+    <Resource Include="assets\images\fantasyPixel\jack_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\king_of_clubs.png" />
+    <Resource Include="assets\images\fantasyPixel\king_of_diamonds.png" />
+    <Resource Include="assets\images\fantasyPixel\king_of_hearts.png" />
+    <Resource Include="assets\images\fantasyPixel\king_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\nine_of_clubs.png" />
+    <Resource Include="assets\images\fantasyPixel\nine_of_diamonds.png" />
+    <Resource Include="assets\images\fantasyPixel\nine_of_hearts.png" />
+    <Resource Include="assets\images\fantasyPixel\nine_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\queen_of_clubs.png" />
+    <Resource Include="assets\images\fantasyPixel\queen_of_diamonds.png" />
+    <Resource Include="assets\images\fantasyPixel\queen_of_hearts.png" />
+    <Resource Include="assets\images\fantasyPixel\queen_of_spades.png" />
+    <Resource Include="assets\images\fantasyPixel\ten_of_clubs.png" />
+    <Resource Include="assets\images\fantasyPixel\ten_of_diamonds.png" />
+    <Resource Include="assets\images\fantasyPixel\ten_of_hearts.png" />
+    <Resource Include="assets\images\fantasyPixel\ten_of_spades.png" />
   </ItemGroup>
 
 	<ItemGroup>

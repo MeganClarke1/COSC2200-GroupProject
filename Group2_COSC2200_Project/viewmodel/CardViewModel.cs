@@ -24,9 +24,24 @@ namespace Group2_COSC2200_Project.viewmodel
     {
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsPlayerCard { get; set; } 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsInPlayArea { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsInKitty { get; set; }
+
+        /// <summary>
         /// Static property to set the base image path
         /// </summary>
-        public static string BaseImagePath { get; set; } = "../assets/images/classic";
+        public static string BaseImagePath { get; set; } = "../assets/images/fantasyPixel";
 
         /// <summary>
         /// The Card model this ViewModel represents.
@@ -40,7 +55,14 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             get
             {
-                return $"{BaseImagePath}/{Card.Rank.ToString().ToLower()}_of_{Card.Suit.ToString().ToLower()}.png";
+                if (IsInPlayArea || IsPlayerCard || IsInKitty)
+                {
+                    return $"{BaseImagePath}/{Card.Rank.ToString().ToLower()}_of_{Card.Suit.ToString().ToLower()}.png";
+                }
+                else
+                {
+                    return $"{BaseImagePath}/card_back.png";
+                }
             }
         }
 

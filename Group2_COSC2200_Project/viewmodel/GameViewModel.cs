@@ -692,10 +692,10 @@ namespace Group2_COSC2200_Project.viewmodel
             Logging.LogStartGame(DateTime.Now); 
             Started = Visibility.Collapsed;
             HasDealer = Visibility.Visible;
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand, false);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand, false);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
 
             // Log the player hands dealt
             Logging.LogPlayerHandsDealt(_game.PlayerOne.PlayerHand, _game.PlayerTwo.PlayerHand,
@@ -748,10 +748,10 @@ namespace Group2_COSC2200_Project.viewmodel
             Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand, false);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand, false);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
             Kitty = new KittyViewModel(_game.Kitty);
         }
@@ -792,10 +792,10 @@ namespace Group2_COSC2200_Project.viewmodel
 
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand, false);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand, false);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
         }
 
     }

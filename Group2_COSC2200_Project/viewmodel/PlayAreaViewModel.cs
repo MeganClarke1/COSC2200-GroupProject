@@ -42,7 +42,10 @@ namespace Group2_COSC2200_Project.viewmodel
             // For each card in the list, create a new CardViewModel with that given card, and add it to the collection. 
             foreach (Card card in playedCardsVMP)
             {
-                CardViewModel cardViewModel = new CardViewModel(card);
+                CardViewModel cardViewModel = new CardViewModel(card)
+                {
+                    IsInPlayArea = true
+                };
                 PlayedCards.Add(cardViewModel);
             }
         }

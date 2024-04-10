@@ -35,7 +35,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// A constructor for our HandViewModel
         /// </summary>
         /// <param name="hand"> The hand object to be passed/rendered in the view. </param>
-        public HandViewModel(Hand hand)
+        public HandViewModel(Hand hand, bool isPlayerHand)
         {
             Cards = new ObservableCollection<CardViewModel>();
 
@@ -43,7 +43,10 @@ namespace Group2_COSC2200_Project.viewmodel
             // This allows rendering of all cards in the hand based on how many cards are in that hand.
             foreach (Card card in hand.Cards)
             {
-                CardViewModel cardViewModel = new CardViewModel(card);
+                CardViewModel cardViewModel = new CardViewModel(card)
+                {
+                    IsPlayerCard = isPlayerHand
+                };
                 Cards.Add(cardViewModel);
             }
         }
