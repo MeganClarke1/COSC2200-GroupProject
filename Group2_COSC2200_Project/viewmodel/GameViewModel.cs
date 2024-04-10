@@ -631,10 +631,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 _GVMplayerStats.TotalGames++;
                 SaveStatsCommand = new SaveStatsCommand(_GVMplayerStats);
             }
-            else
-            {
-                MessageBox.Show("Player has selected new game... Need to create profile."); //temporary
-            }
         }
 
         private void UpdateViewModelState()
@@ -807,10 +803,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 HasLeadSuit = Visibility.Visible;
             }
             TrumpSuit = _game.TrumpSuit.ToString();
-
-            // log trump suit selected
-            Logging.LogTrumpSuit(TrumpSuit);
-
             LeadSuit = _game.LeadSuit.ToString();
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
@@ -828,6 +820,10 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
+
+            // Log the human card played
+            //Logging.LogPlayedCard(_game.CurrentPlayer, cardViewModel.Card);
+
             RefreshUI();
         }
 
