@@ -16,6 +16,7 @@
 ///   </description>
 /// </file>
 
+using Group2_COSC2200_Project.viewmodel;
 using System.Windows;
 
 namespace Group2_COSC2200_Project.model
@@ -192,7 +193,8 @@ namespace Group2_COSC2200_Project.model
             TrumpSuit = Kitty[0].Suit;
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!");
-            // TODO :Set Maker status from the team of which the player that ordered up belongs to 
+            // log trump suit selected
+            Logging.LogTrumpSuit(TrumpSuit.ToString()); 
         }
 
         // These handle what happens when ANY user clicks pass
@@ -222,6 +224,8 @@ namespace Group2_COSC2200_Project.model
             TrumpSuit = trumpSuit;
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
+            // log trump suit selected
+            Logging.LogTrumpSuit(TrumpSuit.ToString()); 
         }
 
         public void PassPostKitty()
@@ -310,6 +314,10 @@ namespace Group2_COSC2200_Project.model
             PlayArea.Add(currentPlayer.PlayerHand.RemoveCard(card));
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has played their card.");
+
+            // Log human card played
+            Logging.LogPlayedCard(CurrentPlayer, card);
+
             // Increase counters for turns taken and played cards
             TurnsTaken++;
             PlayedCardsCounter++;
@@ -382,6 +390,8 @@ namespace Group2_COSC2200_Project.model
                 TrumpSuit = Kitty[0].Suit;
                 RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!.");
+                // log trump suit selected
+                Logging.LogTrumpSuit(TrumpSuit.ToString()); 
                 ChangeState(GameState.DealerKittySwap);
             }
             else
@@ -431,6 +441,8 @@ namespace Group2_COSC2200_Project.model
                         TrumpSuit = NonKittySuits[i];
                         RaiseOnAction();
                         MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
+                        // log trump suit selected
+                        Logging.LogTrumpSuit(TrumpSuit.ToString());
                         ChangeState(GameState.Play);
                         return;
                     }
@@ -462,6 +474,8 @@ namespace Group2_COSC2200_Project.model
                 TrumpSuit = NonKittySuits[highestCounterIndex];
                 RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
+                // log trump suit selected
+                Logging.LogTrumpSuit(TrumpSuit.ToString());
                 ChangeState(GameState.Play);
             }
         }
@@ -577,6 +591,9 @@ namespace Group2_COSC2200_Project.model
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has played their card.");
 
+            // Log AI Cards played
+            Logging.LogPlayedCard(CurrentPlayer, cardToPlay);
+
             TurnsTaken++;
             PlayedCardsCounter++;
 
@@ -602,6 +619,9 @@ namespace Group2_COSC2200_Project.model
             {
                 Team winningTeam = Trick.DetermineTrickWinner(PlayArea, Team1, Team2);
                 MessageBox.Show("Trick Winners: " + winningTeam.TeamId.ToString());
+
+                // Log the trick winner
+                Logging.LogTrickWinner(winningTeam.TeamId.ToString());
 
                 // Increment the trick counter based on winning team
                 if (winningTeam.TeamId == Team.TeamID.TeamOne)
@@ -673,6 +693,10 @@ namespace Group2_COSC2200_Project.model
             }
             RaiseOnAction();
             MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
+
+            // Logging the winning team of the round.
+            Logging.LogRoundWinner(RoundWinner);
+
             if (TeamOneScore >= 10 || TeamTwoScore >= 10)
             {
                 CheckGameWinner();

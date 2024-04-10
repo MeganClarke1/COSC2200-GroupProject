@@ -585,10 +585,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 _GVMplayerStats.TotalGames++;
                 SaveStatsCommand = new SaveStatsCommand(_GVMplayerStats);
             }
-            else
-            {
-                MessageBox.Show("Player has selected new game... Need to create profile."); //temporary
-            }
         }
 
         private void UpdateViewModelState()
@@ -768,6 +764,10 @@ namespace Group2_COSC2200_Project.viewmodel
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
+
+            // Log the human card played
+            //Logging.LogPlayedCard(_game.CurrentPlayer, cardViewModel.Card);
+
             RefreshUI();
         }
 
