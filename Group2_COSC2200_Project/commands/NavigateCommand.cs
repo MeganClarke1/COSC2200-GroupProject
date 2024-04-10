@@ -1,4 +1,4 @@
-﻿/// <file>
+﻿/*/// <file>
 ///   <summary>
 ///     File Name: NavigateCommand.cs
 ///   </summary>
@@ -61,3 +61,4 @@ namespace Group2_COSC2200_Project.commands
         }
     }
 }
+*/

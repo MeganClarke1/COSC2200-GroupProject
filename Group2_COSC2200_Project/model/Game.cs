@@ -26,6 +26,8 @@ namespace Group2_COSC2200_Project.model
     /// </summary>
     public class Game
     {
+
+        #region Properties
         /// <summary>
         /// An enum of gameStates to transition between various states of game.
         /// </summary>
@@ -40,7 +42,6 @@ namespace Group2_COSC2200_Project.model
             EndOfGame
         }
 
-        #region Properties
         public GameState CurrentState { get; private set; }
         public event EventHandler OnAction;
         public Player PlayerOne { get; private set; }
@@ -106,6 +107,8 @@ namespace Group2_COSC2200_Project.model
                     break;
             }
         }
+
+        #region methods
 
         /// <summary>
         /// Represents the intital game state. Eg. As soon as a game is started, this instantiates all necessary items.
@@ -543,6 +546,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Allows the AI player to swap a card with the kitty. The AI player strategically selects a card to swap based on certain conditions.
+        /// </summary>
+        /// <param name="currentPlayer">The AI player performing the swap with the kitty.</param>
         public void AISwapWithKitty(Player currentPlayer)
         {
             Card kittyCard = Kitty[0];
@@ -586,6 +593,10 @@ namespace Group2_COSC2200_Project.model
             ChangeState(GameState.Play);
         }
 
+        /// <summary>
+        /// Plays a card for the AI player based on the current game state and strategy. Updates the game state after playing the card.
+        /// </summary>
+        /// <param name="currentPlayer">The AI player whose turn it is to play a card.</param>
         public void AIPlayCard(Player currentPlayer)
         {
             Card cardToPlay = null;
@@ -676,6 +687,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Checks the winner of the current trick and performs necessary actions such as updating scores, logging the winner, 
+        ///     and proceeding to the next trick or round if applicable.
+        /// </summary>
         public void CheckTrickWinner()
         {
             if (TurnsTaken >= TurnList.Count)
@@ -720,6 +735,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Checks the winner of the current round based on the number of tricks won by each team. Updates scores,
+        ///     logs the winner, and initiates the next round or ends the game if a team reaches the winning score.
+        /// </summary>
         public void CheckRoundWinner()
         {
             string RoundWinner = "";
@@ -800,6 +819,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Checks if a team has reached the winning score of 10 points and displays a message announcing the winning team. 
+        ///     Changes the game state to EndOfGame.
+        /// </summary>
         public void CheckGameWinner()
         {
             if (TeamOneScore >= 10)
@@ -813,7 +836,6 @@ namespace Group2_COSC2200_Project.model
             ChangeState(GameState.EndOfGame);
         }
 
-        //added (brody)
         // Creates a new deck (effectively shuffling the cards back into the deck), then performs the same functionality as start game.
         public void NewRound()
         {
@@ -850,6 +872,9 @@ namespace Group2_COSC2200_Project.model
             ChangeState(GameState.TrumpSelectionFromKitty);
         }
 
+        /// <summary>
+        /// Sets the state for end of game and clears all necessary properties to reset the game play.
+        /// </summary>
         public void EndOfGame()
         {
             CurrentState = GameState.EndOfGame;
@@ -861,5 +886,6 @@ namespace Group2_COSC2200_Project.model
             PlayArea.Clear();
         }
 
+        #endregion
     }
 }
