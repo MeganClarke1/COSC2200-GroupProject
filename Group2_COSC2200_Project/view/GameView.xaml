@@ -6,6 +6,8 @@
     Description: This XAML file defines the layout and appearance of the main GameView.
 -->
     
+    
+    
 <UserControl x:Class="Group2_COSC2200_Project.view.GameView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -24,10 +26,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Content="Deal" Command="{Binding StartCommand}" Visibility="{Binding Started}" HorizontalAlignment="Center" Margin="0,287,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to deal cards to all players and start the game." Content="Deal" Command="{Binding StartCommand}" Visibility="{Binding Started}" HorizontalAlignment="Center" Margin="0,287,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 1 Grid -->
             <Grid Width="500" Height="145" Margin="265,475,265,0">
-                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player1Hand.Cards}">
+                <ItemsControl ToolTipService.ToolTip="The cards in your hand." Margin="5,0,5,10" ItemsSource="{Binding Player1Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
@@ -51,16 +53,16 @@
                 </ItemsControl>
             </Grid>
             <!-- Kitty Trump Selection Buttons -->
-            <Button Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to pass to the next player" Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to accept the top card in the kitty as trump" Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player1Turn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Post Kitty Trump Selection Buttons -->
-            <Button Content="{Binding NonKittySuits[0]}" CommandParameter="{Binding NonKittySuits[0]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="{Binding NonKittySuits[1]}" CommandParameter="{Binding NonKittySuits[1]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="{Binding NonKittySuits[2]}" CommandParameter="{Binding NonKittySuits[2]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
-            <Button Content="Pass" Command="{Binding PassPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to declare this suit as trump" Content="{Binding NonKittySuits[0]}" CommandParameter="{Binding NonKittySuits[0]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to declare this suit as trump" Content="{Binding NonKittySuits[1]}" CommandParameter="{Binding NonKittySuits[1]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="355,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to declare this suit as trump" Content="{Binding NonKittySuits[2]}" CommandParameter="{Binding NonKittySuits[2]}" Command="{Binding OrderUpPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,393,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTipService.ToolTip="Click to pass to the next player" Content="Pass" Command="{Binding PassPostKittyCommand}" Visibility="{Binding Player1PostKittyTurn}" HorizontalAlignment="Left" Margin="520,434,0,0" VerticalAlignment="Top" FontSize="24" Width="160" AutomationProperties.HelpText="HELP"/>
             <!-- Player 2 Grid -->
             <Grid Width="500" Height="145" Margin="-178,237,708,238" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player2Hand.Cards}">
+                <ItemsControl ToolTipService.ToolTip="The cards in player 2's hand." Margin="5,0,5,10" ItemsSource="{Binding Player2Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
@@ -87,11 +89,11 @@
                 </Grid.RenderTransform>
             </Grid>
             <!-- Kitty Trump Selection Buttons -->
-            <Button Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
+            <Button ToolTip="Click to pass to the next player" Content="Pass" Command="{Binding PassCommand}" Visibility="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,274,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player2Turn}" HorizontalAlignment="Left" Margin="152,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 3 Grid -->
             <Grid Width="500" Height="145" Margin="265,0,265,475" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player3Hand.Cards}">
+                <ItemsControl ToolTipService.ToolTip="The cards in player 3's hand." Margin="5,0,5,10" ItemsSource="{Binding Player3Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
@@ -119,7 +121,7 @@
             <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player3Turn}" HorizontalAlignment="Left" Margin="520,150,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player 4 Grid -->
             <Grid Width="500" Height="145" Margin="708,237,-178,238" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Player4Hand.Cards}">
+                <ItemsControl ToolTipService.ToolTip="The cards in player 4's hand." Margin="5,0,5,10" ItemsSource="{Binding Player4Hand.Cards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <!-- Use a Button for each card -->
@@ -149,7 +151,7 @@
             <Button Content="Order it up" Command="{Binding OrderUpCommand}" Visibility="{Binding Player4Turn}" HorizontalAlignment="Left" Margin="723,315,0,0" VerticalAlignment="Top" FontSize="24" Width="160"/>
             <!-- Player Area -->
             <Grid x:Name="playAreaGrid" Width="400" Height="145" Margin="315,238,315,238" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding PlayArea.PlayedCards}">
+                <ItemsControl ToolTipService.ToolTip="The play area where cards that have been played are displayed." Margin="5,0,5,10" ItemsSource="{Binding PlayArea.PlayedCards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Margin="5">
@@ -166,7 +168,7 @@
             </Grid>
             <!-- Kitty -->
             <Grid Width="100" Height="145" Margin="772,402,158,72" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl Margin="5,0,5,10" ItemsSource="{Binding Kitty.KittyCard}">
+                <ItemsControl ToolTipService.ToolTip="The top card of the kitty to be selected as trump." Margin="5,0,5,10" ItemsSource="{Binding Kitty.KittyCard}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Margin="5">
@@ -183,7 +185,7 @@
             </Grid>
 
             <!-- Scoreboard -->
-            <Grid Grid.Row="0" HorizontalAlignment="Right" Margin="0,-21,-104,566" Background="White" Height="75">
+            <Grid ToolTipService.ToolTip="The score board for the current game." Grid.Row="0" HorizontalAlignment="Right" Margin="0,-21,-104,566" Background="White" Height="75">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="100" />
