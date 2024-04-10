@@ -39,6 +39,8 @@ namespace Group2_COSC2200_Project.model
             Play,
             EndOfGame
         }
+
+        #region Properties
         public GameState CurrentState { get; private set; }
         public event EventHandler OnAction;
         public Player PlayerOne { get; private set; }
@@ -64,11 +66,19 @@ namespace Group2_COSC2200_Project.model
 
         public Statistics PlayerOneStats { get; set; } // For storing player stats from GameViewModel
 
+        #endregion
+
         public Game()
         {
             ChangeState(GameState.Initialize);
         }
 
+        /// <summary>
+        /// This switch will be used to trigger a change in the state of the game, it will call specific functions
+        ///     representative of classes/properties/functions that need to be manipulated called to represent that 
+        ///     given state.
+        /// </summary>
+        /// <param name="state"> a GameState enum value. </param>
         public void ChangeState(GameState state)
         {
             switch (state)
@@ -97,6 +107,9 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Represents the intital game state. Eg. As soon as a game is started, this instantiates all necessary items.
+        /// </summary>
         public void Initialize()
         {
             CurrentState = GameState.Initialize;
@@ -118,11 +131,17 @@ namespace Group2_COSC2200_Project.model
             TeamTwoScore = 9;
         }
 
+        /// <summary>
+        /// A virutal event listener to be raised on specific actions, to invoke a change in a given property.
+        /// </summary>
         protected virtual void RaiseOnAction()
         {
             OnAction?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Represents the start of the game, Eg. getting the game in a state thats ready to be interacted with after intital dealings etc.
+        /// </summary>
         public void Start()
         {
             CurrentState = GameState.Start;
@@ -132,6 +151,9 @@ namespace Group2_COSC2200_Project.model
             PlayerOneStats.TotalGames++;
         }
 
+        /// <summary>
+        /// A state which represents the first round of trump card selection, which takes place based on the kitty card.
+        /// </summary>
         public void TrumpSelectionFromKitty() 
         {
             CurrentState = GameState.TrumpSelectionFromKitty;
@@ -146,6 +168,9 @@ namespace Group2_COSC2200_Project.model
             } 
         }
 
+        /// <summary>
+        /// A state which represents the following rounds of trump card selection, which takes place !/passed up suits.
+        /// </summary>
         public void TrumpSelectionPostKitty()
         {
             CurrentState = GameState.TrumpSelectionPostKitty;
@@ -162,6 +187,11 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// An action which represents the functionality behind when the dealer swaps a card with the kitty.
+        ///     Utilizes the turnList and current state to determine dealer, and then resets turnlist.
+        ///     Also deals with AI logic for this state.
+        /// </summary>
         public void DealerKittySwap()
         {
             CurrentState = GameState.DealerKittySwap;
@@ -175,6 +205,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// An action which represents the functionality behind starting the card play state.
+        ///     Utilizes turnlist logic to select who is going first, also handles the AI logic for this state..
+        /// </summary>
         public void Play()
         {
             CurrentState = GameState.Play;
@@ -222,6 +256,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Action representative of ordering up the trump suit post 1st round kitty selection.
+        /// </summary>
+        /// <param name="trumpSuit"></param>
         public void OrderUpPostKitty(Card.Suits trumpSuit)
         {
             TrumpSuit = trumpSuit;
@@ -231,6 +269,9 @@ namespace Group2_COSC2200_Project.model
             Logging.LogTrumpSuit(TrumpSuit.ToString()); 
         }
 
+        /// <summary>
+        /// Action representative of passing up the trump suit post 1st round kitty selection.
+        /// </summary>
         public void PassPostKitty()
         {
             RaiseOnAction();
@@ -249,6 +290,12 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Action representing the swap of the kitty card with a given clicked card.
+        ///     Removes card from hand, adds to play area.
+        /// </summary>
+        /// <param name="currentPlayer"> The current player whose turn it is. </param>
+        /// <param name="card"> The card which they are selecting to switch. </param>
         public void SwapWithKitty(Player currentPlayer, Card card)
         {
             Card kittyCard = Kitty[0];
@@ -376,10 +423,16 @@ namespace Group2_COSC2200_Project.model
             return false;
         }
 
+        /// <summary>
+        /// Represents the AI decision making from the kitty selection state.
+        /// </summary>
+        /// <param name="currentPlayer"> The current player whose turn it is. </param>
         public void AIDecisionFromKitty(Player currentPlayer)
         {
+            // Increment turns taken
             TurnsTaken++;
 
+            // For each card in the current players hands, if it matches the kitty suit, increment the same suit count.
             int sameSuitCount = 0;
             foreach (Card card in currentPlayer.PlayerHand.Cards)
             {
@@ -388,6 +441,8 @@ namespace Group2_COSC2200_Project.model
                     sameSuitCount++;
                 }
             }
+
+            // if that count meets/exceeds 3, the trump suit is selected based on the kitty suit.
             if (sameSuitCount >= 3)
             {
                 TrumpSuit = Kitty[0].Suit;
@@ -397,6 +452,7 @@ namespace Group2_COSC2200_Project.model
                 Logging.LogTrumpSuit(TrumpSuit.ToString()); 
                 ChangeState(GameState.DealerKittySwap);
             }
+            // Else, the action is passed, and the turns taken is manipulated relative to the turnlist count.
             else
             {
                 RaiseOnAction();
@@ -415,6 +471,10 @@ namespace Group2_COSC2200_Project.model
             }
         }
 
+        /// <summary>
+        /// Represents the AI decision post kitty selection.
+        /// </summary>
+        /// <param name="currentPlayer"> The current player whose turn it is. </param>
         public void AIDecisionPostKitty(Player currentPlayer)
         {
             TurnsTaken++;
