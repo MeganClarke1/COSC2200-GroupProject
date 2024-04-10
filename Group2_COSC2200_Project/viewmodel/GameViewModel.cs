@@ -144,6 +144,8 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         public String _playerName;
 
+        #region Monitored Properties
+
         /// <summary>
         /// Monitoring the playername for changes.
         /// </summary>
@@ -541,6 +543,8 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        #endregion
+
         /// <summary>
         /// 
         /// </summary>
@@ -580,13 +584,18 @@ namespace Group2_COSC2200_Project.viewmodel
             if (_playerStats != null)
             {
                 _GVMplayerStats = _playerStats; // assign to GameViewModel container for that player's stats object,
+                _game.PlayerOneStats = _GVMplayerStats; // Store the GVM player stats in GameView
                 MessageBox.Show("Player Name from JSON: " + _GVMplayerStats.PlayerName);
                 PlayerName = _GVMplayerStats.PlayerName;
-                _GVMplayerStats.TotalGames++;
-                SaveStatsCommand = new SaveStatsCommand(_GVMplayerStats);
+                //_GVMplayerStats.TotalGames++;
+
+                SaveStatsCommand = new SaveStatsCommand(_game.PlayerOneStats);
             }
         }
 
+        /// <summary>
+        /// A switch to handle the changing states of the game... Will call the corresponding State function in Game class.
+        /// </summary>
         private void UpdateViewModelState()
         {
             switch (_game.CurrentState)
