@@ -70,10 +70,19 @@ namespace Group2_COSC2200_Project.viewmodel
         /// Command to execute when a game ends and the user would like to return to the menu.
         /// </summary>
         public ICommand ReturnCommand { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICommand ChangeThemeCommand { get; private set; }
 
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
+        private string _backgroundImagePath = "../assets/images/classic/playing_surface.png";
+
         /// <summary>
         /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
         /// </summary>
@@ -151,6 +160,18 @@ namespace Group2_COSC2200_Project.viewmodel
         #endregion
 
         #region Monitored Properties
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BackgroundImagePath
+        {
+            get => _backgroundImagePath;
+            set
+            {
+                _backgroundImagePath = value;
+                OnPropertyChanged(nameof(BackgroundImagePath));
+            }
+        }
 
         /// <summary>
         /// Monitoring the playername for changes.
@@ -583,6 +604,7 @@ namespace Group2_COSC2200_Project.viewmodel
             ClickCardCommand = new RelayCommand<object>(ClickCardExecute);
             OrderUpPostKittyCommand = new RelayCommand<Card.Suits>(OrderUpPostKittyExecute);
             PassPostKittyCommand = new RelayCommand<object>(PassPostKittyExecute);
+            ChangeThemeCommand = new RelayCommand<string>(ChangeThemeExecute);
 
             _game.OnAction += OnActionHandler;
 
@@ -635,11 +657,13 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
         }
 
+        private void ChangeThemeExecute(string theme)
+        {
+            CardViewModel.BaseImagePath = $"../assets/images/{theme}";
+            RefreshCards();
+            BackgroundImagePath = $"../assets/images/{theme}/playing_surface.png";
+        }
 
-        /// <summary>
-        /// Executes the command to order up from the kitty.
-        /// </summary>
-        /// <param name="parameter">The parameter passed to the command.</param>
         private void OrderUpExecute(object parameter)
         {
             _game.OrderUpFromKitty();
@@ -705,7 +729,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// CardViewModel object of the clicked card. </param>
         private void ClickCardExecute(object parameter)
         {
-            if (_game.CurrentState == Game.GameState.DealerKittySwap)
+            if (_game.CurrentState == GameState.DealerKittySwap)
             {
                 if (parameter is CardViewModel cardViewModel)
                 {
@@ -713,7 +737,7 @@ namespace Group2_COSC2200_Project.viewmodel
                     UpdateViewModelState();
                 }
             }
-            else if (_game.CurrentState == Game.GameState.Play)
+            else if (_game.CurrentState == GameState.Play)
             {
                 if (parameter is CardViewModel cardViewModel)
                 {
@@ -734,10 +758,10 @@ namespace Group2_COSC2200_Project.viewmodel
             Logging.LogStartGame(DateTime.Now); 
             Started = Visibility.Collapsed;
             HasDealer = Visibility.Visible;
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand, false);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand, false);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
 
             // Log the player hands dealt
             Logging.LogPlayerHandsDealt(_game.PlayerOne.PlayerHand, _game.PlayerTwo.PlayerHand,
@@ -793,10 +817,10 @@ namespace Group2_COSC2200_Project.viewmodel
             Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand, false);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand, false);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
             Kitty = new KittyViewModel(_game.Kitty);
         }
@@ -840,13 +864,57 @@ namespace Group2_COSC2200_Project.viewmodel
 
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
-            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
-            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
-            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
-            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
+            Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);
+            Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand, false);
+            Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand, false);
+            Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
         }
 
+        private void RefreshCards()
+        {
+            if (Player1Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player1Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Player2Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player2Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Player3Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player3Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Player4Hand?.Cards != null)
+            {
+                foreach (CardViewModel cardViewModel in Player4Hand.Cards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (PlayArea?.PlayedCards != null)
+            {
+                foreach (CardViewModel cardViewModel in PlayArea.PlayedCards)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+            if (Kitty?.KittyCard != null)
+            {
+                foreach (CardViewModel cardViewModel in Kitty.KittyCard)
+                {
+                    cardViewModel.RefreshImagePath();
+                }
+            }
+        }
         #endregion
-
     }
 }

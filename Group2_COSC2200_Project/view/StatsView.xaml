@@ -17,7 +17,7 @@
              d:DesignHeight="720" d:DesignWidth="1280">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="../assets/images/classic/playing_surface.jpg"/>
+            <ImageBrush ImageSource="../assets/images/classic/playing_surface.png"/>
         </Grid.Background>
 
         <!-- Title -->
