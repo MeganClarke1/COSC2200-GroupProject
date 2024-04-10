@@ -16,13 +16,7 @@
 ///   </description>
 /// </file>
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Group2_COSC2200_Project.model
 {

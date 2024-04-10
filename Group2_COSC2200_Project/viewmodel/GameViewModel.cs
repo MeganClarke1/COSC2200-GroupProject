@@ -31,57 +31,65 @@ namespace Group2_COSC2200_Project.viewmodel
     /// </summary>
     public class GameViewModel : ViewModelBase
     {
-
+        #region Game Object
         /// <summary>
         /// Constructs a new game object automatically.
         /// </summary>
         private Game _game = new();
+        #endregion
 
         #region ICommands
         /// <summary>
         /// Command to order up a kitty suit.
         /// </summary>
         public ICommand OrderUpCommand { get; private set; }
+
         /// <summary>
         /// Command to pass on the kitty suit.
         /// </summary>
         public ICommand PassCommand { get; private set; }
+
         /// <summary>
-        /// Command to order a trump suit up after the initial ktty round.
+        /// Command to order a trump suit up after the initial kitty round.
         /// </summary>
         public ICommand OrderUpPostKittyCommand {  get; private set; }
+
         /// <summary>
         /// Command to pass a trump suit up after the initial kitty round.
         /// </summary>
         public ICommand PassPostKittyCommand { get; private set; }
+
         /// <summary>
         /// Command to start the game. (deal cards, create teams, etc)
         /// </summary>
         public ICommand StartCommand { get; private set; }
+
         /// <summary>
         /// Command to be executed when a player clicks a card to play
         /// </summary>
         public ICommand ClickCardCommand { get; private set; }
+
         /// <summary>
         /// Command to execute when save stats button is clicked.
         /// </summary>
         public ICommand SaveStatsCommand { get; private set; }
+
         /// <summary>
         /// Command to execute when a game ends and the user would like to return to the menu.
         /// </summary>
         public ICommand ReturnCommand { get; private set; }
+
         /// <summary>
-        /// 
+        /// Command to change the theme of the game.
         /// </summary>
         public ICommand ChangeThemeCommand { get; private set; }
-
         #endregion
 
         #region Properties
         /// <summary>
-        /// 
+        /// The path to the background image for the game.
         /// </summary>
-        private string _backgroundImagePath = "../assets/images/classic/playing_surface.png";
+        private string _backgroundImagePath = $"../assets/images/{Theme.GetTheme()}/playing_surface.png";
 
         /// <summary>
         /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
@@ -122,7 +130,6 @@ namespace Group2_COSC2200_Project.viewmodel
         private int _teamTwoTricks;
         private int _teamOneScore;
         private int _teamTwoScore;
-        private Scoreboard _scoreBoard;
 
         /// <summary>
         /// Setting initial visibiltiy of the started property to visible.
@@ -130,7 +137,7 @@ namespace Group2_COSC2200_Project.viewmodel
         private Visibility _started = Visibility.Visible;
 
         /// <summary>
-        /// 
+        /// Setting the initial visibility for the "Back to menu" button.
         /// </summary>
         private Visibility _ended = Visibility.Collapsed;
 
@@ -161,7 +168,7 @@ namespace Group2_COSC2200_Project.viewmodel
 
         #region Monitored Properties
         /// <summary>
-        /// 
+        /// Monitoring BackgroundImagePath for changes
         /// </summary>
         public string BackgroundImagePath
         {
@@ -190,23 +197,39 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// Montioring the scoreboard for changes.
+        /// Montioring teamOne for changes.
         /// </summary>
-        public Scoreboard Scoreboard
+        public Team TeamOne
         {
-            get => _scoreBoard;
+            get => _teamOne;
             set
             {
-                if (_scoreBoard != value)
+                if (_teamOne != value)
                 {
-                    _scoreBoard = value;
-                    OnPropertyChanged(nameof(Scoreboard));
+                    _teamOne = value;
+                    OnPropertyChanged(nameof(TeamOne));
                 }
             }
         }
 
         /// <summary>
-        /// Montioring team one tricks for changes.
+        /// Montioring TeamTwo for changes.
+        /// </summary>
+        public Team TeamTwo
+        {
+            get => _teamTwo;
+            set
+            {
+                if (_teamTwo != value)
+                {
+                    _teamTwo = value;
+                    OnPropertyChanged(nameof(TeamTwo));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Montioring TeamOne tricks for changes.
         /// </summary>
         public int TeamOneTricks
         {
@@ -265,38 +288,6 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     _teamTwoScore = value;
                     OnPropertyChanged(nameof(TeamTwoScore));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Montioring teamOn for changes.
-        /// </summary>
-        public Team TeamOne
-        {
-            get => _teamOne;
-            set
-            {
-                if (_teamOne != value)
-                {
-                    _teamOne = value;
-                    OnPropertyChanged(nameof(TeamOne));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Montioring teamTwo for changes.
-        /// </summary>
-        public Team TeamTwo
-        {
-            get => _teamTwo;
-            set
-            {
-                if (_teamTwo != value)
-                {
-                    _teamTwo = value;
-                    OnPropertyChanged(nameof(TeamTwo));
                 }
             }
         }
@@ -475,7 +466,7 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Monitoring Ended for changes.
         /// </summary>
         public Visibility Ended
         {
@@ -523,7 +514,7 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Monitoring HasDealer For changes.
         /// </summary>
         public Visibility HasDealer
         {
@@ -585,18 +576,17 @@ namespace Group2_COSC2200_Project.viewmodel
                 }
             }
         }
-
         #endregion
 
+        #region Constructor
         /// <summary>
         /// The constructor for the GameViewModel.
-        ///     Thhis constructor serves to instantitate all needed data/commands for beginning a game of Euchre.
-        ///     This includes button clicks, Updating the ViewModel, and opening a log file.
+        /// This constructor serves to instantitate all needed data/commands for beginning a game of Euchre.
+        /// This includes button clicks, Updating the ViewModel, and opening a log file.
         /// </summary>
-        /// <param name="_playerStats"> Accepts plaer stats from the menuView and passes that to its own view. </param>
+        /// <param name="_playerStats"> Accepts player stats from the menuView and passes that to its own view. </param>
         public GameViewModel(Statistics _playerStats, NavigationStore _navigationStore) // ***** added parameter on constructor
         {
-            //logWriter = new StreamWriter("../../game_log.txt", true); // Open the log file for appending
             UpdateViewModelState();
             OrderUpCommand = new RelayCommand<object>(OrderUpExecute);
             PassCommand = new RelayCommand<object>(PassExecute);
@@ -618,6 +608,7 @@ namespace Group2_COSC2200_Project.viewmodel
                 ReturnCommand = new ReturnPostGameCommand(_navigationStore, _game.PlayerOneStats);
             }
         }
+        #endregion
 
         /// <summary>
         /// A switch to handle the changing states of the game... Will call the corresponding State function in Game class.
@@ -648,7 +639,6 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         #region Command Executions
-
         /// <summary>
         /// Event handler for actions triggered during the game.
         /// </summary>
@@ -659,6 +649,7 @@ namespace Group2_COSC2200_Project.viewmodel
 
         private void ChangeThemeExecute(string theme)
         {
+            Theme.SetTheme(theme);
             CardViewModel.BaseImagePath = $"../assets/images/{theme}";
             RefreshCards();
             BackgroundImagePath = $"../assets/images/{theme}/playing_surface.png";
@@ -747,8 +738,8 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
         #endregion
-        #region methods
 
+        #region methods
         /// <summary>
         /// Represents the start of the game, called by our state switch
         /// </summary>
@@ -769,9 +760,8 @@ namespace Group2_COSC2200_Project.viewmodel
 
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
-            TeamOne = new Team(_game.Team1.TeamId, _game.Team1.TeamPlayers);
-            TeamTwo = new Team(_game.Team2.TeamId, _game.Team2.TeamPlayers);
-            Scoreboard = new Scoreboard();
+            TeamOne = new Team(_game.Team1.TeamId, _game.Team1.TeamPlayers, _game.Team1.Name);
+            TeamTwo = new Team(_game.Team2.TeamId, _game.Team2.TeamPlayers, _game.Team2.Name);
             Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
         }
 
@@ -825,21 +815,28 @@ namespace Group2_COSC2200_Project.viewmodel
             Kitty = new KittyViewModel(_game.Kitty);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void EndOfGame()
         {
             Ended = Visibility.Visible;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cardViewModel"></param>
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
-
-            // Log the human card played
-            //Logging.LogPlayedCard(_game.CurrentPlayer, cardViewModel.Card);
-
             RefreshUI();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cardViewModel"></param>
         private void SwapWithKitty(CardViewModel cardViewModel)
         {
             _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
@@ -870,6 +867,9 @@ namespace Group2_COSC2200_Project.viewmodel
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand, false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void RefreshCards()
         {
             if (Player1Hand?.Cards != null)

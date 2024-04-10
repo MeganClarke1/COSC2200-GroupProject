@@ -16,12 +16,6 @@
 ///   </description>
 /// </file>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Group2_COSC2200_Project.model
 {
     /// <summary>
@@ -46,6 +40,11 @@ namespace Group2_COSC2200_Project.model
         public TeamID TeamId{ get; private set; }
 
         /// <summary>
+        /// The name of the team.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
         /// A list of player objects representing a team (2 players).
         /// </summary>
         public List<Player> TeamPlayers { get; private set; }
@@ -58,11 +57,12 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// Constructor for a team object.
         /// </summary>
-        public Team(TeamID _teamId, List<Player> _teamPlayers)
+        public Team(TeamID _teamId, List<Player> _teamPlayers, string _name)
         {
             TeamId = _teamId;
             TeamPlayers = _teamPlayers;
             MakerStatus = false;
+            Name = _name;
         }
 
         /// <summary>
