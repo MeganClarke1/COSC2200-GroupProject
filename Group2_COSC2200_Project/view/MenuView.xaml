@@ -38,7 +38,13 @@
             </Grid.RowDefinitions>
             <Button ToolTipService.ToolTip="Click to start a new game!" Content="Play Game" Command="{Binding ContinueCommand}" HorizontalAlignment="Center" FontSize="24" Width="160"/>
             <Button ToolTipService.ToolTip="Click to see the statistics page." Content="Stats" Command="{Binding StatsViewCommand}" HorizontalAlignment="Center" FontSize="24" Width="160" Margin="0,10,0,0" Grid.Row="1"/>
-           
         </Grid>
+        <!-- Menu Bar Section -->
+        <Menu Margin="0,0,0,705">
+            <MenuItem Header="Help">
+                <MenuItem Header="Rules" Click="RulesMenuItem_Click"/>
+                <MenuItem Header="User Guide" Click="UserGuideItem_Click"/>
+            </MenuItem>
+        </Menu>
     </Grid>
 </UserControl>

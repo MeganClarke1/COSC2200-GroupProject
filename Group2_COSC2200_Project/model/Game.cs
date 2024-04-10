@@ -234,7 +234,26 @@ namespace Group2_COSC2200_Project.model
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!");
             // log trump suit selected
-            Logging.LogTrumpSuit(TrumpSuit.ToString()); 
+            Logging.LogTrumpSuit(TrumpSuit.ToString());
+
+            // Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+            setMakerStatus();
+        }
+
+        /// <summary>
+        /// Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+        /// </summary>
+        public void setMakerStatus()
+        {
+            // Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+            if (Team1.TeamPlayers.Any(player => player.PlayerID == CurrentPlayer.PlayerID))
+            {
+                Team1.MakerStatus = true;
+            }
+            else if (Team2.TeamPlayers.Any(player => player.PlayerID == CurrentPlayer.PlayerID))
+            {
+                Team1.MakerStatus = true;
+            }
         }
 
         // These handle what happens when ANY user clicks pass
@@ -269,7 +288,9 @@ namespace Group2_COSC2200_Project.model
             RaiseOnAction();
             MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
             // log trump suit selected
-            Logging.LogTrumpSuit(TrumpSuit.ToString()); 
+            Logging.LogTrumpSuit(TrumpSuit.ToString());
+            // Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+            setMakerStatus();
         }
 
         /// <summary>
@@ -452,7 +473,9 @@ namespace Group2_COSC2200_Project.model
                 RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has ordered it up!.");
                 // log trump suit selected
-                Logging.LogTrumpSuit(TrumpSuit.ToString()); 
+                Logging.LogTrumpSuit(TrumpSuit.ToString());
+                // Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+                setMakerStatus();
                 ChangeState(GameState.DealerKittySwap);
             }
             // Else, the action is passed, and the turns taken is manipulated relative to the turnlist count.
@@ -509,6 +532,8 @@ namespace Group2_COSC2200_Project.model
                         MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
                         // log trump suit selected
                         Logging.LogTrumpSuit(TrumpSuit.ToString());
+                        // Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+                        setMakerStatus();
                         ChangeState(GameState.Play);
                         return;
                     }
@@ -540,6 +565,8 @@ namespace Group2_COSC2200_Project.model
                 TrumpSuit = NonKittySuits[highestCounterIndex];
                 RaiseOnAction();
                 MessageBox.Show(CurrentPlayer.PlayerName + " has chosen " + TrumpSuit + ".");
+                // Check if any players on team one have the current player's id and set their maker status to true if they picked the trump
+                setMakerStatus();
                 // log trump suit selected
                 Logging.LogTrumpSuit(TrumpSuit.ToString());
                 ChangeState(GameState.Play);
@@ -747,31 +774,27 @@ namespace Group2_COSC2200_Project.model
             {
                 RoundWinner = Team.TeamID.TeamOne.ToString();
 
-                /*if (TeamOne.MakerStatus == true)
+                if (Team1.MakerStatus == true)
                 {
                     TeamOneScore++;
                 }
                 else
                 {
                     TeamOneScore = TeamOneScore + 3;
-                }*/
-
-                TeamOneScore++;
+                }
             }
             else if (TeamTwoTricks >= 3)
             {
                 RoundWinner = Team.TeamID.TeamTwo.ToString();
 
-                /*if (TeamTwo.MakerStatus == true)
+                if (Team2.MakerStatus == true)
                 {
                     TeamTwoScore++;
                 }
                 else
                 {
                     TeamTwoScore = TeamTwoScore + 3;
-                }*/
-
-                TeamTwoScore++;
+                }
             }
             RaiseOnAction();
 
@@ -792,6 +815,11 @@ namespace Group2_COSC2200_Project.model
                     {
                         PlayerOneStats.CurrentStreak++;
                     }
+                    // else, their last game was a loss, the streak should be reset.
+                    else
+                    {
+                        PlayerOneStats.CurrentStreak = 0;
+                    }
 
                     // Update their previous game result
                     PlayerOneStats.previousGameResult = Statistics.LastGameResult.Win; 
@@ -805,6 +833,10 @@ namespace Group2_COSC2200_Project.model
                     if (PlayerOneStats.previousGameResult == Statistics.LastGameResult.Loss)
                     {
                         PlayerOneStats.CurrentStreak++;
+                    }
+                    else
+                    {
+                        PlayerOneStats.CurrentStreak = 0;
                     }
 
                     PlayerOneStats.previousGameResult = Statistics.LastGameResult.Loss;
@@ -884,6 +916,8 @@ namespace Group2_COSC2200_Project.model
             PlayerFour.PlayerHand.Cards.Clear();
             Kitty.Clear();
             PlayArea.Clear();
+            Team1.MakerStatus = false;
+            Team2.MakerStatus = false;
         }
 
         #endregion

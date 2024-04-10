@@ -44,13 +44,43 @@ namespace Group2_COSC2200_Project.view
             InitializeComponent();
         }
 
-        /*private void NewGame_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// The on click event of the rules menu item from the game View. Will present a messagebox with the rules.
+        /// </summary>
+        /// <param name="sender"> The Sending object. </param>
+        /// <param name="e"> The routed event object. </param>
+        private void RulesMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            *//*if (DataContext is MainViewModel mainViewModel)
+            // Show a message box with the rules
+            MessageBox.Show(GameView.rulesString, "Game Rules", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// On click event for the user guide.
+        /// </summary>
+        /// <param name="sender"> The Sending object. </param>
+        /// <param name="e"> The routed event object. </param>
+        private void UserGuideItem_Click(object sender, RoutedEventArgs e)
+        {
+            string pdfPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EuchreUserGuideV1.0.pdf");
+            // Create a new ProcessStartInfo
+            var psi = new System.Diagnostics.ProcessStartInfo()
             {
-                mainViewModel.SwitchToGameViewModel();
-            }*//*
-        }*/
+                FileName = pdfPath,
+                UseShellExecute = true // Important to set this to true
+            };
+
+            // Start the process with the ProcessStartInfo
+            try
+            {
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, for example, log them or show to the user
+                MessageBox.Show($"Failed to open the PDF: {ex.Message}");
+            }
+        }
     }
 }
 
