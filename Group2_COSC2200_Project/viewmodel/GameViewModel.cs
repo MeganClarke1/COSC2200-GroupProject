@@ -19,9 +19,6 @@
 using GalaSoft.MvvmLight.Command;
 using Group2_COSC2200_Project.commands;
 using Group2_COSC2200_Project.model;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using static Group2_COSC2200_Project.model.Game;
@@ -64,9 +61,13 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         public ICommand ClickCardCommand { get; private set; }
         /// <summary>
-        /// Command to exectute when save stats button is clicked.
+        /// Command to execute when save stats button is clicked.
         /// </summary>
         public ICommand SaveStatsCommand { get; private set; }
+        /// <summary>
+        /// Command to execute when a game ends and the user would like to return to the menu.
+        /// </summary>
+        public ICommand EndCommand { get; private set; }
 
         /// <summary>
         /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
@@ -82,9 +83,6 @@ namespace Group2_COSC2200_Project.viewmodel
         /// Setting visibility of the player turns to collapsed so it can't be seen.
         /// </summary>
         private Visibility _player1Turn = Visibility.Collapsed;
-        private Visibility _player2Turn = Visibility.Collapsed;
-        private Visibility _player3Turn = Visibility.Collapsed;
-        private Visibility _player4Turn = Visibility.Collapsed;
 
         /// <summary>
         /// Setting the visibility for Turns post initial kitty round to also be unseen.
@@ -95,9 +93,6 @@ namespace Group2_COSC2200_Project.viewmodel
         /// Tracking boolean status for is players can click their cards based on if it's their turn.
         /// </summary>
         private bool _player1CanClickCard;
-        private bool _player2CanClickCard;
-        private bool _player3CanClickCard;
-        private bool _player4CanClickCard;
 
         /// <summary>
         /// Initializing a list of Suits that are available for selection as the trump suit after the kitty round.
@@ -121,16 +116,23 @@ namespace Group2_COSC2200_Project.viewmodel
         private Visibility _started = Visibility.Visible;
 
         /// <summary>
+        /// 
+        /// </summary>
+        private Visibility _ended = Visibility.Collapsed;
+
+        /// <summary>
         /// Hiding these properties to create invisible tracks not seen by the user.
         /// </summary>
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
         private Visibility _hasLeadSuit = Visibility.Collapsed;
+        private Visibility _hasDealer = Visibility.Collapsed;
 
         /// <summary>
         /// Intializing empty Strings to store the trump suit and lead suit for comparison during play.
         /// </summary>
         private String _trumpSuit = "";
         private String _leadSuit = "";
+        private String _dealer = "";
 
         /// <summary>
         /// A container for storage of the player's statistics as passed to this view by the MenuView.
@@ -385,54 +387,6 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// Montioring Player turn for changes.
-        /// </summary>
-        public Visibility Player2Turn
-        {
-            get { return _player2Turn; }
-            private set
-            {
-                if (_player2Turn != value)
-                {
-                    _player2Turn = value;
-                    OnPropertyChanged(nameof(Player2Turn));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Montioring Player turn for changes.
-        /// </summary>
-        public Visibility Player3Turn
-        {
-            get { return _player3Turn; }
-            private set
-            {
-                if (_player3Turn != value)
-                {
-                    _player3Turn = value;
-                    OnPropertyChanged(nameof(Player3Turn));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Montioring Player turn for changes.
-        /// </summary>
-        public Visibility Player4Turn
-        {
-            get { return _player4Turn; }
-            private set
-            {
-                if (_player4Turn != value)
-                {
-                    _player4Turn = value;
-                    OnPropertyChanged(nameof(Player4Turn));
-                }
-            }
-        }
-
-        /// <summary>
         /// Montioring Player turn post kitty round for changes.
         /// </summary>
         public Visibility Player1PostKittyTurn
@@ -465,54 +419,6 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// Montioring Player ability to click card for changes.
-        /// </summary>
-        public bool Player2CanClickCard
-        {
-            get => _player2CanClickCard;
-            set
-            {
-                if (_player2CanClickCard != value)
-                {
-                    _player2CanClickCard = value;
-                    OnPropertyChanged(nameof(Player2CanClickCard));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Montioring Player ability to click card for changes.
-        /// </summary>
-        public bool Player3CanClickCard
-        {
-            get => _player3CanClickCard;
-            set
-            {
-                if (_player3CanClickCard != value)
-                {
-                    _player3CanClickCard = value;
-                    OnPropertyChanged(nameof(Player3CanClickCard));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Montioring Player ability to click card for changes.
-        /// </summary>
-        public bool Player4CanClickCard
-        {
-            get => _player4CanClickCard;
-            set
-            {
-                if (_player4CanClickCard != value)
-                {
-                    _player4CanClickCard = value;
-                    OnPropertyChanged(nameof(Player4CanClickCard));
-                }
-            }
-        }
-
-        /// <summary>
         /// Montioring list of non kitty suits for changes.
         /// </summary>
         public List<Card.Suits> NonKittySuits
@@ -537,6 +443,22 @@ namespace Group2_COSC2200_Project.viewmodel
                 {
                     _started = value;
                     OnPropertyChanged(nameof(Started));
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Visibility Ended
+        {
+            get => _ended;
+            set
+            {
+                if (_ended != value)
+                {
+                    _ended = value;
+                    OnPropertyChanged(nameof(Ended));
                 }
             }
         }
@@ -574,6 +496,22 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Visibility HasDealer
+        {
+            get => _hasDealer;
+            set
+            {
+                if (_hasDealer != value)
+                {
+                    _hasDealer = value;
+                    OnPropertyChanged(nameof(HasDealer));
+                }
+            }
+        }
+
+        /// <summary>
         /// Montioring Trump suit for changes.
         /// </summary>
         public String TrumpSuit
@@ -606,6 +544,22 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String Dealer
+        {
+            get => _dealer;
+            set
+            {
+                if (_dealer != value)
+                {
+                    _dealer = "Current Dealer: " + value;
+                    OnPropertyChanged(nameof(Dealer));
+                }
+            }
+        }
 
         /// <summary>
         /// The constructor for the GameViewModel.
@@ -655,14 +609,14 @@ namespace Group2_COSC2200_Project.viewmodel
                 case GameState.Play:
                     Play();
                     break;
-                case GameState.EndOfGame:
-                    //EndOfGame();
-                    break;
                 case GameState.TrumpSelectionPostKitty:
                     TrumpSelectionPostKitty();
                     break;
                 case GameState.DealerKittySwap:
                     DealerKittySwap();
+                    break;
+                case GameState.EndOfGame:
+                    EndOfGame();
                     break;
             }
         }
@@ -746,6 +700,7 @@ namespace Group2_COSC2200_Project.viewmodel
             // log start time
             Logging.LogStartGame(DateTime.Now); 
             Started = Visibility.Collapsed;
+            HasDealer = Visibility.Visible;
             Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
             Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
@@ -760,6 +715,7 @@ namespace Group2_COSC2200_Project.viewmodel
             TeamOne = new Team(_game.Team1.TeamId, _game.Team1.TeamPlayers);
             TeamTwo = new Team(_game.Team2.TeamId, _game.Team2.TeamPlayers);
             Scoreboard = new Scoreboard();
+            Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
         }
 
         /// <summary>
@@ -769,9 +725,6 @@ namespace Group2_COSC2200_Project.viewmodel
         private void TrumpSelectionFromKitty()
         {
             Player1Turn = _game.CurrentPlayer == _game.PlayerOne ? Visibility.Visible : Visibility.Collapsed;
-            Player2Turn = _game.CurrentPlayer == _game.PlayerTwo ? Visibility.Visible : Visibility.Collapsed;
-            Player3Turn = _game.CurrentPlayer == _game.PlayerThree ? Visibility.Visible : Visibility.Collapsed;
-            Player4Turn = _game.CurrentPlayer == _game.PlayerFour ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
@@ -782,30 +735,18 @@ namespace Group2_COSC2200_Project.viewmodel
             NonKittySuits = _game.NonKittySuits;
             Player1PostKittyTurn = Visibility.Visible;
             Player1Turn = Visibility.Collapsed;
-            Player2Turn = Visibility.Collapsed;
-            Player3Turn = Visibility.Collapsed;
-            Player4Turn = Visibility.Collapsed;
             Kitty = new KittyViewModel(_game.Kitty);
         }
 
         private void DealerKittySwap()
         {
             Player1Turn = Visibility.Collapsed;
-            Player2Turn = Visibility.Collapsed;
-            Player3Turn = Visibility.Collapsed;
-            Player4Turn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
-            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
-            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
-            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
         }
 
         private void Play()
         {
             Player1Turn = Visibility.Collapsed;
-            Player2Turn = Visibility.Collapsed;
-            Player3Turn = Visibility.Collapsed;
-            Player4Turn = Visibility.Collapsed;
             HasTrumpSuit = Visibility.Visible;
             if (_game.TurnsTaken == 0)
             {
@@ -813,17 +754,20 @@ namespace Group2_COSC2200_Project.viewmodel
             }
             TrumpSuit = _game.TrumpSuit.ToString();
             LeadSuit = _game.LeadSuit.ToString();
+            Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
             Player1PostKittyTurn = Visibility.Collapsed;
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
-            Player2CanClickCard = _game.CurrentPlayer == _game.PlayerTwo;
-            Player3CanClickCard = _game.CurrentPlayer == _game.PlayerThree;
-            Player4CanClickCard = _game.CurrentPlayer == _game.PlayerFour;
             Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
             Player2Hand = new HandViewModel(_game.PlayerTwo.PlayerHand);
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
             Kitty = new KittyViewModel(_game.Kitty);
+        }
+
+        private void EndOfGame()
+        {
+            Ended = Visibility.Visible;
         }
 
         private void PlayCard(CardViewModel cardViewModel)
@@ -851,6 +795,10 @@ namespace Group2_COSC2200_Project.viewmodel
             TeamOneScore = _game.TeamOneScore;
             TeamTwoScore = _game.TeamTwoScore;
 
+            TrumpSuit = _game.TrumpSuit.ToString();
+            LeadSuit = _game.LeadSuit.ToString();
+            Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
+
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
             Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand);
@@ -858,5 +806,6 @@ namespace Group2_COSC2200_Project.viewmodel
             Player3Hand = new HandViewModel(_game.PlayerThree.PlayerHand);
             Player4Hand = new HandViewModel(_game.PlayerFour.PlayerHand);
         }
+
     }
 }
