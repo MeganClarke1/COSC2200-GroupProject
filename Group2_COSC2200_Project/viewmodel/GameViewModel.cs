@@ -37,6 +37,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         private Game _game = new();
 
+        #region ICommands
         /// <summary>
         /// Command to order up a kitty suit.
         /// </summary>
@@ -74,6 +75,9 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         public ICommand ChangeThemeCommand { get; private set; }
 
+        #endregion
+
+        #region Properties
         /// <summary>
         /// 
         /// </summary>
@@ -153,6 +157,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// A public property for setting via the player's statistics to dyanmically update player one's name on the view.
         /// </summary>
         public String _playerName;
+        #endregion
 
         #region Monitored Properties
         /// <summary>
@@ -566,7 +571,7 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Monitoring the dealer property for changes.
         /// </summary>
         public String Dealer
         {
@@ -642,6 +647,11 @@ namespace Group2_COSC2200_Project.viewmodel
             }
         }
 
+        #region Command Executions
+
+        /// <summary>
+        /// Event handler for actions triggered during the game.
+        /// </summary>
         private void OnActionHandler(object sender, EventArgs e)
         {
             UpdateViewModelState();
@@ -662,12 +672,21 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
         }
 
+
+        /// <summary>
+        /// Executes the command to pass from the kitty.
+        /// </summary>
+        /// <param name="parameter">The parameter passed to the command.</param>
         private void PassExecute(object parameter)
         {
             _game.PassFromKitty();
             UpdateViewModelState();
         }
 
+        /// <summary>
+        /// Executes the command to start the game.
+        /// </summary>
+        /// <param name="parameter">The parameter passed to the command.</param>
         private void StartExecute(object parameter)
         {
             _game.Start();
@@ -676,6 +695,10 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
         }
 
+        /// <summary>
+        /// Executes the command to order up after viewing the kitty.
+        /// </summary>
+        /// <param name="trumpSuit">The trump suit selected.</param>
         private void OrderUpPostKittyExecute(Card.Suits trumpSuit)
         {
             _game.OrderUpPostKitty(trumpSuit);
@@ -684,6 +707,10 @@ namespace Group2_COSC2200_Project.viewmodel
             UpdateViewModelState();
         }
 
+        /// <summary>
+        /// Executes the command to pass after viewing the kitty.
+        /// </summary>
+        /// <param name="parameter">The parameter passed to the command.</param>
         private void PassPostKittyExecute(object parameter)
         {
             _game.PassPostKitty();
@@ -719,6 +746,8 @@ namespace Group2_COSC2200_Project.viewmodel
                 }
             }
         }
+        #endregion
+        #region methods
 
         /// <summary>
         /// Represents the start of the game, called by our state switch
@@ -772,6 +801,9 @@ namespace Group2_COSC2200_Project.viewmodel
             Player1CanClickCard = _game.CurrentPlayer == _game.PlayerOne;
         }
 
+        /// <summary>
+        /// Prepares the UI for the current player's turn and updates game elements accordingly.
+        /// </summary>
         private void Play()
         {
             Player1Turn = Visibility.Collapsed;
@@ -814,6 +846,9 @@ namespace Group2_COSC2200_Project.viewmodel
             RefreshUI();
         }
 
+        /// <summary>
+        /// Refreshes the user interface to reflect the current state of the game.
+        /// </summary>
         private void RefreshUI()
         {
             TeamOne = _game.Team1;
