@@ -163,8 +163,8 @@ namespace Group2_COSC2200_Project.model
             TurnsTaken = 0;
             CurrentPlayer = TurnList[0];
             RaiseOnAction();
-            MessageBox.Show("The Dealer is " + TurnList[3].PlayerName + " and the current top kitty suit is "
-                + Kitty[0].Suit + ". " + CurrentPlayer.PlayerName + " is up.");
+            MessageBox.Show("The Dealer is " + TurnList[3].PlayerName + " \n\rThe current top kitty suit is "
+                + Kitty[0].Suit + ". \n\r" + CurrentPlayer.PlayerName + " is up!");
             if (CurrentPlayer.IsAI)
             {
                 AIDecisionFromKitty(CurrentPlayer);
@@ -201,7 +201,7 @@ namespace Group2_COSC2200_Project.model
             TurnList = GameFunctionality.RotateToDealer(TurnList);
             CurrentPlayer = TurnList[0];
             RaiseOnAction();
-            MessageBox.Show(CurrentPlayer.PlayerName +  "can swap one of their cards with the top kitty card.");
+            MessageBox.Show(CurrentPlayer.PlayerName +  " can swap one of their cards with the top kitty card.");
             if (CurrentPlayer.IsAI)
             {
                 AISwapWithKitty(CurrentPlayer);
@@ -770,6 +770,7 @@ namespace Group2_COSC2200_Project.model
         {
             string RoundWinner = "";
 
+            // If team one won the round, then check if they were the maker's, and increment the points accordingly.
             if (TeamOneTricks >= 3)
             {
                 RoundWinner = Team.TeamID.TeamOne.ToString();
@@ -783,6 +784,8 @@ namespace Group2_COSC2200_Project.model
                     TeamOneScore = TeamOneScore + 3;
                 }
             }
+
+            // Do the same for team two.
             else if (TeamTwoTricks >= 3)
             {
                 RoundWinner = Team.TeamID.TeamTwo.ToString();
@@ -798,7 +801,7 @@ namespace Group2_COSC2200_Project.model
             }
             RaiseOnAction();
 
-            MessageBox.Show("Round Winner: " + RoundWinner + " Next Round will Begin when you click ok!");
+            MessageBox.Show("Round Winner: " + RoundWinner + " \n\rNext Round will Begin when you click ok!");
 
             // Logging the winning team of the round.
             Logging.LogRoundWinner(RoundWinner);
@@ -859,16 +862,18 @@ namespace Group2_COSC2200_Project.model
         {
             if (TeamOneScore >= 10)
             {
-                MessageBox.Show("Team 1 has won the game! " + PlayerOne.PlayerName + " and " + PlayerThree.PlayerName + " are the winners!");
+                MessageBox.Show("Team 1 has won the game! \n\r" + PlayerOne.PlayerName + " and " + PlayerThree.PlayerName + " are the winners!");
             }
             else if (TeamTwoScore >= 10)
             {
-                MessageBox.Show("Team 2 has won the game! " + PlayerTwo.PlayerName + " and " + PlayerFour.PlayerName + " are the winners!");
+                MessageBox.Show("Team 2 has won the game! \n\r" + PlayerTwo.PlayerName + " and " + PlayerFour.PlayerName + " are the winners!");
             }
             ChangeState(GameState.EndOfGame);
         }
 
-        // Creates a new deck (effectively shuffling the cards back into the deck), then performs the same functionality as start game.
+        /// <summary>
+        /// Creates a new deck (effectively shuffling the cards back into the deck), then performs the same functionality as start game.
+        /// </summary>
         public void NewRound()
         {
             PlayedCardsCounter = 0;
