@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Group2_COSC2200_Project.view
 {
@@ -118,8 +118,24 @@ namespace Group2_COSC2200_Project.view
         /// <param name="e"> The routed event object. </param>
         private void UserGuideItem_Click(object sender, RoutedEventArgs e)
         {
-            // Show a message box with the rules
-            MessageBox.Show("Placeholder", "User Guide", MessageBoxButton.OK, MessageBoxImage.Information);
+            string pdfPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EuchreUserGuideV1.0.pdf");
+            // Create a new ProcessStartInfo
+            var psi = new System.Diagnostics.ProcessStartInfo()
+            {
+                FileName = pdfPath,
+                UseShellExecute = true // Important to set this to true
+            };
+
+            // Start the process with the ProcessStartInfo
+            try
+            {
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, for example, log them or show to the user
+                MessageBox.Show($"Failed to open the PDF: {ex.Message}");
+            }
         }
     }
 }
