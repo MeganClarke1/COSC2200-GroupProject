@@ -112,18 +112,20 @@ namespace Group2_COSC2200_Project.view
         }
 
         /// <summary>
-        /// On click event for the user guide.
+        /// On click of the User guide option in the help dropdown. This will open a pdf viewer on the user's
+        /// computer to display the user guide PDF. This will allow players to view the document while they
+        /// play the game.
         /// </summary>
         /// <param name="sender"> The Sending object. </param>
         /// <param name="e"> The routed event object. </param>
         private void UserGuideItem_Click(object sender, RoutedEventArgs e)
         {
             string pdfPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EuchreUserGuideV1.0.pdf");
-            // Create a new ProcessStartInfo
+            // Create a new ProcessStartInfo to force the system to open a PDF viewer
             var psi = new System.Diagnostics.ProcessStartInfo()
             {
                 FileName = pdfPath,
-                UseShellExecute = true // Important to set this to true
+                UseShellExecute = true
             };
 
             // Start the process with the ProcessStartInfo
@@ -133,8 +135,8 @@ namespace Group2_COSC2200_Project.view
             }
             catch (Exception ex)
             {
-                // Handle exceptions, for example, log them or show to the user
-                MessageBox.Show($"Failed to open the PDF: {ex.Message}");
+                // Show an error if the action fails
+                MessageBox.Show($"Sorry, the User Guide is currently not available.");
             }
         }
     }
