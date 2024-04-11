@@ -26,7 +26,7 @@ namespace Group2_COSC2200_Project.commands
     /// <summary>
     /// For returning to the MenuView with the back button from stats.
     /// </summary>
-    public class ReturnPostGameCommand : CommandBase
+    public class ReturnFromMenuBarGameCommand : CommandBase
     {
         /// <summary>
         /// The navigation store (current View model) to be altered with the desired new ViewModel.
@@ -38,7 +38,7 @@ namespace Group2_COSC2200_Project.commands
         /// The constructor for the back Command.
         /// </summary>
         /// <param name="navigationStore"> The desired ViewModel to navigate to. </param>
-        public ReturnPostGameCommand(NavigationStore navigationStore, Statistics PlayerStats)
+        public ReturnFromMenuBarGameCommand(NavigationStore navigationStore, Statistics PlayerStats)
         {
             _navigationStore = navigationStore;
             _playerStats = PlayerStats;
@@ -51,22 +51,13 @@ namespace Group2_COSC2200_Project.commands
         /// <param name="parameter"></param>
         public override void Execute(object parameter)
         {
-            // Prompt the user with a messagebox
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to return to the main menu?\n\rThis will reset the current game.", "Return to Menu", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            // Check the user's response
-            if (result == MessageBoxResult.Yes)
-            {
-                var saveStatsCommand = new SaveStatsCommand(_playerStats);
-                saveStatsCommand.Execute(null);
+            var saveStatsCommand = new SaveStatsCommand(_playerStats);
+            saveStatsCommand.Execute(null);
 
-                // Navigate to the menu
-                _navigationStore.CurrentViewModel = new MenuViewModel(_navigationStore, null);
-            }
-            else
-            {
-                return;
-            }
+            // Navigate to the menu
+            _navigationStore.CurrentViewModel = new MenuViewModel(_navigationStore, null);
+
 
         }
     }
