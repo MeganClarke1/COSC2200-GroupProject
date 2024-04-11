@@ -22,19 +22,22 @@ using System.Collections.ObjectModel;
 namespace Group2_COSC2200_Project.viewmodel
 {
     /// <summary>
-    /// The KittyViewModel class is the kitty card to be determined after deck being dealt.
+    /// Represents the ViewModel for the kitty card in the game. This class uses an observable collection to 
+    /// dynamically update the UI as the kitty's composition is revealed or changes.
     /// </summary>
     public class KittyViewModel : ViewModelBase
     {
         /// <summary>
-        /// An observable collection of Kitty Card Objects.
+        /// Holds the CardViewModel that represents the kitty. This enables dynamic updates of kitty card within the UI.
         /// </summary>
         public ObservableCollection<CardViewModel> KittyCard { get; }
 
+
         /// <summary>
-        /// Constructor for the KittyViewModel
+        /// Initializes a new instance of the KittyViewModel class, converting the card in the kitty into a 
+        /// CardViewModel for UI rendering. 
         /// </summary>
-        /// <param name="kitty"> Takes a list of card objects (The list of kitty cards) </param>
+        /// <param name="kitty">A list of Card models representing the cards currently in the kitty.</param>
         public KittyViewModel(List<Card> kitty)
         {
             KittyCard = new ObservableCollection<CardViewModel>();

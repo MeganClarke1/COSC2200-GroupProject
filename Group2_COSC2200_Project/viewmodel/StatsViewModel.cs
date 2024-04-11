@@ -33,6 +33,9 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         public ICommand BackCommand { get; }
 
+        /// <summary>
+        /// Defining the command to reset the user stats.
+        /// </summary>
         public ICommand ResetStatsCommand { get; }
 
         /// <summary>

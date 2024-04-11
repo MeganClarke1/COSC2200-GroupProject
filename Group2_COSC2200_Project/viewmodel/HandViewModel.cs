@@ -22,19 +22,24 @@ using System.Collections.ObjectModel;
 namespace Group2_COSC2200_Project.viewmodel
 {
     /// <summary>
-    /// A handViewModel class for defining a players hand.
+    /// Represents the ViewModel for a player's hand in the game, managing the visualization of the cards within the 
+    /// hand. It utilizes an observable collection of CardViewModel objects to enable dynamic updates to the UI as the 
+    /// hand's composition changes.
     /// </summary>
     public class HandViewModel : ViewModelBase
     {
         /// <summary>
-        /// An observable collection of CardViewModel objects. Defining a hand as cardViewModels for full image rendering.
+        /// Holds the collection of CardViewModels that represent each card in the player's hand.
         /// </summary>
         public ObservableCollection<CardViewModel> Cards { get; }
 
         /// <summary>
-        /// A constructor for our HandViewModel
+        /// Initializes a new instance of the HandViewModel class, converting each card in the provided hand into a 
+        /// CardViewModel for UI rendering.
         /// </summary>
-        /// <param name="hand"> The hand object to be passed/rendered in the view. </param>
+        /// <param name="hand">The Hand model containing the card data.</param>
+        /// <param name="isPlayerHand">Indicates whether the hand belongs to the player, 
+        /// to control card face visibility</param>
         public HandViewModel(Hand hand, bool isPlayerHand)
         {
             Cards = new ObservableCollection<CardViewModel>();

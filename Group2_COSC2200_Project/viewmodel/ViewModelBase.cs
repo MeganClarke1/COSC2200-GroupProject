@@ -21,17 +21,20 @@ using System.ComponentModel;
 namespace Group2_COSC2200_Project.viewmodel
 {
     /// <summary>
-    /// Provides a base class for view models to support property change notification.
+    /// Serves as the foundation for all ViewModel classes in an application. This class implements the 
+    /// INotifyPropertyChanged interface, which supports binding by notifying the view of changes to property values 
+    /// within the ViewModel.
     /// </summary>
     public class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
-        /// Occurs when a property value changes.
+        /// Fired when a property on this ViewModel has changed. Binding mechanisms in the view use this event to 
+        /// update the UI accordingly.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
-        /// Notifies subscribers of the event that a property value has changed.
+        /// Invokes the PropertyChanged event, signaling to any bound controls that the value of a property has changed.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
         protected void OnPropertyChanged(string propertyName)
