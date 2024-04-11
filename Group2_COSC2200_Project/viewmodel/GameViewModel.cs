@@ -80,6 +80,11 @@ namespace Group2_COSC2200_Project.viewmodel
         public ICommand ReturnCommand { get; private set; }
 
         /// <summary>
+        /// Command to execute when a user navigates away from the game with the main menu bar.
+        /// </summary>
+        public ICommand MenuFromBarCommand { get; private set; }
+
+        /// <summary>
         /// Command to change the theme of the game.
         /// </summary>
         public ICommand ChangeThemeCommand { get; private set; }
@@ -632,7 +637,9 @@ namespace Group2_COSC2200_Project.viewmodel
                 _game.PlayerOneStats = _GVMplayerStats; // Store the GVM player stats in GameView
                 PlayerName = _GVMplayerStats.PlayerName;
                 SaveStatsCommand = new SaveStatsCommand(_game.PlayerOneStats);
+                
                 ReturnCommand = new ReturnPostGameCommand(_navigationStore, _game.PlayerOneStats);
+                MenuFromBarCommand = new ReturnFromMenuBarGameCommand(_navigationStore, _game.PlayerOneStats);
             }
         }
         #endregion

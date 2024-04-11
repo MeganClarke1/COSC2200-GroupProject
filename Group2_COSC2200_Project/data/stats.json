@@ -2,10 +2,10 @@
   "500": {
     "PlayerID": 0,
     "PlayerName": "You",
-    "PlayerWins": 1,
-    "PlayerLosses": 0,
-    "TotalGames": 2,
-    "CurrentStreak": 0,
-    "previousGameResult": 1
+    "PlayerWins": 0,
+    "PlayerLosses": 2,
+    "TotalGames": 3,
+    "CurrentStreak": 1,
+    "previousGameResult": 2
   }
 }
