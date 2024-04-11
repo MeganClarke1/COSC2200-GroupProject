@@ -638,7 +638,10 @@ namespace Group2_COSC2200_Project.viewmodel
         #endregion
 
         /// <summary>
-        /// A switch to handle the changing states of the game... Will call the corresponding State function in Game class.
+        /// Updates the ViewModel state based on the current state of the game. This method acts as a central control 
+        /// for transitioning between different phases of the game, such as starting the game, selecting the trump suit 
+        /// from the kitty, playing cards, and concluding the game. Each game state triggers the corresponding method 
+        /// to update the ViewModel and the UI to reflect the new state.
         /// </summary>
         private void UpdateViewModelState()
         {
@@ -668,13 +671,20 @@ namespace Group2_COSC2200_Project.viewmodel
 
         #region Command Executions
         /// <summary>
-        /// Event handler for actions triggered during the game.
+        /// Responds to game action events by updating the ViewModel state to reflect changes in the game. This method 
+        /// ensures that the ViewModel remains in sync with the game's current state.
         /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event data.</param>
         private void OnActionHandler(object sender, EventArgs e)
         {
             UpdateViewModelState();
         }
 
+        /// <summary>
+        /// Changes the game's theme to the specified theme. 
+        /// </summary>
+        /// <param name="theme">The name of the theme to be applied to the game's visual elements.</param>
         private void ChangeThemeExecute(string theme)
         {
             Theme.SetTheme(theme);
@@ -683,6 +693,10 @@ namespace Group2_COSC2200_Project.viewmodel
             BackgroundImagePath = $"../assets/images/{theme}/playing_surface.png";
         }
 
+        /// <summary>
+        /// Executes the user action to "order up" a suit as the trump suit during the kitty phase of the game.
+        /// </summary>
+        /// <param name="parameter">The parameter is not used but included to match the ICommand delegate signature.</param>
         private void OrderUpExecute(object parameter)
         {
             _game.OrderUpFromKitty();
@@ -769,7 +783,10 @@ namespace Group2_COSC2200_Project.viewmodel
 
         #region methods
         /// <summary>
-        /// Represents the start of the game, called by our state switch
+        /// Initializes the game's UI components for the start of gameplay. This includes hiding the start indicator, 
+        /// showing the dealer, setting up the hand view models for all players, and logging the start of the game and 
+        /// the initial hands dealt. It also initializes the kitty and play area view models, and updates the UI to 
+        /// display the current teams and dealer.
         /// </summary>
         private void Start()
         {
@@ -794,8 +811,8 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// Represents the TrumpSelectionFromKitty phase of the game. Called from our state switch
-        /// handles dyanmic turn based rounds.
+        /// Transitions the game to the TrumpSelectionFromKitty phase. This method updates the UI so that the user has
+        /// "Pass" and "Order it up" buttons available to click on their turn.
         /// </summary>
         private void TrumpSelectionFromKitty()
         {
@@ -805,7 +822,8 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// Represents the trump suit selection after the inital kitty voting round.
+        /// Manages the phase for selecting the trump suit after the initial kitty phase. This method updates the UI 
+        /// so that the user has "Pass" and non-kitty suits available to choose from as buttons when it is their turn.
         /// </summary>
         private void TrumpSelectionPostKitty()
         {
@@ -817,6 +835,10 @@ namespace Group2_COSC2200_Project.viewmodel
             Kitty = new KittyViewModel(_game.Kitty);
         }
 
+        /// <summary>
+        /// Manages the game phase for the dealer to swap a card with the kitty, adjusting UI elements to indicate 
+        /// that it's the current player's turn to make the swap.
+        /// </summary>
         private void DealerKittySwap()
         {
             Player1Turn = Visibility.Collapsed;
@@ -848,7 +870,7 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Marks the end of the game by setting the visibility of the "Return to menu" button as visible.
         /// </summary>
         private void EndOfGame()
         {
@@ -856,9 +878,10 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Facilitates a player's action to play a card during their turn. This method updates the game state by 
+        /// adding the selected card to the play area and then refreshes the UI to reflect the new state.
         /// </summary>
-        /// <param name="cardViewModel"></param>
+        /// <param name="cardViewModel">The cardViewModel representing the card selected by the player.</param>
         private void PlayCard(CardViewModel cardViewModel)
         {
             _game.PlayCard(_game.CurrentPlayer, cardViewModel.Card);
@@ -866,9 +889,10 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Facilitates the user's action to swap a card from their hand with the top card from the kitty during the 
+        /// dealer kitty swap phase. This method updates the game state to reflect the swap and then refreshes the UI.
         /// </summary>
-        /// <param name="cardViewModel"></param>
+        /// <param name="cardViewModel">The cardViewModel representing the card selected by the dealer for swapping.</param>
         private void SwapWithKitty(CardViewModel cardViewModel)
         {
             _game.SwapWithKitty(_game.CurrentPlayer, cardViewModel.Card);
@@ -902,7 +926,10 @@ namespace Group2_COSC2200_Project.viewmodel
         }
 
         /// <summary>
-        /// 
+        /// Updates the image paths for all cards currently displayed in the game's UI. This includes cards in each 
+        /// player's hand, the play area, and the kitty. It's called after a theme change, which requires visual 
+        /// updates to the cards. This method iterates through all card view models, triggering a refresh of their 
+        /// image paths to reflect the current game state or theme.
         /// </summary>
         private void RefreshCards()
         {

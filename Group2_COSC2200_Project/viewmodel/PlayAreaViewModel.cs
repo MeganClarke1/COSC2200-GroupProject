@@ -22,19 +22,23 @@ using System.Collections.ObjectModel;
 namespace Group2_COSC2200_Project.viewmodel
 {
     /// <summary>
-    /// The playAreaViewModel for center area (cards played)
+    /// Represents the ViewModel for the play area in the card game, which is the central area where cards are played 
+    /// during a round. This ViewModel manages the visualization of the cards within the play area, using an observable 
+    /// collection to enable dynamic updates to the UI as cards are played.
     /// </summary>
     public class PlayAreaViewModel : ViewModelBase
     {
         /// <summary>
-        /// An observable collection of cardViewModel objects to be rendered dynamically to the view.
+        /// Holds the collection of CardViewModels that represent each card played into the play area. 
         /// </summary>
         public ObservableCollection<CardViewModel> PlayedCards { get; }
 
         /// <summary>
-        /// The Constructor, uses a list of CardViewModel objects to render multiple cards to the PlayArea.
+        /// Initializes a new instance of the PlayAreaViewModel class. It converts each card played in the current 
+        /// round into a CardViewModel for UI rendering.
         /// </summary>
-        /// <param name="playedCardsVMP"> playedCards - a list of Card Objects </param>
+        /// <param name="playedCardsVMP">A list of Card models representing the cards that have been played in the 
+        /// current round.</param>
         public PlayAreaViewModel(List<Card> playedCardsVMP)
         {
             PlayedCards = new ObservableCollection<CardViewModel>();
