@@ -16,11 +16,6 @@
 ///   </description>
 /// </file>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Group2_COSC2200_Project.model
@@ -28,7 +23,7 @@ namespace Group2_COSC2200_Project.model
     /// <summary>
     /// A class representing 1 Trick. (Each player has went once)
     /// </summary>
-    class Trick
+    public class Trick
     {
         /// <summary>
         /// A list of cards that have been played during the round.

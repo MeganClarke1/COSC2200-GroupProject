@@ -16,7 +16,6 @@
 ///   </description>
 /// </file>
 
-using Group2_COSC2200_Project.viewmodel;
 using System.Windows;
 
 namespace Group2_COSC2200_Project.model
@@ -68,7 +67,6 @@ namespace Group2_COSC2200_Project.model
         public Statistics PlayerOneStats { get; set; } // For storing player stats from GameViewModel
 
         #endregion
-
         public Game()
         {
             ChangeState(GameState.Initialize);
@@ -109,7 +107,6 @@ namespace Group2_COSC2200_Project.model
         }
 
         #region methods
-
         /// <summary>
         /// Represents the intital game state. Eg. As soon as a game is started, this instantiates all necessary items.
         /// </summary>
@@ -122,16 +119,16 @@ namespace Group2_COSC2200_Project.model
             PlayerTwo = new Player(2, "Player 2", true);
             PlayerThree = new Player(3, "Player 3", true);
             PlayerFour = new Player(4, "Player 4", true);
-            Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree));
-            Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour));
+            Team1 = new Team(Team.TeamID.TeamOne, Team.createTeam(PlayerOne, PlayerThree), "Team 1");
+            Team2 = new Team(Team.TeamID.TeamTwo, Team.createTeam(PlayerTwo, PlayerFour), "Team 2");
             TurnList = GameFunctionality.CreateTurnList(Team1.TeamPlayers, Team2.TeamPlayers);
             PlayArea = new List<Card>();
             TurnsTaken = 0;
             TeamOneTricks = 0;
             TeamTwoTricks = 0;
             PlayedCardsCounter = 0;
-            TeamOneScore = 9;
-            TeamTwoScore = 9;
+            TeamOneScore = 0;
+            TeamTwoScore = 0;
         }
 
         /// <summary>

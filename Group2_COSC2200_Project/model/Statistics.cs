@@ -16,17 +16,8 @@
 ///   </description>
 /// </file>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
-using System.Windows.Input;
-using System.Windows.Markup;
-using System.Windows;
-using System.Reflection;
 
 namespace Group2_COSC2200_Project.model
 {
