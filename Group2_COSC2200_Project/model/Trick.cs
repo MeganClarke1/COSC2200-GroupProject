@@ -21,33 +21,15 @@ using System.Windows;
 namespace Group2_COSC2200_Project.model
 {
     /// <summary>
-    /// A class representing 1 Trick. (Each player has went once)
-    /// </summary>
-    public class Trick
+    /// Provides functionality relative to Tricks in a Euchre game. 
+    public static class Trick
     {
-        /// <summary>
-        /// A list of cards that have been played during the round.
-/*        /// </summary>
-        public List<Card> PlayedCards { get; private set; }
-
-        public Card WinningCard { get; private set; }
-
-        public Card.Suits LeadSuit {  get; private set; }*/
-
-        public Team TrickWinningTeam { get; private set; }
-
-        // Constructor
-        // TODO: decide if we need a parameterized or if blank constructor is fine, or both.
-        public Trick()
-        {
-
-        }
 
         /// <summary>
         /// Takes a list of played cards, the current turn list, and both Team objects.
-        ///     Determines the highest card of all played cards, stores the player who that card belongs to. (Winning Player)
-        ///     Loops through both teams to find which team the winning player belongs to. (Comparing player IDs)
-        ///     Returns the team who owns the winning player. (Winning Team)
+        /// Determines the highest card of all played cards, stores the player who that card belongs to. (Winning Player)
+        /// Loops through both teams to find which team the winning player belongs to. (Comparing player IDs)
+        /// Returns the team who owns the winning player. (Winning Team)
         /// </summary>
         /// <param name="PlayedCards"> The List of Card objects that have been played this trick. </param>
         /// <param name="TeamOne"> The current team one of the game class. </param>
@@ -73,7 +55,7 @@ namespace Group2_COSC2200_Project.model
             // Fetch the player who owned the card that has the highest value.
             int winningPlayerId = highCard.CardsAssociatedToPlayers;
 
-            MessageBox.Show("Player with ID " + winningPlayerId + " has won the hand");
+            MessageBox.Show("Player " + winningPlayerId + " has won the hand!", "Trick Won");
 
             // Initialize an empty winningTeam to hold the result.
             Team winningTeam = null;
