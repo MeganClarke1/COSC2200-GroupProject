@@ -188,10 +188,13 @@ namespace Group2_COSC2200_Project.model
         /// <param name="turnList">A list of players participating in the current round, whose cards will be evaluated.</param>
         public static void SetTrumpSuitValues(Card.Suits trumpSuit, List<Player> turnList)
         {
+            // For each player in th the turn list
             foreach (Player player in turnList)
             {
+                // For each card of the player's hands
                 foreach (Card card in player.PlayerHand.Cards)
                 {
+                    // Set the card value based on the Trump suit.
                     card.SetTrumpSuitValue(trumpSuit);
                 }
             }
@@ -256,13 +259,17 @@ namespace Group2_COSC2200_Project.model
             Card highCard = null;
             Player playerWithHighCard = null;
 
+            // for each card in the play area
             for (int i = 0; i < playArea.Count; i++)
             {
+                // if the card is higher value, replace that value
                 if (highCard == null || playArea[i].Value > highCard.Value)
                 {
                     highCard = playArea[i];
                 }
             }
+
+            // Also, update the player who it belongs to.
             foreach (Player player in turnList)
             {
                 if (player.PlayerID == highCard.CardsAssociatedToPlayers)
@@ -300,12 +307,16 @@ namespace Group2_COSC2200_Project.model
         /// <returns></returns>
         public static List<Player> ChangeDealer(Player currentDealer, Player newDealer, List<Player> turnList)
         {
+            // If the current dealer 
             if (currentDealer.IsDealer)
             {
+                // Change it to false
                 currentDealer.IsDealer = false;
             }
+            // If not
             if (!newDealer.IsDealer)
             {
+                // Set it to true
                 newDealer.IsDealer = true;
             }
             return RotateToFirstTurn(turnList);

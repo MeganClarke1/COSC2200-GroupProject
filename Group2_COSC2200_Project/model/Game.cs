@@ -109,6 +109,7 @@ namespace Group2_COSC2200_Project.model
         #region methods
         /// <summary>
         /// Represents the intital game state. Eg. As soon as a game is started, this instantiates all necessary items.
+        ///     State, deck ,kitty , players, teams, turnlist, play area, scoring, etc. is all started from scratch here.
         /// </summary>
         public void Initialize()
         {
@@ -156,12 +157,17 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public void TrumpSelectionFromKitty() 
         {
+            // Set the current state to the trump selection from kitty state
             CurrentState = GameState.TrumpSelectionFromKitty;
+            // Reset turns taken to 0
             TurnsTaken = 0;
+            // Set the current player to the first in the turn list
             CurrentPlayer = TurnList[0];
             RaiseOnAction();
             MessageBox.Show("The Dealer is " + TurnList[3].PlayerName + " \n\rThe current top kitty suit is "
                 + Kitty[0].Suit + ". \n\r" + CurrentPlayer.PlayerName + " is up!");
+
+            // If the current player is AI, perform a decision for this stage.
             if (CurrentPlayer.IsAI)
             {
                 AIDecisionFromKitty(CurrentPlayer);
@@ -173,14 +179,23 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public void TrumpSelectionPostKitty()
         {
+
+            // Change the game state for post kitty
             CurrentState = GameState.TrumpSelectionPostKitty;
+            // reset turns taken
             TurnsTaken = 0;
+            // Set the non kitty suits for selection
             NonKittySuits = GameFunctionality.SetNonKittySuits(Kitty[0]);
+            // Rotate turns
             TurnList = GameFunctionality.RotateToFirstTurn(TurnList);
+            // Clear the kitty value
             Kitty.Clear();
+            // Current player = the first person in the turn list
             CurrentPlayer = TurnList[0];
             RaiseOnAction();
             MessageBox.Show("No one ordered it up. "+ CurrentPlayer.PlayerName + " is up.");
+            
+            // Perform the assosiated AI action if the player is AI
             if (CurrentPlayer.IsAI)
             {
                 AIDecisionPostKitty(CurrentPlayer);
@@ -576,9 +591,12 @@ namespace Group2_COSC2200_Project.model
         /// <param name="currentPlayer">The AI player performing the swap with the kitty.</param>
         public void AISwapWithKitty(Player currentPlayer)
         {
+            // Set the kitty card to the first card in the kitty and the card to swap to null for container values.
             Card kittyCard = Kitty[0];
             Card cardToSwap = null;
             int sameSuitCount = 0;
+
+            // For each card in the current players hand, if their card suit is the kittyCard suit, increase the count of that suit.
             foreach (Card card in currentPlayer.PlayerHand.Cards)
             {
                 if (card.Suit == kittyCard.Suit)
@@ -586,8 +604,11 @@ namespace Group2_COSC2200_Project.model
                     sameSuitCount++;
                 }
             }
+
+            // If the player has 2 or more of the same suit...
             if (sameSuitCount >= 2)
             {
+                // For each card, assign the cards to swap
                 foreach (Card card in currentPlayer.PlayerHand.Cards)
                 {
                     if (card.Suit != kittyCard.Suit || !(card.Colour == kittyCard.Colour && card.Rank == Card.Ranks.Jack))
@@ -739,11 +760,14 @@ namespace Group2_COSC2200_Project.model
 
                 RaiseOnAction();
 
+                // All hands have been played out, time to check for a winner!
                 if (PlayedCardsCounter >= 20)
                 {
                     CheckRoundWinner();
                     return;
                 } 
+
+                // Else the game is still occuring - proceed to the next trick in the round.
                 else
                 {
                     MessageBox.Show("The next trick will begin!");
@@ -772,6 +796,7 @@ namespace Group2_COSC2200_Project.model
             {
                 RoundWinner = Team.TeamID.TeamOne.ToString();
 
+                // Check if team one has maker status, which will determine how many points they score for the round (3 for non-maker)
                 if (Team1.MakerStatus == true)
                 {
                     TeamOneScore++;
@@ -857,6 +882,7 @@ namespace Group2_COSC2200_Project.model
         /// </summary>
         public void CheckGameWinner()
         {
+            // Determine which team has the win condition number of points (10) and provide them a winning message.
             if (TeamOneScore >= 10)
             {
                 MessageBox.Show("Team 1 has won the game! \n\r" + PlayerOne.PlayerName + " and " + PlayerThree.PlayerName + " are the winners!");
@@ -865,6 +891,7 @@ namespace Group2_COSC2200_Project.model
             {
                 MessageBox.Show("Team 2 has won the game! \n\r" + PlayerTwo.PlayerName + " and " + PlayerFour.PlayerName + " are the winners!");
             }
+            // Transition to end of game
             ChangeState(GameState.EndOfGame);
         }
 
