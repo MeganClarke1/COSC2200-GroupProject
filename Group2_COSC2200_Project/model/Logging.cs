@@ -36,6 +36,7 @@ namespace Group2_COSC2200_Project.model
         /// <param name="startTime"> The time to be logged. </param>
         public static void LogStartGame(DateTime startTime)
         {
+            // Try to open the ext file, and write the current start date assosiated with game starting (Deal button)
             try
             {
                 using (StreamWriter writer = new StreamWriter(LogFilePath, true))
@@ -58,6 +59,7 @@ namespace Group2_COSC2200_Project.model
         public static void LogPlayerHandsDealt(Hand player1Hand, Hand player2Hand,
                                         Hand player3Hand, Hand player4Hand)
         {
+            // Try to write to the log file, with the time, as well as the current players for each player after the hands were dealt.
             try
             {
                 using (StreamWriter writer = new StreamWriter(LogFilePath, true))
@@ -82,6 +84,8 @@ namespace Group2_COSC2200_Project.model
         /// <param name="message"> The message to be logged. </param>
         public static void LogTrumpSuit(string message)
         {
+            // Try to write to the log file the current time, as well as the suit that was selected as trump.
+            // To be done on every AI/Player trump selection phase.
             try
             {
                 using (StreamWriter writer = new StreamWriter(LogFilePath, true))
@@ -103,6 +107,7 @@ namespace Group2_COSC2200_Project.model
         /// <param name="card"> The card that was played. </param>
         public static void LogPlayedCard(Player player, Card card)
         {
+            // Try to open and write to the log file for the current time, as well as the player and the card they played on their turn.
             try
             {
                 string logMessage = $"{DateTime.Now}: {player.PlayerName} played {card.ToString()}";
@@ -124,6 +129,7 @@ namespace Group2_COSC2200_Project.model
         /// <param name="winner"></param>
         public static void LogTrickWinner(string winner)
         {
+            // Try to log to the text file the date and time and the winner of the trick.
             try
             {
                 string logMessage = $"{DateTime.Now}: Trick Winner - {winner}";
@@ -147,6 +153,8 @@ namespace Group2_COSC2200_Project.model
         /// <param name="winner"> The winning team </param>
         public static void LogRoundWinner(string winner)
         {
+            // Try to log to the text file the date time and the winner of the round.
+            // To take place at the end of every round (>= 10 points)
             try
             {
                 string logMessage = $"{DateTime.Now}: Round Winner - {winner}";

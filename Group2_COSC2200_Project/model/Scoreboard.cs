@@ -9,7 +9,7 @@
 ///     Created: April 6, 2024
 ///   </created>
 ///   <lastModified>
-///     Last Modified: April 9, 2024
+///     Last Modified: April 10, 2024
 ///   </lastModified>
 ///   <description>
 ///     Description: This class represents a Scoreboard for the game.
@@ -49,10 +49,13 @@ namespace Group2_COSC2200_Project.model
         /// <param name="TeamWonTrick"> The team that won the trick. </param>
         public void IncrementTrickCount(Team TeamWonTrick)
         {
+            // If the winning team is team one, increment their wins
+            // To be tracked by the game instance and the GameViewModel for rendering to the scoreboard.
             if (TeamWonTrick.TeamId == Team.TeamID.TeamOne)
             {
                 TeamOneTricks++;
             }
+            // And vice versa
             else if(TeamWonTrick.TeamId == Team.TeamID.TeamTwo)
             {
                 TeamTwoTricks++;

@@ -24,6 +24,14 @@ namespace Group2_COSC2200_Project.stores
 
     /// <summary>
     /// Holds the current value of the view Model among all aspects of the application.
+    ///     Navigation Guide:
+    ///         1. Button executes function
+    ///         2. Execution calls a viewModel constructor
+    ///         3. That view model is passed to the navigation Store (will have navigation store as an argument)
+    ///         4. Navigation store stores the current ViewModel
+    ///         5. Navigation store monitors the currentViewModel property of itself
+    ///         6. That property is bound to the MainWindow.
+    ///         7. Mainwindow updates with the new ViewModel, which is tied to the View in the data templating in the mainWindow.
     /// </summary>
     public class NavigationStore
     {
