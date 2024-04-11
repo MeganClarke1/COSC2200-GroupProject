@@ -229,7 +229,7 @@
             <MenuItem Header="Theme">
                 <MenuItem Header="Classic" Command="{Binding ChangeThemeCommand}" CommandParameter="classic"/>
                 <MenuItem Header="Fantasy" Command="{Binding ChangeThemeCommand}" CommandParameter="fantasyPixel"/>
-                <MenuItem Header="Theme 3" Command="{Binding}"/>
+                <MenuItem Header="Cute" Command="{Binding ChangeThemeCommand}" CommandParameter="cute"/>
             </MenuItem>
         </Menu>
     </Grid>
