@@ -20,26 +20,29 @@ using Group2_COSC2200_Project.model;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
+    /// <summary>
+    /// Provides a ViewModel layer for a Card, enabling the representation of card properties in the UI.
+    /// </summary>
     public class CardViewModel : ViewModelBase
     {
 
         /// <summary>
-        /// 
+        /// Indicates whether the card is held by a player.
         /// </summary>
-        public bool IsPlayerCard { get; set; } 
+        public bool IsPlayerCard { get; set; }
 
         /// <summary>
-        /// 
+        /// Indicates whether the card is currently placed in the play area.
         /// </summary>
         public bool IsInPlayArea { get; set; }
 
         /// <summary>
-        /// 
+        /// Indicates whether the card is the kitty.
         /// </summary>
         public bool IsInKitty { get; set; }
 
         /// <summary>
-        /// Static property to set the base image path
+        /// Defines the base path for card images, dynamically adjusted based on the current theme.
         /// </summary>
         public static string BaseImagePath { get; set; } = $"../assets/images/{Theme.GetTheme()}";
 
@@ -49,7 +52,7 @@ namespace Group2_COSC2200_Project.viewmodel
         public Card Card { get; private set; }
 
         /// <summary>
-        /// Path to the image representing the Card.
+        /// Provides the path to the card's image file, with logic to show the card face or back depending on the card's state.
         /// </summary>
         public string ImagePath
         {
@@ -75,6 +78,9 @@ namespace Group2_COSC2200_Project.viewmodel
             Card = card;
         }
 
+        /// <summary>
+        /// Updates the ImagePath property, triggering UI updates for the card's image.
+        /// </summary>
         public void RefreshImagePath()
         {
             OnPropertyChanged(nameof(ImagePath));

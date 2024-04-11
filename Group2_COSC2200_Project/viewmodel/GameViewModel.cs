@@ -87,73 +87,100 @@ namespace Group2_COSC2200_Project.viewmodel
 
         #region Properties
         /// <summary>
-        /// The path to the background image for the game.
+        /// Represents the background image path for the game's UI, dynamically set based on the current theme.
         /// </summary>
         private string _backgroundImagePath = $"../assets/images/{Theme.GetTheme()}/playing_surface.png";
 
         /// <summary>
-        /// Initailizing properties to be monitored by the ViewModel (Automatic changes to the view require this)
+        /// ViewModel instances for each player's hand, facilitating the binding and interaction within the UI.
         /// </summary>
-        private HandViewModel _player1Hand;
-        private HandViewModel _player2Hand;
-        private HandViewModel _player3Hand;
-        private HandViewModel _player4Hand;
+        private HandViewModel _player1Hand, _player2Hand, _player3Hand, _player4Hand;
+
+        /// <summary>
+        /// ViewModel for the kitty, managing its representation and interactions within the game's UI.
+        /// </summary>
         private KittyViewModel _kitty;
+
+        /// <summary>
+        /// ViewModel for the play area, where cards played during a trick are displayed.
+        /// </summary>
         private PlayAreaViewModel _playArea;
 
         /// <summary>
-        /// Setting visibility of the player turns to collapsed so it can't be seen.
+        /// Visibility indicators for the UI elements related to the user's turn.
         /// </summary>
         private Visibility _player1Turn = Visibility.Collapsed;
 
         /// <summary>
-        /// Setting the visibility for Turns post initial kitty round to also be unseen.
+        /// Visibility indicators for the UI elements related to the user's turn.
         /// </summary>
         private Visibility _player1PostKittyTurn = Visibility.Collapsed;
 
         /// <summary>
-        /// Tracking boolean status for is players can click their cards based on if it's their turn.
+        /// Indicates whether player one can interact with their cards, typically set according to whether it is their turn.
         /// </summary>
         private bool _player1CanClickCard;
 
         /// <summary>
-        /// Initializing a list of Suits that are available for selection as the trump suit after the kitty round.
+        /// A collection of card suits available for selection as the trump suit.
         /// </summary>
         private List<Card.Suits> _nonKittySuits;
 
         /// <summary>
-        /// Initializing more properties to keep track of via IMontior for view changes. Will be mutated to update the view.
+        /// Instances of Team representing the two teams competing in the game.
         /// </summary>
-        private Team _teamOne;
-        private Team _teamTwo;
-        private int _teamOneTricks;
-        private int _teamTwoTricks;
-        private int _teamOneScore;
-        private int _teamTwoScore;
+        private Team _teamOne, _teamTwo;
 
         /// <summary>
-        /// Setting initial visibiltiy of the started property to visible.
+        /// Counters for the number of tricks won by each team.
+        /// </summary>
+        private int _teamOneTricks, _teamTwoTricks;
+
+        /// <summary>
+        /// The current score for each team, updated throughout the game based on the outcomes of each trick and round.
+        /// </summary>
+        private int _teamOneScore, _teamTwoScore;
+
+        /// <summary>
+        /// Indicates the initial visibility of the Deal button, set to be visible at the beginning.
         /// </summary>
         private Visibility _started = Visibility.Visible;
 
         /// <summary>
-        /// Setting the initial visibility for the "Back to menu" button.
+        /// Controls the visibility of the "Back to menu" button, initially hidden until the game ends.
         /// </summary>
         private Visibility _ended = Visibility.Collapsed;
 
         /// <summary>
-        /// Hiding these properties to create invisible tracks not seen by the user.
+        /// Determines the visibility of UI elements indicating the presence of a trump suit, initially hidden.
         /// </summary>
         private Visibility _hasTrumpSuit = Visibility.Collapsed;
+
+        /// <summary>
+        /// Controls the visibility of indicators for the lead suit in play, initially set to be hidden.
+        /// </summary>
         private Visibility _hasLeadSuit = Visibility.Collapsed;
+
+        /// <summary>
+        /// Manages the display of the dealer's status within the UI, initially hidden.
+        /// </summary>
         private Visibility _hasDealer = Visibility.Collapsed;
 
         /// <summary>
-        /// Intializing empty Strings to store the trump suit and lead suit for comparison during play.
+        /// Stores the name of the currently selected trump suit, initially empty until a suit is chosen.
         /// </summary>
         private String _trumpSuit = "";
+
+        /// <summary>
+        /// Holds the name of the lead suit for the current round of play, initially empty.
+        /// </summary>
         private String _leadSuit = "";
+
+        /// <summary>
+        /// Contains the name or identifier of the current dealer in the game, starting with an empty value.
+        /// </summary>
         private String _dealer = "";
+
 
         /// <summary>
         /// A container for storage of the player's statistics as passed to this view by the MenuView.
@@ -615,6 +642,7 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         private void UpdateViewModelState()
         {
+            RefreshUI();
             switch (_game.CurrentState)
             {
                 case GameState.Start:
@@ -767,10 +795,12 @@ namespace Group2_COSC2200_Project.viewmodel
 
         /// <summary>
         /// Represents the TrumpSelectionFromKitty phase of the game. Called from our state switch
-        ///     handles dyanmic turn based rounds.
+        /// handles dyanmic turn based rounds.
         /// </summary>
         private void TrumpSelectionFromKitty()
         {
+            HasTrumpSuit = Visibility.Collapsed;
+            HasLeadSuit = Visibility.Collapsed;
             Player1Turn = _game.CurrentPlayer == _game.PlayerOne ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -779,6 +809,8 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         private void TrumpSelectionPostKitty()
         {
+            HasTrumpSuit = Visibility.Collapsed;
+            HasLeadSuit = Visibility.Collapsed;
             NonKittySuits = _game.NonKittySuits;
             Player1PostKittyTurn = Visibility.Visible;
             Player1Turn = Visibility.Collapsed;
@@ -798,7 +830,7 @@ namespace Group2_COSC2200_Project.viewmodel
         {
             Player1Turn = Visibility.Collapsed;
             HasTrumpSuit = Visibility.Visible;
-            if (_game.TurnsTaken == 0)
+            if (_game.TurnsTaken >= 1)
             {
                 HasLeadSuit = Visibility.Visible;
             }
@@ -848,17 +880,19 @@ namespace Group2_COSC2200_Project.viewmodel
         /// </summary>
         private void RefreshUI()
         {
+            if (_game.TurnsTaken >= 1)
+            {
+                HasLeadSuit = Visibility.Visible;
+            }
             TeamOne = _game.Team1;
             TeamTwo = _game.Team2;
             TeamOneTricks = _game.TeamOneTricks;
             TeamTwoTricks = _game.TeamTwoTricks;
             TeamOneScore = _game.TeamOneScore;
             TeamTwoScore = _game.TeamTwoScore;
-
             TrumpSuit = _game.TrumpSuit.ToString();
             LeadSuit = _game.LeadSuit.ToString();
             Dealer = _game.TurnList.FirstOrDefault(player => player.IsDealer)?.PlayerName ?? "No Dealer Found";
-
             Kitty = new KittyViewModel(_game.Kitty);
             PlayArea = new PlayAreaViewModel(_game.PlayArea);
             Player1Hand = new HandViewModel(_game.PlayerOne.PlayerHand, true);

@@ -19,7 +19,9 @@
 namespace Group2_COSC2200_Project.model
 {
     /// <summary>
-    /// Represents the general game logic for the game.
+    /// Contains the core functionality and logic specific to managing the flow and rules of a card game. This includes
+    /// operations such as dealing cards, determining turn order, evaluating the outcome of each trick, and managing 
+    /// game state transitions such as selecting trump suits, rotating dealer responsibilities, and handling card swaps. 
     /// </summary>
     public class GameFunctionality
     {
@@ -43,10 +45,11 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// 
+        /// Generates a list of card suits excluding the suit of a the kitty card. This is used in game phases where 
+        /// the trump suit is being selected after the first rotation of selecting it from the Kitty.
         /// </summary>
-        /// <param name="kittyCard"></param>
-        /// <returns></returns>
+        /// <param name="kittyCard">The card whose suit is to be excluded from the list of potential suits.</param>
+        /// <returns>A list of Card.Suits representing all suits except the one of the specified kitty card.</returns>
         public static List<Card.Suits> SetNonKittySuits(Card kittyCard)
         {
             List<Card.Suits> nonKittySuits = new List<Card.Suits>();
@@ -83,10 +86,10 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// 
+        /// Rotates the turn order of players to ensure the dealer is positioned at the beginning of the list.
         /// </summary>
-        /// <param name="TurnList"></param>
-        /// <returns></returns>
+        /// <param name="TurnList">The current list of players in turn order.</param>
+        /// <returns>The modified list of players with the dealer rotated to the first position.</returns>
         public static List<Player> RotateToDealer(List<Player> TurnList)
         {
             if (TurnList[0].IsDealer)
@@ -101,10 +104,10 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// 
+        /// Adjusts the turn order so that the game starts with the player immediately following the dealer.
         /// </summary>
-        /// <param name="TurnList"></param>
-        /// <returns></returns>
+        /// <param name="TurnList">The list of players in their current turn order.</param>
+        /// <returns>The adjusted list of players with the dealer rotated to the last position.</returns>
         public static List<Player> RotateToFirstTurn(List<Player> TurnList)
         {
             if (TurnList[TurnList.Count - 1].IsDealer)
@@ -139,49 +142,6 @@ namespace Group2_COSC2200_Project.model
         }
 
         /// <summary>
-        /// Creates a new ROUND object with the selected Trump Card.
-        /// Takes the selected Trump, the current player who selected it, and the 2 participating teams.
-        /// Checks both teams for the presence of that player object. If the player object is found in that team,
-        /// then we know what team selected the Trump, and the rounds MakerStatus (Team object) is set.
-        /// Also set the TrumpCard in round object.
-        /// Return a new Round Object.
-        /// </summary>
-        /// <param name="selectedTrumpSuit"> The card Suit property that was chosen as Trump. </param>
-        /// <param name="currentPlayer"> The player whose current turn it is (Who selected the trump) </param>
-        /// <param name="TeamOne"> The first team participating in the game. </param>
-        /// <param name="TeamTwo"> The second team participating in the game. </param>
-        /// <returns> newRound a new Round object </returns>
-        public static Round TrumpSelected(Card.Suits selectedTrumpSuit, Player currentPlayer, Team TeamOne, Team TeamTwo)
-        {
-
-            // Initialize a round object (Empty Values)
-            Round newRound = new Round();
-
-            // Loops through both team lists to check for which team selected the trump. Whichever team did, update the
-            // Round.MakerStatus to THAT team
-            foreach (Player player in TeamOne.TeamPlayers)
-            {
-                if (player == currentPlayer)
-                {
-                    newRound.MakerTeam = TeamOne;
-                }
-            }
-            foreach (Player player in TeamTwo.TeamPlayers)
-            {
-                if (player == currentPlayer)
-                {
-                    newRound.MakerTeam = TeamTwo;
-                }
-            }
-
-            // Regardless, update Round.TrumpSuit
-            newRound.TrumpSuit = selectedTrumpSuit;
-
-            return newRound;
-        }
-
-
-        /// <summary>
         /// Updates the value of each card in every player's hand based on the specified trump suit.
         /// </summary>
         /// <param name="trumpSuit">The suit that has been declared as trump for the current round.</param>
@@ -202,7 +162,7 @@ namespace Group2_COSC2200_Project.model
 
         /// <summary>
         /// Loops through the turnlist to access each players hands, and sets the value of their cards based on the lead suit and 
-        ///     trump suit. This is used to determine who wins a hand.
+        /// trump suit. This is used to determine who wins a hand.
         /// </summary>
         /// <param name="leadSuit"> The current lead suit </param>
         /// <param name="trumpSuit"> The current trump suit </param>
@@ -247,8 +207,8 @@ namespace Group2_COSC2200_Project.model
 
         /// <summary>
         /// Used to get the player with the high card out of all played cards in the play area.
-        ///     for every card in the play area determine the high card, placing the high card and the player who owns it in the 
-        ///     current highest for both containers. Returns player who owns the winning card.
+        /// or every card in the play area determine the high card, placing the high card and the player who owns it in the 
+        /// current highest for both containers. Returns player who owns the winning card.
         /// </summary>
         /// <param name="playArea"> The current play area </param>
         /// <param name="turnList"> The current Turn List </param>
@@ -283,7 +243,7 @@ namespace Group2_COSC2200_Project.model
 
         /// <summary>
         /// Once a trick ends, the person who won that trick starts the next trick.
-        ///     Determines this via manipulation of the turnlist by setting the winning player first in that list.
+        /// Determines this via manipulation of the turnlist by setting the winning player first in that list.
         /// </summary>
         /// <param name="turnList"> The current turn list </param>
         /// <param name="winningPlayer"> The current winning player. </param>
@@ -299,7 +259,7 @@ namespace Group2_COSC2200_Project.model
 
         /// <summary>
         /// Used to change the dealer status. Determined by accessing the current dealer in the turn list, changing their 
-        ///     Player.dealerStatus, and updating the new dealer's to true.
+        /// Player.dealerStatus, and updating the new dealer's to true.
         /// </summary>
         /// <param name="currentDealer"> the current dealer </param>
         /// <param name="newDealer"> The new dealer </param>

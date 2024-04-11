@@ -3,6 +3,9 @@ using System.IO;
 
 namespace Group2_COSC2200_Project.viewmodel
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Theme
     {
         /// <summary>

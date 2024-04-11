@@ -44,7 +44,7 @@ namespace Group2_COSC2200_Project.model
         public bool IsDealer { get; set; }
 
         /// <summary>
-        /// 
+        /// Gets or sets a flag determining if a player is AI.
         /// </summary>
         public bool IsAI { get; set; }
 

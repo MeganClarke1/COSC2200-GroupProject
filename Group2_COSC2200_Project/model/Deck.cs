@@ -34,11 +34,14 @@ namespace Group2_COSC2200_Project.model
         public Deck()
         {
             Cards = new List<Card>();
+
+            // Loop through each suit value defined in the Card.Suits enumeration
             foreach (Card.Suits suit in Enum.GetValues(typeof(Card.Suits)))
             {
+                // For each suit, loop through each rank value defined in the Card.Ranks enumeration
                 foreach (Card.Ranks rank in Enum.GetValues(typeof(Card.Ranks)))
                 {
-                    Cards.Add(new Card(suit, rank));
+                    Cards.Add(new Card(suit, rank));    // add a new card with the current suit and rank to the deck
                 }
             }
         }
@@ -46,13 +49,14 @@ namespace Group2_COSC2200_Project.model
         /// <summary>
         /// Shuffles the cards in the deck using the Fisher-Yates algorithm.
         /// </summary>
-        public void Shuffle() // TODO: Cite this algo
+        public void Shuffle() 
         {
             Random rnd = new();
+
             for (int i = Cards.Count - 1; i > 0; i--)
             {
                 int swapIndex = rnd.Next(i + 1);
-                (Cards[swapIndex], Cards[i]) = (Cards[i], Cards[swapIndex]);
+                (Cards[swapIndex], Cards[i]) = (Cards[i], Cards[swapIndex]); 
             }
         }
 
