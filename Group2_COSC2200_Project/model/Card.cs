@@ -93,13 +93,15 @@ namespace Group2_COSC2200_Project.model
             Suit = suit;
             Rank = rank;
 
+            // Determine the card's colour based on its suit.
             Colour = suit switch
             {
-                Suits.Clubs => Colours.Black,
-                Suits.Spades => Colours.Black,
-                _ => Colours.Red,
+                Suits.Clubs => Colours.Black,   // Clubs are black.
+                Suits.Spades => Colours.Black,  // Spades are black.
+                _ => Colours.Red,               // All other suits (Diamonds and Hearts) are red.
             };
 
+            // Assign the card's value based on its rank.
             Value = rank switch
             {
                 Ranks.Nine => 1,

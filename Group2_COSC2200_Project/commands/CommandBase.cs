@@ -16,11 +16,6 @@
 ///   </description>
 /// </file>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Group2_COSC2200_Project.commands
