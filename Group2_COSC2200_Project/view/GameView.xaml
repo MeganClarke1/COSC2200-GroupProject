@@ -207,7 +207,7 @@
         </Grid>
         <TextBlock HorizontalAlignment="Left" Margin="619,675,0,0" TextWrapping="Wrap" Text="{Binding PlayerName}" VerticalAlignment="Top" Width="121" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Player 2" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
-        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Text="Player 3" VerticalAlignment="Top" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,18,0,0" TextWrapping="Wrap" Text="Player 3" VerticalAlignment="Top" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
         <TextBlock HorizontalAlignment="Left" Margin="1186,0,0,0" TextWrapping="Wrap" Text="Player 4" VerticalAlignment="Center" Width="84" FontSize="24" Foreground="White" Background="Transparent"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="10,615,0,0" TextWrapping="Wrap" Visibility="{Binding HasDealer}" Text="{Binding Dealer}" VerticalAlignment="Top" Width="412" FontSize="24" Foreground="White" Background="Transparent"/>
